@@ -12,6 +12,8 @@ import one.com.pesosense.UtilsApp;
 
 public class Login extends Activity implements View.OnClickListener {
 
+    Button pabida;
+
     Button btnLogin;
     Button btnSkip;
 
