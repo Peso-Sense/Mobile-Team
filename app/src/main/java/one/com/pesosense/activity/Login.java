@@ -13,8 +13,8 @@ import one.com.pesosense.UtilsApp;
 public class Login extends Activity implements View.OnClickListener {
 
     Button btnLogin;
-    Button btnSkip;
-    
+    Button btnSignup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +28,8 @@ public class Login extends Activity implements View.OnClickListener {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-        btnSkip = (Button) findViewById(R.id.btnSkip);
-        btnSkip.setOnClickListener(this);
+        btnSignup = (Button) findViewById(R.id.btnSignup);
+        btnSignup.setOnClickListener(this);
 
     }
 
@@ -40,7 +40,7 @@ public class Login extends Activity implements View.OnClickListener {
             UtilsApp.LOGIN_STATUS = 1;
 
         }
-        if (v.getId() == R.id.btnSkip) {
+        if (v.getId() == R.id.btnSignup) {
             UtilsApp.LOGIN_STATUS = 0;
 
         }
