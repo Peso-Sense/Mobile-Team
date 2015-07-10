@@ -16,6 +16,8 @@ import android.widget.Toast;
 /**
  * Created by mykelneds on 6/20/15.
  */
+ 
+ //TESING KO LANG
 public class UtilsApp extends Application {
 
     private static Context mContext;
