@@ -14,56 +14,74 @@
         android:background="@drawable/pesosense_icon" />
 
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    <!-- RELATIVE PA MORE! -->
+    <!--<RelativeLayout-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true">-->
 
-        <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="192dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/lbb" />
+    <!--
+    ** PAALALA **
+    Wag gumamit ng ImageButton or ImageView
+    kung gagawa ka lang ng button na wala puro text! HAHA
+    -->
 
-        <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="192dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/lb" />
+    <!--<ImageView-->
+    <!--android:id="@+id/imageView10"-->
+    <!--android:layout_width="192dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/lbb" />-->
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="71dp"
-            android:layout_marginStart="71dp"
-            android:text="Log in"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#ffffff" />
+    <!--<ImageView-->
+    <!--android:id="@+id/imageView11"-->
+    <!--android:layout_width="192dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:background="@drawable/lb" />-->
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/imageView11"
-            android:layout_alignRight="@+id/imageView11"
-            android:layout_alignTop="@+id/textView11"
-            android:layout_marginEnd="62dp"
-            android:layout_marginRight="62dp"
-            android:text="Sign up"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+    <!--<TextView-->
+    <!--android:id="@+id/textView11"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="71dp"-->
+    <!--android:layout_marginStart="71dp"-->
+    <!--android:text="Log in"-->
+    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+    <!--android:textColor="#ffffff" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView12"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignEnd="@+id/imageView11"-->
+    <!--android:layout_alignRight="@+id/imageView11"-->
+    <!--android:layout_alignTop="@+id/textView11"-->
+    <!--android:layout_marginEnd="62dp"-->
+    <!--android:layout_marginRight="62dp"-->
+    <!--android:text="Sign up"-->
+    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+    <!--android:textColor="#000000" />-->
+    <!-- -->
+    <!-- -->
+    <!-- Para san to?-->
+    <!--<ProgressBar-->
+    <!--style="?android:attr/progressBarStyleHorizontal"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/progressBar"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true" />-->
 
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <ImageView
         android:id="@+id/imageView12"
@@ -74,3 +92,4 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/pesosense_title" />
 </RelativeLayout>
+
