@@ -8,4 +8,17 @@
     <color name="textColorPrimary">#fff</color>
     <color name="colorSelected">#80DEEA</color>
 
+    <color name="tabsScrollColor">#0f0f0f</color>
+
+    <color name="textColorBlack">#000</color>
+    <color name="windowBackground">#e9e7e8</color>
+
+    <color name="tips1">#98cb4a</color>
+    <color name="tips2">#f7d842</color>
+    <color name="tips3">#839098</color>
+    <color name="tips4">#2ca8c2</color>
+    <color name="tips5">#f15f74</color>
+
+    <item name="grey" type="color">#424242</item>
+
 </resources>

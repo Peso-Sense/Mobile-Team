@@ -29,7 +29,7 @@
         <item>@drawable/cfo_newsfeeds</item>
         <item>@drawable/check_icon_hover</item>
         <item>@drawable/medal_icon_hover</item>
-        <item>@drawable/settings_icon_hover</item>
+        <item>@drawable/settings_selector</item>
     </array>
 
     <array name="nav_icons_rich">
@@ -37,11 +37,11 @@
         <item>@drawable/check_icon_hover</item>
         <item>@drawable/medal_icon_hover</item>
         <item>@drawable/cfo_newsfeeds</item>
-        <item>@drawable/store_icon_blue</item>
+        <item>@drawable/ic_store_selected</item>
         <item>@drawable/ic_news_feeds</item>
         <item>@drawable/ic_news_feeds</item>
         <item>@drawable/ic_news_feeds</item>
-        <item>@drawable/settings_icon_hover</item>
+        <item>@drawable/settings_selector</item>
 
     </array>
 

@@ -3,7 +3,6 @@ package one.com.pesosense.fragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -116,7 +115,7 @@ public class FragmentDrawer extends Fragment {
         }
 
         CircularImageView civ = (CircularImageView) layout.findViewById(R.id.imgUser);
-        civ.setImageDrawable(getResources().getDrawable(R.drawable.not_sync_icon));
+        civ.setImageDrawable(getResources().getDrawable(R.drawable.ic_unsync));
 
         if (UtilsApp.LOGIN_STATUS == 0) {
             civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
