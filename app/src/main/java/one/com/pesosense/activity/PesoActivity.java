@@ -1,21 +1,15 @@
 package one.com.pesosense.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
 
 import one.com.pesosense.R;
 import one.com.pesosense.fragment.FragmentDrawer;
-import one.com.pesosense.tabs.SlidingTabLayout;
 
 
 public class PesoActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {

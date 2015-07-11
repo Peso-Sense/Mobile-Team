@@ -77,7 +77,6 @@
     <!--</RelativeLayout>-->
 
     <ImageView
-        android:id="@+id/imageView12"
         android:layout_width="180dp"
         android:layout_height="25dp"
         android:layout_below="@+id/imageView9"
@@ -89,21 +88,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="1dp">
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginRight="0.5dp"
             android:layout_weight="1"
-            android:text="LOGIN" />
+            android:background="@drawable/selector_black"
+            android:text="LOGIN"
+            android:textColor="@color/textColorPrimary"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSignup"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="0.5dp"
             android:layout_weight="1"
-            android:text="SIGNUP" />
+            android:background="@drawable/selector_blue"
+            android:text="SIGNUP"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
 
