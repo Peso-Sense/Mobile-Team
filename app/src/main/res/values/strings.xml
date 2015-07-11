@@ -29,7 +29,7 @@
         <item>@drawable/newsfeed_selector</item>
         <item>@drawable/check_icon_hover</item>
         <item>@drawable/medal_icon_hover</item>
-        <item>@drawable/settings_selector</item>
+        <item>@drawable/selector_settings</item>
     </array>
 
     <array name="nav_icons_rich">
@@ -41,7 +41,7 @@
         <item>@drawable/ic_newsfeeds_normal</item>
         <item>@drawable/ic_newsfeeds_normal</item>
         <item>@drawable/ic_newsfeeds_normal</item>
-        <item>@drawable/settings_selector</item>
+        <item>@drawable/selector_settings</item>
 
     </array>
 
