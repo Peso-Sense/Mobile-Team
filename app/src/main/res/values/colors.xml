@@ -11,6 +11,7 @@
     <color name="tabsScrollColor">#0f0f0f</color>
 
     <color name="textColorBlack">#000</color>
+    <color name="textColorSelected">#000</color>
     <color name="windowBackground">#e9e7e8</color>
 
     <color name="tips1">#98cb4a</color>

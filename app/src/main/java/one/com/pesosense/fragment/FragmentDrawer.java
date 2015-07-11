@@ -17,9 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.pkmmte.view.CircularImageView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.adapter.NavigationDrawerAdapter;
@@ -39,6 +42,7 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles = null;
     private static TypedArray icons = null;
+    private static TypedArray iconsSeletected = null;
     private FragmentDrawerListener drawerListener;
 
     private TextView lblUsername;
@@ -61,7 +65,7 @@ public class FragmentDrawer extends Fragment {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
             navItem.setIcon(icons.getResourceId(i, -1));
-
+            navItem.setSelectedIcon(iconsSeletected.getResourceId(i, -1));
             data.add(navItem);
         }
         return data;
@@ -89,6 +93,7 @@ public class FragmentDrawer extends Fragment {
                     R.array.nav_item_rich);
             icons = getActivity().getResources().obtainTypedArray(
                     R.array.nav_icons_rich);
+            iconsSeletected = getActivity().getResources().obtainTypedArray(R.array.nav_icons_rich_selected);
         }
     }
 

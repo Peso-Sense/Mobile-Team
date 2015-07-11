@@ -33,7 +33,7 @@ public class Splashscreen extends Activity {
 
 
             }
-        }, 2000);
+        }, 2500);
     }
 
 

@@ -26,6 +26,7 @@ public class Signup extends ActionBarActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
     }
 
     @Override

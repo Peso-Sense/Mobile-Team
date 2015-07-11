@@ -26,23 +26,24 @@
     </string-array>
 
     <array name="nav_icons_thin">
-        <item>@drawable/newsfeed_selector</item>
+        <item>@drawable/selector_feed</item>
         <item>@drawable/check_icon_hover</item>
-        <item>@drawable/medal_icon_hover</item>
+        <item>@drawable/selector_payment</item>
         <item>@drawable/selector_settings</item>
     </array>
 
     <array name="nav_icons_rich">
-        <item>@drawable/newsfeed_selector</item>
-        <item>@drawable/check_icon_hover</item>
-        <item>@drawable/medal_icon_hover</item>
-        <item>@drawable/newsfeed_selector</item>
-        <item>@drawable/ic_store_selected</item>
-        <item>@drawable/ic_newsfeeds_normal</item>
-        <item>@drawable/ic_newsfeeds_normal</item>
-        <item>@drawable/ic_newsfeeds_normal</item>
-        <item>@drawable/selector_settings</item>
+        <item>@drawable/selector_feed</item>
+        <item>@drawable/selector_store</item>
+        <item>@drawable/selector_payment</item>
+        <item>@drawable/selector_remittance</item>
+    </array>
 
+    <array name="nav_icons_rich_selected">
+        <item>@drawable/ic_feeds_selected</item>
+        <item>@drawable/ic_store_selected</item>
+        <item>@drawable/ic_payment_selected</item>
+        <item>@drawable/ic_settings_selected</item>
     </array>
 
     <!-- TODO: Remove or change this placeholder text -->

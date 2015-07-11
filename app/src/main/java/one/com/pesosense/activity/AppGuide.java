@@ -40,13 +40,15 @@ public class AppGuide extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.btnLogin)
             intent = new Intent(AppGuide.this, PesoActivity.class);
-            //intent = new Intent(AppGuide.this, Login.class);
+        //intent = new Intent(AppGuide.this, Login.class);
 
         if (view.getId() == R.id.btnSignup)
             intent = new Intent(AppGuide.this, Signup.class);
 
-        if (intent != null)
+        if (intent != null) {
             startActivity(intent);
+            finish();
+        }
 
     }
 

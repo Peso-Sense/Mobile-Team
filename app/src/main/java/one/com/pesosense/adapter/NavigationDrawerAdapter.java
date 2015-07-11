@@ -61,6 +61,8 @@ public class NavigationDrawerAdapter extends
         data.get(0).setShowNotify(true);
         holders.get(0).root.setBackgroundColor(context.getResources().getColor(
                 R.color.colorSelected));
+        holders.get(0).title.setTextColor(context.getResources().getColor(R.color.textColorBlack));
+        holders.get(0).icon.setImageResource(data.get(0).getSelectedIcon());
 
         holder.root.setOnClickListener(new View.OnClickListener() {
 
@@ -69,10 +71,14 @@ public class NavigationDrawerAdapter extends
                 // TODO Auto-generated method stub
 
                 holders.get(position).root.setBackgroundColor(context.getResources().getColor(R.color.colorSelected));
+                holders.get(position).title.setTextColor(context.getResources().getColor(R.color.textColorBlack));
+                holders.get(position).icon.setImageResource(current.getSelectedIcon());
                 for (int i = 0; i < data.size(); i++) {
                     if (i != position) {
                         holders.get(i).root.setBackgroundColor(context
                                 .getResources().getColor(R.color.colorPrimary));
+                        holders.get(i).title.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+                        holders.get(i).icon.setImageResource(data.get(i).getIcon());
 
                     }
                 }
@@ -99,7 +105,7 @@ public class NavigationDrawerAdapter extends
             icon = (ImageView) itemView.findViewById(R.id.icon);
 
 
-           // root.setOnClickListener(this);
+            // root.setOnClickListener(this);
         }
 
         public void onClick(View v) {
