@@ -1,60 +1,76 @@
-
-<RelativeLayout
-    android:layout_width="fill_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@drawable/bg1">
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:background="@drawable/pesosense_icon" />
 
 
-
-
-
-
-<ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        >
-
-
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-
-        <ImageView android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@drawable/appg2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-             />
-
-
-
-
-        </RelativeLayout>
-
-
-    </ScrollView>
-
-    <Button
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:id="@+id/Button"
-        android:textSize="20dp"
-        android:text="NEXT PAGE"
-        android:textColor="@color/background_floating_material_light"
-        android:background="@color/background_material_dark"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp" />
+        android:layout_alignParentStart="true">
 
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lbb" />
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/lb" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="71dp"
+            android:layout_marginStart="71dp"
+            android:text="Log in"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/imageView11"
+            android:layout_alignRight="@+id/imageView11"
+            android:layout_alignTop="@+id/textView11"
+            android:layout_marginEnd="62dp"
+            android:layout_marginRight="62dp"
+            android:text="Sign up"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="180dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/imageView9"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/pesosense_title" />
 </RelativeLayout>
-
-

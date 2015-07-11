@@ -20,8 +20,7 @@ public class Splashscreen extends Activity {
         setContentView(R.layout.activity_splashscreen);
 
         img2 = (ImageView) findViewById(R.id.imageView);
-        img2.setBackgroundResource(R.drawable.peso_gif)
-        ;
+        img2.setBackgroundResource(R.drawable.peso_gif);
         AnimationDrawable frameAnimation = (AnimationDrawable) img2.getBackground();
         frameAnimation.start();
 

@@ -18,15 +18,11 @@
     </string-array>
 
     <string-array name="nav_item_rich">
-        <item>CFO Newsfeeds</item>
-        <item>Celebrity #PesoSense Tips</item>
-        <item>Targeted Financial Tips</item>
-        <item>#PesoSense</item>
-        <item>Online Shop</item>
-        <item>Bills</item>
-        <item>Remit</item>
-        <item>Partner Promos</item>
-        <item>Settings</item>
+        <item>Feeds</item>
+        <item>Shop</item>
+        <item>Payments</item>
+        <item>Remittance</item>
+
     </string-array>
 
     <array name="nav_icons_thin">
