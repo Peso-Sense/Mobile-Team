@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import one.com.pesosense.R;
+import one.com.pesosense.UtilsApp;
 
 
 public class AppGuide extends Activity implements View.OnClickListener {
@@ -26,9 +27,11 @@ public class AppGuide extends Activity implements View.OnClickListener {
     public void initValues() {
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setTypeface(UtilsApp.opensansNormal());
         btnLogin.setOnClickListener(this);
 
         btnSignup = (Button) findViewById(R.id.btnSignup);
+        btnSignup.setTypeface(UtilsApp.opensansNormal());
         btnSignup.setOnClickListener(this);
 
     }

@@ -102,6 +102,7 @@ public class NavigationDrawerAdapter extends
             super(itemView);
             root = (RelativeLayout) itemView.findViewById(R.id.root);
             title = (TextView) itemView.findViewById(R.id.title);
+            title.setTypeface(UtilsApp.opensansNormal());
             icon = (ImageView) itemView.findViewById(R.id.icon);
 
 

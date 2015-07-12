@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import one.com.pesosense.R;
+import one.com.pesosense.UtilsApp;
 
 
 public class Splashscreen extends Activity {
@@ -28,6 +29,8 @@ public class Splashscreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                UtilsApp.putInt("LOGIN_STATUS", 1);
+                UtilsApp.LOGIN_STATUS = UtilsApp.getInt("LOGIN_STATUS");
                 startActivity(new Intent(Splashscreen.this, AppGuide.class));
                 finish();
 
