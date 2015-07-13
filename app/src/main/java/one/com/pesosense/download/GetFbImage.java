@@ -47,6 +47,8 @@ public class GetFbImage {
     int ilikes = 0;
     int icomments = 0;
 
+    int limit = 10;
+
     public GetFbImage(Context context) {
         this.context = context;
 
@@ -59,7 +61,7 @@ public class GetFbImage {
 
         String nextUrl = "";
 
-        HttpGet request = new HttpGet(URL + URLEncoder.encode(QUERY) + "&limit=25");
+        HttpGet request = new HttpGet(URL + URLEncoder.encode(QUERY) + "&limit=" + limit);
         HttpClient httpclient = new DefaultHttpClient();
 
         try {
