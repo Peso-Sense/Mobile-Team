@@ -43,12 +43,11 @@
             android:text="lorem impsum..."
             android:textColor="@color/textColorBlack" />
 
-        <ImageView
-            android:id="@+id/fbImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:adjustViewBounds="true" />
+        <VideoView
+            android:id="@+id/fbVideo"
+            android:layout_width="fill_parent"
+            android:layout_height="185dp"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"

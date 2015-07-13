@@ -3,7 +3,7 @@ package one.com.pesosense.model;
 /**
  * Created by mykelneds on 7/13/15.
  */
-public class FbImageItem {
+public class FbVideoItem {
 
     String id;
     String profilePic;
@@ -12,7 +12,7 @@ public class FbImageItem {
     int likes;
     int comment;
 
-    public FbImageItem(String id, String profilePic, String message, String link, int likes, int comment) {
+    public FbVideoItem(String id, String profilePic, String message, String link, int likes, int comment) {
         this.id = id;
         this.profilePic = profilePic;
         this.message = message;

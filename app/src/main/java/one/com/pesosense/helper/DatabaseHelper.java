@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 7);
+        super(mContext, "onex_db", null, 14);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -25,27 +25,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, message varchar, link varchar, likes integer,comment integer)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer,comment integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer, province varchar, name varchar, price varchar, product_image varchar, description varchar, ratings int)");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_category (cat_id integer , cat_name varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_subcategory(subcat_id integer , subcat_name varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_products(product_id integer , cat_id integer, subcat_id integer, product_name varchar, product_desc varchar, product_cost integer, product_price integer, product_quantity integer, product_image varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_grabbed(grabbed_id integer, cat_id integer, subcat_id integer, grabbed_name varchar, grabbed_desc varchar, grabbed_cost integer, grabbed_price integer, grabbed_quantity integer, grabbed_image varchar)");
-
-
-        populateSample(db);
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer, province varchar, name varchar, price varchar, product_image varchar, description varchar, ratings int)");
+//
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_category (cat_id integer , cat_name varchar)");
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_subcategory(subcat_id integer , subcat_name varchar)");
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_products(product_id integer , cat_id integer, subcat_id integer, product_name varchar, product_desc varchar, product_cost integer, product_price integer, product_quantity integer, product_image varchar)");
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_grabbed(grabbed_id integer, cat_id integer, subcat_id integer, grabbed_name varchar, grabbed_desc varchar, grabbed_cost integer, grabbed_price integer, grabbed_quantity integer, grabbed_image varchar)");
+//
         populateTips(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS tbl_financial_tips");
+        db.execSQL("DROP TABLE IF EXISTS tbl_fb_feeds");
+        db.execSQL("DROP TABLE IF EXISTS tbl_fb_video");
         db.execSQL("DROP TABLE IF EXISTS tbl_fb_image");
+        db.execSQL("DROP TABLE IF EXISTS tbl_financial_tips");
+
         db.execSQL("DROP TABLE IF EXISTS tbl_remittances");
 
         db.execSQL("DROP TABLE IF EXISTS tbl_category");
@@ -117,46 +120,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO tbl_remittances (id, date, title, message) VALUES (1, '01-01-2015', 'SMART', 'This is a sample content') ");
     }
 
-    public void populateSample(SQLiteDatabase db) {
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 1, 'Batanes', 'Miniovaheng', '150pesos', " +
-                "'http://journeyingjames.com/wp-content/uploads/2011/05/Rice-wine.jpg' , 'Sugarcane Wine' , 4) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 2, 'Surigao del sur', 'Fashionable neckpieces', '120pesos', " +
-                "'http://www.interaksyon.com/lifestyle/assets/2014/10/IMG_1809e.jpg' , 'description' , 3) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 3, 'Palawan', 'Palawan wood figurines', '150pesos', " +
-                "'http://www.palawan-philippines.com/images/tn_wood-figurines.jpg' , 'description' , 4) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 4, 'Palawan', 'Palawan wood carving design', '200pesos', " +
-                "'https://retirednoway.files.wordpress.com/2011/02/2011-feb-puerto-princesa-to-nasiduan-27.jpg' , 'description' , 3) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 5, 'Ilocos Norte', 'Bagnet', '220 pesos', " +
-                "'http://heftyfoodie.com/wp-content/uploads/2014/01/manongs_bagnet_station_cover.jpg' , 'description' , 4) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 6, 'Vigan', 'Vigan empanada 5 pcs', '120 pesos', " +
-                "'http://4.bp.blogspot.com/-lt71C9Y9hMA/UOFWt-ruQwI/AAAAAAAAEY0/YUfevSexgAM/s1600/IMAG0094.jpg' , 'description' , 4) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 7, 'Zambales', 'Zambales Jar With Cover', '450 pesos', " +
-                "'http://i00.i.aliimg.com/photo/v0/11516384/Zambales_Jar_With_Cover.jpg' , 'description' , 5) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 8, 'Pangasinan', 'Lingayens Bagoong', '120 pesos', " +
-                "'http://4.bp.blogspot.com/-LY5UhJ20sN8/UbvgR0lFyjI/AAAAAAAADRc/n6NGVhhm9Q4/s320/pangasinantour_JBbagoong+%283%29.jpg' , 'description' , 3) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 9, 'Nueva Ecija', 'Puno’s Ice Cream and Sherbet', '150 pesos', " +
-                "'https://jhanellamanabat.files.wordpress.com/2015/03/adsfd.jpg' , 'description' , 3) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 10, 'Bulacan', 'Pastillas', '100 pesos', " +
-                "'http://www.bulacan.gov.ph/business/images/themes/pastillas/masthead.jpg' , 'description' , 3) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 11, 'Pampanga', 'Longaniza', '95 pesos', " +
-                "'http://static.ensogo.com.ph/assets/deals/16707a26f8b008cb6f6d860d4f4b7591/description1.jpg' , 'Pampangas Best Best Longaniza 500g for only P95 (valued at P121)' , 5) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 12, 'Aklan', 'AKlan dress and barong', '2095 pesos', " +
-                "'https://s-media-cache-ak0.pinimg.com/736x/0c/6b/42/0c6b4291d434034ba94c11725a5dd28f.jpg' , 'description' , 4) ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings) VALUES ( 13, 'Capiz', 'Capiz shell lamp', '300 pesos', " +
-                "'http://www.retireinthephilippines.info/wp-content/uploads/2012/05/Capiz-Capiz-shell-products.jpg' , 'description' , 4) ");
-
-
-    }
 }

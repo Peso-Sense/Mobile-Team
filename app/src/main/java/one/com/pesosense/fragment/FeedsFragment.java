@@ -2,11 +2,14 @@ package one.com.pesosense.fragment;
 
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +18,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
+import one.com.pesosense.adapter.FeedsAdapter;
+import one.com.pesosense.download.GetFbImage;
 import one.com.pesosense.helper.DatabaseHelper;
+import one.com.pesosense.model.FbImageItem;
 import one.com.pesosense.model.TipsItem;
 
 /**
@@ -27,9 +34,18 @@ import one.com.pesosense.model.TipsItem;
  */
 public class FeedsFragment extends Fragment {
 
-    DatabaseHelper dbhelper;
+    RecyclerView rv;
+    LinearLayoutManager llm;
+
+    FeedsAdapter adapter;
+
+    ArrayList<Object> fi;
+
+    DatabaseHelper dbHelper;
     SQLiteDatabase db;
     Cursor cursor;
+
+    String nextUrl = "";
 
     String tipsType[] = {"Entrepreneurs", "Homemakers", "Professionals", "Seniors and retiree", "Yound adults"};
     int icons[] = {R.drawable.tips1, R.drawable.tips2, R.drawable.tips3, R.drawable.tips4, R.drawable.tips5};
@@ -51,7 +67,15 @@ public class FeedsFragment extends Fragment {
 
     public void initValues(View v) {
 
-        dbhelper = DatabaseHelper.getInstance(getActivity());
+        dbHelper = DatabaseHelper.getInstance(getActivity());
+
+        fi = new ArrayList<>();
+        adapter = new FeedsAdapter(this.getActivity(), fi);
+
+        llm = new LinearLayoutManager(getActivity());
+        rv = (RecyclerView) v.findViewById(R.id.rv);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(llm);
 
         if (checkDB() != 0)
             readDB();
@@ -64,7 +88,7 @@ public class FeedsFragment extends Fragment {
     public int checkDB() {
         int count = 0;
 
-        db = dbhelper.getReadableDatabase();
+        db = dbHelper.getReadableDatabase();
         cursor = db.query("tbl_fb_image", null, null, null, null, null, null);
 
         count = cursor.getCount();
@@ -73,24 +97,60 @@ public class FeedsFragment extends Fragment {
     }
 
     public void readDB() {
+
+        String id;
+        String profilePic;
+        String message;
+        String link;
+        int likes;
+        int comment;
+
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.query("tbl_fb_image", null, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            id = cursor.getString(0);
+            profilePic = cursor.getString(1);
+            message = cursor.getString(2);
+            link = cursor.getString(3);
+            likes = cursor.getInt(4);
+            comment = cursor.getInt(5);
+
+            fi.add(new FbImageItem(id, profilePic, message, link, likes, comment));
+        }
+
+        adapter.notifyDataSetChanged();
         displayTips();
+
+
     }
 
     public class FeedsTask extends AsyncTask<Void, Void, Void> {
 
+        ProgressDialog pDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Pansamantala...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            nextUrl = new GetFbImage(getActivity()).getData();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            pDialog.dismiss();
             readDB();
         }
     }
