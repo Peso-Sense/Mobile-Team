@@ -19,15 +19,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.AppGuide"
+            android:label="@string/title_activity_app_guide"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
             android:name=".activity.PesoActivity"
             android:label="@string/title_activity_peso" />
         <activity
             android:name=".activity.Login"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".activity.AppGuide"
-            android:label="@string/title_activity_app_guide"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />

@@ -4,6 +4,7 @@ package one.com.pesosense.fragment;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -52,9 +53,46 @@ public class FeedsFragment extends Fragment {
 
         dbhelper = DatabaseHelper.getInstance(getActivity());
 
+        if (checkDB() != 0)
+            readDB();
+        else {
+            new FeedsTask().execute();
+        }
+    }
 
-        //displayTips should be after readDB();
+
+    public int checkDB() {
+        int count = 0;
+
+        db = dbhelper.getReadableDatabase();
+        cursor = db.query("tbl_fb_image", null, null, null, null, null, null);
+
+        count = cursor.getCount();
+        return count;
+
+    }
+
+    public void readDB() {
         displayTips();
+    }
+
+    public class FeedsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            readDB();
+        }
     }
 
     public void displayTips() {
