@@ -3,6 +3,7 @@ package one.com.pesosense.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        Log.d("bindView", String.valueOf(holder.getItemViewType()));
         switch (holder.getItemViewType()) {
             case FB_IMAGE:
                 FbImageHolder imageHolder = (FbImageHolder) holder;
@@ -146,7 +148,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Uri video = Uri.parse(current.getLink());
         holder.fbVideo.setMediaController(mediacontroller);
         holder.fbVideo.setVideoURI(video);
-        holder.fbVideo.start();
+    //    holder.fbVideo.start();
 
 
     }
@@ -200,8 +202,11 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (data.get(position) instanceof FbImageItem)
             return FB_IMAGE;
-        if (data.get(position) instanceof FbVideoItem)
+        if (data.get(position) instanceof FbVideoItem) {
+            Log.d("video", "..");
             return FB_VIDEO;
+
+        }
         return type;
 
     }

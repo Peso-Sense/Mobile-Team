@@ -59,7 +59,7 @@ public class GetFbImage {
 
         String nextUrl = "";
 
-        HttpGet request = new HttpGet(URL + URLEncoder.encode(QUERY) + "&limit=10");
+        HttpGet request = new HttpGet(URL + URLEncoder.encode(QUERY) + "&limit=25");
         HttpClient httpclient = new DefaultHttpClient();
 
         try {
@@ -79,7 +79,8 @@ public class GetFbImage {
                         JSONObject c = jsonArray.getJSONObject(i);
                         id = c.getString("id");
 
-                        if (c.getString("type").equalsIgnoreCase("photo") || c.getString("type").equalsIgnoreCase("status") && c.has("object_id") && c.has("likes")) { // (s) PesoSense Facebook image feed
+                        if ((c.getString("type").equalsIgnoreCase("photo") || c.getString("type").equalsIgnoreCase("status")) && c.has("object_id") && c.has("likes")) { // (s) PesoSense Facebook image feed
+
                             HttpGet enlarge = new HttpGet("https://graph.facebook.com/v2.3/" + c.getString("object_id") + "?access_token=" + URLEncoder.encode(QUERY));
                             // &limit=25
                             //
@@ -123,7 +124,7 @@ public class GetFbImage {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
-                            if (!isDataExist(id)) {
+                            if (!isDataExist("tbl_fb_image", id)) {
                                 populateFbFeeds(id, 0);
                                 populateFbImage(id, picture, message, link, ilikes, icomments);
                             }
@@ -145,13 +146,15 @@ public class GetFbImage {
 
                             ilikes = jsonObj2.getJSONObject("summary").getInt("total_count");
 
-                            HttpGet comments = new HttpGet("https://graph.facebook.com/" + c.getString("object_id") + "/comments?summary=true&access_token=" + URLEncoder.encode(QUERY));
-                            HttpResponse httpResponse3 = httpclient.execute(comments);
-                            HttpEntity httpEntity3 = httpResponse3.getEntity();
-                            String strComments = EntityUtils.toString(httpEntity3);
+//                            HttpGet comments = new HttpGet("https://graph.facebook.com/" + c.getString("object_id") + "/comments?summary=true&access_token=" + URLEncoder.encode(QUERY));
+//                            HttpResponse httpResponse3 = httpclient.execute(comments);
+//                            HttpEntity httpEntity3 = httpResponse3.getEntity();
+//                            String strComments = EntityUtils.toString(httpEntity3);
+//
+//                            JSONObject jsonObj3 = new JSONObject(strComments);
+//                            icomments = jsonObj3.getJSONObject("summary").getInt("total_count");
 
-                            JSONObject jsonObj3 = new JSONObject(strComments);
-                            icomments = jsonObj3.getJSONObject("summary").getInt("total_count");
+                            icomments = 0;
 
                             HttpGet profilePic = new HttpGet(profPic);
                             HttpResponse httpResponse4 = httpclient.execute(profilePic);
@@ -161,7 +164,7 @@ public class GetFbImage {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
-                            if (!isDataExist(id)) {
+                            if (!isDataExist("tbl_fb_video", id)) {
                                 populateFbFeeds(id, 1);
                                 populateFbVideo(id, picture, message, link, ilikes, icomments);
                             }
@@ -191,8 +194,12 @@ public class GetFbImage {
 
 
     public void deleteDB() {
+
+        Log.d("DATABASE", "Database Deleted!!");
         db = dbHelper.getWritableDatabase();
         db.delete("tbl_fb_image", null, null);
+        db.delete("tbl_fb_video", null, null);
+        db.delete("tbl_fb_feeds", null, null);
         db.close();
     }
 
@@ -261,7 +268,7 @@ public class GetFbImage {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
-                            if (!isDataExist(id))
+                            if (!isDataExist("tbl_fb_image", id))
                                 populateFbImage(id, picture, message, link, ilikes, icomments);
                         }
 
@@ -286,13 +293,13 @@ public class GetFbImage {
         return nextUrl;
     }
 
-    public boolean isDataExist(String id) {
+    public boolean isDataExist(String tableName, String id) {
 
         boolean exists = false;
         String tempID = "";
 
         db = dbHelper.getReadableDatabase();
-        cursor = db.query("tbl_fb_image", null, null, null, null, null, null);
+        cursor = db.query(tableName, null, null, null, null, null, null);
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -322,7 +329,7 @@ public class GetFbImage {
         db.insert("tbl_fb_image", null, values);
         db.close();
 
-        Log.d("DATABASE", "INSERTED!!");
+        Log.d("DATABASE", "INSERTED!! : IMAGE");
 
     }
 
@@ -337,10 +344,10 @@ public class GetFbImage {
         values.put("likes", likes);
         values.put("comment", comment);
 
-        db.insert("tbl_fb_image", null, values);
+        db.insert("tbl_fb_video", null, values);
         db.close();
 
-        Log.d("DATABASE", "INSERTED!!");
+        Log.d("DATABASE", "INSERTED!! : VIDEO");
 
     }
 

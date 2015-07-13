@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class FeedsFragment extends Fragment {
 
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
-    Cursor cursor;
+    Cursor cursor, cursor2, cursor3;
 
     String nextUrl = "";
 
@@ -78,12 +79,12 @@ public class FeedsFragment extends Fragment {
         rv.setAdapter(adapter);
         rv.setLayoutManager(llm);
 
-
+        readFeeds();
 //        if (checkDB() != 0)
 //            readDB();
 //        else {
-        new FeedsTask().execute();
-//        }
+//        new FeedsTask().execute();
+//         }
     }
 
 
@@ -96,6 +97,81 @@ public class FeedsFragment extends Fragment {
         count = cursor.getCount();
         return count;
 
+    }
+
+    public void readFeeds() {
+
+        String id;
+        int type;
+
+        db = dbHelper.getReadableDatabase();
+        cursor = db.query("tbl_fb_feeds", null, null, null, null, null, null);
+        Log.d("DATABASE", "Count: " + String.valueOf(cursor.getCount()));
+        while (cursor.moveToNext()) {
+            id = cursor.getString(0);
+            type = cursor.getInt(1);
+//
+            if (type == 0) {
+                fi.add(getFBImage(id));
+            } else if (type == 1) {
+                fi.add(getFBVideo(id));
+            }
+            Log.d("All feeds", id + " type: " + String.valueOf(type));
+        }
+        db.close();
+        adapter.notifyDataSetChanged();
+    }
+
+    public FbImageItem getFBImage(String id) {
+        FbImageItem item = null;
+
+        String profilePic = "";
+        String message = "";
+        String link = "";
+        int likes = 0;
+        int comment = 0;
+
+        db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM tbl_fb_image WHERE id = '" + id + "'";
+        cursor2 = db.rawQuery(query, null);
+        if (cursor2 != null) {
+            cursor2.moveToNext();
+            profilePic = cursor2.getString(1);
+            message = cursor2.getString(2);
+            link = cursor2.getString(3);
+            likes = cursor2.getInt(4);
+            comment = cursor2.getInt(5);
+
+            item = new FbImageItem(id, profilePic, message, link, likes, comment);
+        }
+
+        return item;
+    }
+
+    public FbVideoItem getFBVideo(String id) {
+        FbVideoItem item = null;
+
+        String profilePic = "";
+        String message = "";
+        String link = "";
+        int likes = 0;
+        int comment = 0;
+
+        db = dbHelper.getReadableDatabase();
+        String query = "SELECT * FROM tbl_fb_video WHERE id = '" + id + "'";
+        cursor3 = db.rawQuery(query, null);
+        if (cursor3 != null) {
+            cursor3.moveToNext();
+            profilePic = cursor3.getString(1);
+            message = cursor3.getString(2);
+            link = cursor3.getString(3);
+            likes = cursor3.getInt(4);
+            comment = cursor3.getInt(5);
+
+            item = new FbVideoItem(id, profilePic, message, link, likes, comment);
+        }
+
+        return item;
     }
 
     public void readDB() {
@@ -153,7 +229,7 @@ public class FeedsFragment extends Fragment {
         }
 
         adapter.notifyDataSetChanged();
-        displayTips();
+//        displayTips();
     }
 
     public class FeedsTask extends AsyncTask<Void, Void, Void> {
@@ -181,8 +257,8 @@ public class FeedsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             pDialog.dismiss();
-            // readDB();
-            readVideo();
+            readDB();
+            // readVideo();
         }
     }
 
