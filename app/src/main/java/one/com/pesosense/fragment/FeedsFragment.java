@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,7 +26,7 @@ import java.util.Random;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.adapter.FeedsAdapter;
-import one.com.pesosense.download.GetFbImage;
+import one.com.pesosense.download.GetFbFeeds;
 import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.FbImageItem;
 import one.com.pesosense.model.FbVideoItem;
@@ -42,6 +43,7 @@ public class FeedsFragment extends Fragment {
     FeedsAdapter adapter;
 
     ArrayList<Object> fi;
+    ArrayList<String> excludeID;
 
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
@@ -72,6 +74,8 @@ public class FeedsFragment extends Fragment {
         dbHelper = DatabaseHelper.getInstance(getActivity());
 
         fi = new ArrayList<>();
+        excludeID = new ArrayList<>();
+
         adapter = new FeedsAdapter(this.getActivity(), fi);
 
         llm = new LinearLayoutManager(getActivity());
@@ -110,17 +114,47 @@ public class FeedsFragment extends Fragment {
         while (cursor.moveToNext()) {
             id = cursor.getString(0);
             type = cursor.getInt(1);
+
+            excludeID.add(id);
 //
-            if (type == 0) {
-                fi.add(getFBImage(id));
-            } else if (type == 1) {
-                fi.add(getFBVideo(id));
+            if (!isExist(id)) {
+                if (type == 0) {
+                    fi.add(getFBImage(id));
+                } else if (type == 1) {
+                    fi.add(getFBVideo(id));
+                }
             }
             Log.d("All feeds", id + " type: " + String.valueOf(type));
         }
         db.close();
         adapter.notifyDataSetChanged();
     }
+
+    public boolean isExist(String id) {
+
+        boolean exist = false;
+        String tempId = "";
+        for (int i = 0; i < fi.size(); i++) {
+
+            if (fi.get(i) instanceof FbImageItem) {
+
+                FbImageItem fii = (FbImageItem) (fi.get(i));
+                tempId = fii.getId();
+            } else if (fi.get(i) instanceof FbVideoItem) {
+                FbVideoItem fvi = (FbVideoItem) (fi.get(i));
+                tempId = fvi.getId();
+            }
+
+            if (id.equalsIgnoreCase(tempId)) {
+                exist = true;
+                break;
+            }
+        }
+
+
+        return exist;
+    }
+
 
     public FbImageItem getFBImage(String id) {
         FbImageItem item = null;
@@ -249,7 +283,7 @@ public class FeedsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            nextUrl = new GetFbImage(getActivity()).getData();
+            nextUrl = new GetFbFeeds(getActivity()).getData();
             return null;
         }
 
@@ -257,8 +291,33 @@ public class FeedsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             pDialog.dismiss();
+
+            displayTips();
             readFeeds();
+            new NextFeedTask().execute();
             // readVideo();
+        }
+    }
+
+    public class NextFeedTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(getActivity(), "LOADING ulit...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            nextUrl = new GetFbFeeds(getActivity()).getNext(nextUrl);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            readFeeds();
         }
     }
 

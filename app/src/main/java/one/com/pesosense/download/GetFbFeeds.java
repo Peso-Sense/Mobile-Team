@@ -26,7 +26,7 @@ import one.com.pesosense.helper.DatabaseHelper;
 /**
  * Created by mykelneds on 7/8/15.
  */
-public class GetFbImage {
+public class GetFbFeeds {
 
     private String URL = "https://graph.facebook.com/v2.3/229179187266839/posts?access_token=";
     private String QUERY = "1602942913280381|a662f932e1409f7b9fd483e4698c878b";
@@ -47,9 +47,9 @@ public class GetFbImage {
     int ilikes = 0;
     int icomments = 0;
 
-    int limit = 10;
+    int limit = 5;
 
-    public GetFbImage(Context context) {
+    public GetFbFeeds(Context context) {
         this.context = context;
 
         dbHelper = DatabaseHelper.getInstance(context);
@@ -57,7 +57,7 @@ public class GetFbImage {
 
     public String getData() {
 
-        deleteDB();
+//        deleteDB();
 
         String nextUrl = "";
 
@@ -226,12 +226,17 @@ public class GetFbImage {
                     jsonArray = jsonObj.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject c = jsonArray.getJSONObject(i);
-                        if (c.getString("type").equalsIgnoreCase("photo") && c.has("likes")) {
+                        id = c.getString("id");
+
+                        if ((c.getString("type").equalsIgnoreCase("photo") || c.getString("type").equalsIgnoreCase("status")) && c.has("object_id") && c.has("likes")) { // (s) PesoSense Facebook image feed
+
                             HttpGet enlarge = new HttpGet("https://graph.facebook.com/v2.3/" + c.getString("object_id") + "?access_token=" + URLEncoder.encode(QUERY));
+                            // &limit=25
+                            //
                             HttpResponse httpResponse1 = httpclient.execute(enlarge);
                             HttpEntity httpEntity1 = httpResponse1.getEntity();
                             String imgLink = EntityUtils.toString(httpEntity1);
-
+                            Log.d("imgLink", imgLink);
                             JSONObject jsonObj1 = new JSONObject(imgLink);
                             JSONArray jsonArray1 = jsonObj1.getJSONArray("images");
                             JSONObject largeImg = jsonArray1.getJSONObject(jsonArray1.length() - 1);
@@ -260,7 +265,45 @@ public class GetFbImage {
                             JSONObject jsonObj3 = new JSONObject(strComments);
                             icomments = jsonObj3.getJSONObject("summary").getInt("total_count");
 
-                            // content.add(new Content(fbMsg, fbLikes, fbImage, fbComments));
+                            HttpGet profilePic = new HttpGet(profPic);
+                            HttpResponse httpResponse4 = httpclient.execute(profilePic);
+                            HttpEntity httpEntity4 = httpResponse4.getEntity();
+                            String pic = EntityUtils.toString(httpEntity4);
+
+                            JSONObject jsonObj4 = new JSONObject(pic);
+                            picture = jsonObj4.getJSONObject("data").getString("url");
+
+                            if (!isDataExist("tbl_fb_image", id)) {
+                                populateFbFeeds(id, 0);
+                                populateFbImage(id, picture, message, link, ilikes, icomments);
+                            }
+                        } // (e) PesoSense Facebook image feed
+                        else if (c.getString("type").equalsIgnoreCase("video") && c.has("likes")) {       // (s) PesoSense Facebook video feed
+                            link = c.getString("source");
+                            if (c.has("message"))
+                                message = c.getString("message");
+                            else if (c.has("description")) {
+                                message = c.getString("description");
+                            }
+
+                            HttpGet likes = new HttpGet("https://graph.facebook.com/" + c.getString("id") + "/likes?summary=true&access_token=" + URLEncoder.encode(QUERY));
+                            HttpResponse httpResponse2 = httpclient.execute(likes);
+                            HttpEntity httpEntity2 = httpResponse2.getEntity();
+                            String strLikes = EntityUtils.toString(httpEntity2);
+
+                            JSONObject jsonObj2 = new JSONObject(strLikes);
+
+                            ilikes = jsonObj2.getJSONObject("summary").getInt("total_count");
+
+//                            HttpGet comments = new HttpGet("https://graph.facebook.com/" + c.getString("object_id") + "/comments?summary=true&access_token=" + URLEncoder.encode(QUERY));
+//                            HttpResponse httpResponse3 = httpclient.execute(comments);
+//                            HttpEntity httpEntity3 = httpResponse3.getEntity();
+//                            String strComments = EntityUtils.toString(httpEntity3);
+//
+//                            JSONObject jsonObj3 = new JSONObject(strComments);
+//                            icomments = jsonObj3.getJSONObject("summary").getInt("total_count");
+
+                            icomments = 0;
 
                             HttpGet profilePic = new HttpGet(profPic);
                             HttpResponse httpResponse4 = httpclient.execute(profilePic);
@@ -270,21 +313,23 @@ public class GetFbImage {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
-                            if (!isDataExist("tbl_fb_image", id))
-                                populateFbImage(id, picture, message, link, ilikes, icomments);
-                        }
+                            if (!isDataExist("tbl_fb_video", id)) {
+                                populateFbFeeds(id, 1);
+                                populateFbVideo(id, picture, message, link, ilikes, icomments);
+                            }
 
+
+                        }   // (e) PesoSense Facebook video feed
                     }
-
                     nextUrl = jsonObj.getJSONObject("paging").getString("next");
-                    UtilsApp.putString("nextUrl", "Next Url: " + nextUrl);
+                    Log.d("nextURL", nextUrl);
+
+                    UtilsApp.putString("nextUrl", "NEXT URL: " + nextUrl);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -292,6 +337,7 @@ public class GetFbImage {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         return nextUrl;
     }
 
