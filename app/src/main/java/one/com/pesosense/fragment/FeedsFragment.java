@@ -27,6 +27,7 @@ import one.com.pesosense.adapter.FeedsAdapter;
 import one.com.pesosense.download.GetFbImage;
 import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.FbImageItem;
+import one.com.pesosense.model.FbVideoItem;
 import one.com.pesosense.model.TipsItem;
 
 /**
@@ -77,11 +78,12 @@ public class FeedsFragment extends Fragment {
         rv.setAdapter(adapter);
         rv.setLayoutManager(llm);
 
-        if (checkDB() != 0)
-            readDB();
-        else {
-            new FeedsTask().execute();
-        }
+
+//        if (checkDB() != 0)
+//            readDB();
+//        else {
+        new FeedsTask().execute();
+//        }
     }
 
 
@@ -126,6 +128,34 @@ public class FeedsFragment extends Fragment {
 
     }
 
+    public void readVideo() {
+
+        String id;
+        String profilePic;
+        String message;
+        String link;
+        int likes;
+        int comment;
+
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.query("tbl_fb_video", null, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            id = cursor.getString(0);
+            profilePic = cursor.getString(1);
+            message = cursor.getString(2);
+            link = cursor.getString(3);
+            likes = cursor.getInt(4);
+            comment = cursor.getInt(5);
+
+            fi.add(new FbVideoItem(id, profilePic, message, link, likes, comment));
+        }
+
+        adapter.notifyDataSetChanged();
+        displayTips();
+    }
+
     public class FeedsTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog pDialog;
@@ -151,7 +181,8 @@ public class FeedsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             pDialog.dismiss();
-            readDB();
+            // readDB();
+            readVideo();
         }
     }
 

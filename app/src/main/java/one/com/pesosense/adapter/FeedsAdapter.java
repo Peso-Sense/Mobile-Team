@@ -1,11 +1,13 @@
 package one.com.pesosense.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.model.FbImageItem;
+import one.com.pesosense.model.FbVideoItem;
 
 /**
  * Created by mykelneds on 7/13/15.
@@ -47,8 +50,9 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 viewHolder = new FbImageHolder(v);
                 break;
             case FB_VIDEO:
+                v = inflater.inflate(R.layout.feeds_fbvideo, parent, false);
+                viewHolder = new FbVideoHolder(v);
                 break;
-
 
         }
 
@@ -64,6 +68,10 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case FB_IMAGE:
                 FbImageHolder imageHolder = (FbImageHolder) holder;
                 fbImageHolder(imageHolder, position);
+                break;
+            case FB_VIDEO:
+                FbVideoHolder videoHolder = (FbVideoHolder) holder;
+                fbVideoHolder(videoHolder, position);
                 break;
         }
 
@@ -119,6 +127,26 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             lblLikes = (TextView) v.findViewById(R.id.lblLikes);
             lblLikes.setTypeface(UtilsApp.opensansNormal());
         }
+    }
+
+    public void fbVideoHolder(FbVideoHolder holder, int position) {
+
+        FbVideoItem current = (FbVideoItem) data.get(position);
+
+        holder.fbMessage.setText(current.getMessage());
+        holder.lblNoLikes.setText(String.valueOf(current.getLikes()));
+        holder.lblNoComments.setText(String.valueOf(current.getComment()));
+
+        Picasso.with(context).load(current.getProfilePic()).into(holder.fbProfilePicture);
+
+        //URL new_url = new URL(current.getLink());
+        MediaController mediacontroller = new MediaController(context);
+        mediacontroller.setAnchorView(holder.fbVideo);
+
+        Uri video = Uri.parse(current.getLink());
+        holder.fbVideo.setMediaController(mediacontroller);
+        holder.fbVideo.setVideoURI(video);
+        holder.fbVideo.start();
 
 
     }
@@ -144,7 +172,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             fbProfilePicture = (ImageView) v.findViewById(R.id.fbProfilePicture);
 
-            fbVideo = (ImageView) v.findViewById(R.id.fbVideo);
+            fbVideo = (VideoView) v.findViewById(R.id.fbVideo);
 
             fbMessage = (TextView) v.findViewById(R.id.fbMessage);
             fbMessage.setTypeface(UtilsApp.opensansNormal());
@@ -172,7 +200,8 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (data.get(position) instanceof FbImageItem)
             return FB_IMAGE;
-
+        if (data.get(position) instanceof FbVideoItem)
+            return FB_VIDEO;
         return type;
 
     }

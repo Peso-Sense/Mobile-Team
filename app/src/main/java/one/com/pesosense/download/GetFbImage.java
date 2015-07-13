@@ -163,7 +163,7 @@ public class GetFbImage {
 
                             if (!isDataExist(id)) {
                                 populateFbFeeds(id, 1);
-                                populateFbImage(id, picture, message, link, ilikes, icomments);
+                                populateFbVideo(id, picture, message, link, ilikes, icomments);
                             }
 
 
