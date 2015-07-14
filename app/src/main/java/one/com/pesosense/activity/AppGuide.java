@@ -1,57 +1,59 @@
 package one.com.pesosense.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import one.com.pesosense.R;
+import one.com.pesosense.UtilsApp;
 
 
-public class AppGuide extends ActionBarActivity {
+public class AppGuide extends Activity implements View.OnClickListener {
 
-    ScrollView scroll;
-    Button btn1;
+    Button btnLogin;
+    Button btnSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_guide);
 
+        initValues();
 
-        scroll = (ScrollView) findViewById(R.id.scroll);
-        btn1 = (Button) findViewById(R.id.Button);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    }
 
-                Intent intent = new Intent(AppGuide.this,Login.class);
-                startActivity(intent);
+    public void initValues() {
 
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setTypeface(UtilsApp.opensansNormal());
+        btnLogin.setOnClickListener(this);
 
-            }
-        });
-
+        btnSignup = (Button) findViewById(R.id.btnSignup);
+        btnSignup.setTypeface(UtilsApp.opensansNormal());
+        btnSignup.setOnClickListener(this);
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_appguide, menu);
-        return true;
+    public void onClick(View view) {
 
+        Intent intent = null;
 
+        if (view.getId() == R.id.btnLogin)
+            intent = new Intent(AppGuide.this, PesoActivity.class);
+        //intent = new Intent(AppGuide.this, Login.class);
 
+        if (view.getId() == R.id.btnSignup)
+            intent = new Intent(AppGuide.this, Signup.class);
+
+        if (intent != null) {
+            startActivity(intent);
+            finish();
+        }
 
     }
-
-
 
 
 }

@@ -18,35 +18,32 @@
     </string-array>
 
     <string-array name="nav_item_rich">
-        <item>CFO Newsfeeds</item>
-        <item>Celebrity #PesoSense Tips</item>
-        <item>Targeted Financial Tips</item>
-        <item>#PesoSense</item>
-        <item>Online Shop</item>
-        <item>Bills</item>
-        <item>Remit</item>
-        <item>Partner Promos</item>
-        <item>Settings</item>
+        <item>Feeds</item>
+        <item>Shop</item>
+        <item>Payments</item>
+        <item>Remittance</item>
+
     </string-array>
 
     <array name="nav_icons_thin">
-        <item>@drawable/cfo_newsfeeds</item>
+        <item>@drawable/selector_feed</item>
         <item>@drawable/check_icon_hover</item>
-        <item>@drawable/medal_icon_hover</item>
-        <item>@drawable/settings_icon_hover</item>
+        <item>@drawable/selector_payment</item>
+        <item>@drawable/selector_settings</item>
     </array>
 
     <array name="nav_icons_rich">
-        <item>@drawable/cfo_newsfeeds</item>
-        <item>@drawable/check_icon_hover</item>
-        <item>@drawable/medal_icon_hover</item>
-        <item>@drawable/cfo_newsfeeds</item>
-        <item>@drawable/store_icon_blue</item>
-        <item>@drawable/ic_news_feeds</item>
-        <item>@drawable/ic_news_feeds</item>
-        <item>@drawable/ic_news_feeds</item>
-        <item>@drawable/settings_icon_hover</item>
+        <item>@drawable/selector_feed</item>
+        <item>@drawable/selector_store</item>
+        <item>@drawable/selector_payment</item>
+        <item>@drawable/selector_remittance</item>
+    </array>
 
+    <array name="nav_icons_rich_selected">
+        <item>@drawable/ic_feeds_selected</item>
+        <item>@drawable/ic_store_selected</item>
+        <item>@drawable/ic_payment_selected</item>
+        <item>@drawable/ic_settings_selected</item>
     </array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -62,6 +59,7 @@
         <item>TAB 2</item>
         <item>TAB 3</item>
     </string-array>
+    <string name="title_activity_signup">Signup</string>
 
     <!--
     //Thin

@@ -16,6 +16,8 @@ import android.widget.Toast;
 /**
  * Created by mykelneds on 6/20/15.
  */
+
+//TESING KO LANG
 public class UtilsApp extends Application {
 
     private static Context mContext;
@@ -33,10 +35,14 @@ public class UtilsApp extends Application {
         editor = preferences.edit();
     }
 
+    public static Typeface opensansLight() {
+
+        return Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans_Light.ttf");
+    }
 
     public static Typeface opensansNormal() {
 
-        return Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans_Light.ttf");
+        return Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans_Regular.ttf");
     }
 
     public static Typeface opensansBold() {

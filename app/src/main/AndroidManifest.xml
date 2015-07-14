@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="one.com.pesosense" >
+    package="one.com.pesosense">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".UtilsApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.Splashscreen"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,28 +21,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.AppGuide"
+            android:label="@string/title_activity_app_guide"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
             android:name=".activity.PesoActivity"
             android:label="@string/title_activity_peso" />
         <activity
             android:name=".activity.Login"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".activity.AppGuide"
-            android:label="@string/title_activity_app_guide" >
-            <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".activity.TabActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activity.Signup"
+            android:label="@string/title_activity_signup"></activity>
     </application>
 
 </manifest>
