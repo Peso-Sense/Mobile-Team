@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import one.com.pesosense.EndlessRecyclerOnScrollListener;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.adapter.FeedsAdapter;
@@ -61,6 +62,8 @@ public class FeedsFragment extends Fragment {
     }
 
 
+    Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,6 +85,12 @@ public class FeedsFragment extends Fragment {
         rv = (RecyclerView) v.findViewById(R.id.rv);
         rv.setAdapter(adapter);
         rv.setLayoutManager(llm);
+        rv.setOnScrollListener(new EndlessRecyclerOnScrollListener(llm) {
+            @Override
+            public void onLoadMore(int current_page) {
+                new NextFeedTask().execute();
+            }
+        });
 
 //        readFeeds();
 //        if (checkDB() != 0)
@@ -208,64 +217,6 @@ public class FeedsFragment extends Fragment {
         return item;
     }
 
-//    public void readDB() {
-//
-//        String id;
-//        String profilePic;
-//        String message;
-//        String link;
-//        int likes;
-//        int comment;
-//
-//        db = dbHelper.getReadableDatabase();
-//
-//        cursor = db.query("tbl_fb_image", null, null, null, null, null, null);
-//
-//        while (cursor.moveToNext()) {
-//            id = cursor.getString(0);
-//            profilePic = cursor.getString(1);
-//            message = cursor.getString(2);
-//            link = cursor.getString(3);
-//            likes = cursor.getInt(4);
-//            comment = cursor.getInt(5);
-//
-//            fi.add(new FbImageItem(id, profilePic, message, link, likes, comment));
-//        }
-//
-//        adapter.notifyDataSetChanged();
-//        displayTips();
-//
-//
-//    }
-//
-//    public void readVideo() {
-//
-//        String id;
-//        String profilePic;
-//        String message;
-//        String link;
-//        int likes;
-//        int comment;
-//
-//        db = dbHelper.getReadableDatabase();
-//
-//        cursor = db.query("tbl_fb_video", null, null, null, null, null, null);
-//
-//        while (cursor.moveToNext()) {
-//            id = cursor.getString(0);
-//            profilePic = cursor.getString(1);
-//            message = cursor.getString(2);
-//            link = cursor.getString(3);
-//            likes = cursor.getInt(4);
-//            comment = cursor.getInt(5);
-//
-//            fi.add(new FbVideoItem(id, profilePic, message, link, likes, comment));
-//        }
-//
-//        adapter.notifyDataSetChanged();
-////        displayTips();
-//    }
-
     public class FeedsTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog pDialog;
@@ -301,10 +252,19 @@ public class FeedsFragment extends Fragment {
 
     public class NextFeedTask extends AsyncTask<Void, Void, Void> {
 
+        ProgressDialog pDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getActivity(), "LOADING ulit...", Toast.LENGTH_SHORT).show();
+
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Pansamantala...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+            //  Toast.makeText(getActivity(), "LOADING ulit...", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -317,6 +277,7 @@ public class FeedsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
+            pDialog.dismiss();
             readFeeds();
         }
     }

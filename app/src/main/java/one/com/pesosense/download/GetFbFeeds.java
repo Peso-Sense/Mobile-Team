@@ -57,7 +57,7 @@ public class GetFbFeeds {
 
     public String getData() {
 
-//        deleteDB();
+        deleteDB();
 
         String nextUrl = "";
 
