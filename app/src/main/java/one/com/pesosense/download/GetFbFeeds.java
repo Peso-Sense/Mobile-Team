@@ -46,6 +46,7 @@ public class GetFbFeeds {
     String message = ""; // MESSAGE BODY;
     int ilikes = 0;
     int icomments = 0;
+    String timestamp = "";
 
     int limit = 5;
 
@@ -126,9 +127,14 @@ public class GetFbFeeds {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
+                            if (c.has("updated_time"))
+                                timestamp = c.getString("updated_time");
+                            else
+                                timestamp = c.getString("created_time");
+
                             if (!isDataExist("tbl_fb_image", id)) {
-                                populateFbFeeds(id, 0);
-                                populateFbImage(id, picture, message, link, ilikes, icomments);
+                                populateFbFeeds(id, 0, timestamp);
+                                populateFbImage(id, picture, message, link, ilikes, icomments, timestamp);
                             }
                         } // (e) PesoSense Facebook image feed
                         else if (c.getString("type").equalsIgnoreCase("video") && c.has("likes")) {       // (s) PesoSense Facebook video feed
@@ -166,9 +172,14 @@ public class GetFbFeeds {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
+                            if (c.has("updated_time"))
+                                timestamp = c.getString("updated_time");
+                            else
+                                timestamp = c.getString("created_time");
+
                             if (!isDataExist("tbl_fb_video", id)) {
-                                populateFbFeeds(id, 1);
-                                populateFbVideo(id, picture, message, link, ilikes, icomments);
+                                populateFbFeeds(id, 1, timestamp);
+                                populateFbVideo(id, picture, message, link, ilikes, icomments, timestamp);
                             }
 
 
@@ -273,9 +284,14 @@ public class GetFbFeeds {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
+                            if (c.has("updated_time"))
+                                timestamp = c.getString("updated_time");
+                            else
+                                timestamp = c.getString("created_time");
+
                             if (!isDataExist("tbl_fb_image", id)) {
-                                populateFbFeeds(id, 0);
-                                populateFbImage(id, picture, message, link, ilikes, icomments);
+                                populateFbFeeds(id, 0, timestamp);
+                                populateFbImage(id, picture, message, link, ilikes, icomments, timestamp);
                             }
                         } // (e) PesoSense Facebook image feed
                         else if (c.getString("type").equalsIgnoreCase("video") && c.has("likes")) {       // (s) PesoSense Facebook video feed
@@ -313,9 +329,14 @@ public class GetFbFeeds {
                             JSONObject jsonObj4 = new JSONObject(pic);
                             picture = jsonObj4.getJSONObject("data").getString("url");
 
+                            if (c.has("updated_time"))
+                                timestamp = c.getString("updated_time");
+                            else
+                                timestamp = c.getString("created_time");
+
                             if (!isDataExist("tbl_fb_video", id)) {
-                                populateFbFeeds(id, 1);
-                                populateFbVideo(id, picture, message, link, ilikes, icomments);
+                                populateFbFeeds(id, 1, timestamp);
+                                populateFbVideo(id, picture, message, link, ilikes, icomments, timestamp );
                             }
 
 
@@ -363,7 +384,7 @@ public class GetFbFeeds {
         return exists;
     }
 
-    public void populateFbImage(String id, String picture, String message, String link, int likes, int comment) {
+    public void populateFbImage(String id, String picture, String message, String link, int likes, int comment, String timestamp) {
 
         db = dbHelper.getWritableDatabase();
         values = new ContentValues();
@@ -373,6 +394,7 @@ public class GetFbFeeds {
         values.put("link", link);
         values.put("likes", likes);
         values.put("comment", comment);
+        values.put("timestamp", timestamp);
 
         db.insert("tbl_fb_image", null, values);
         db.close();
@@ -381,7 +403,7 @@ public class GetFbFeeds {
 
     }
 
-    public void populateFbVideo(String id, String picture, String message, String link, int likes, int comment) {
+    public void populateFbVideo(String id, String picture, String message, String link, int likes, int comment, String timestamp) {
 
         db = dbHelper.getWritableDatabase();
         values = new ContentValues();
@@ -391,6 +413,7 @@ public class GetFbFeeds {
         values.put("link", link);
         values.put("likes", likes);
         values.put("comment", comment);
+        values.put("timestamp", timestamp);
 
         db.insert("tbl_fb_video", null, values);
         db.close();
@@ -399,12 +422,13 @@ public class GetFbFeeds {
 
     }
 
-    public void populateFbFeeds(String id, int type) {
+    public void populateFbFeeds(String id, int type, String timestamp) {
 
         db = dbHelper.getWritableDatabase();
         values = new ContentValues();
         values.put("id", id);
         values.put("type", type);
+        values.put("timestamp", timestamp);
         db.insert("tbl_fb_feeds", null, values);
         db.close();
 

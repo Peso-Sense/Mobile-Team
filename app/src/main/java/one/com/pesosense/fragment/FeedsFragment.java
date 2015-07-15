@@ -8,8 +8,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +23,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import one.com.pesosense.EndlessRecyclerOnScrollListener;
@@ -40,6 +45,7 @@ import one.com.pesosense.model.TipsItem;
  */
 public class FeedsFragment extends Fragment {
 
+    SwipeRefreshLayout swp;
     RecyclerView rv;
     LinearLayoutManager llm;
 
@@ -78,7 +84,7 @@ public class FeedsFragment extends Fragment {
 
     public void initValues(View v) {
 
-        displayTips();
+        //  displayTips();
 
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         nextUrl = pref.getString("nextUrl", null);
@@ -91,24 +97,44 @@ public class FeedsFragment extends Fragment {
         adapter = new FeedsAdapter(this.getActivity(), fi);
 
         llm = new LinearLayoutManager(getActivity());
+
+
+        swp = (SwipeRefreshLayout) v.findViewById(R.id.swp);
+        swp.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                Toast.makeText(getActivity(), "Refresh Practice", Toast.LENGTH_LONG).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swp.setRefreshing(false);
+                    }
+                }, 6000);
+
+            }
+        });
+
         rv = (RecyclerView) v.findViewById(R.id.rv);
         rv.setAdapter(adapter);
         rv.setLayoutManager(llm);
+        //rv.setOnScrollListener();
         rv.setOnScrollListener(new EndlessRecyclerOnScrollListener(llm) {
             @Override
             public void onLoadMore(int current_page) {
 
                 nextUrl = pref.getString("nextUrl", null);
-                new NextFeedTask().execute();
+                new NextFeedTask(nextUrl).execute();
             }
         });
 
-//        readFeeds();
-//        if (checkDB() != 0)
-//            readFeeds();
-//        else {
-        new FeedsTask().execute();
-//        }
+        readFeeds();
+        if (checkDB() != 0)
+            readFeeds();
+        else {
+            new FeedsTask().execute();
+        }
     }
 
 
@@ -127,8 +153,9 @@ public class FeedsFragment extends Fragment {
 
         String id;
         int type;
+        String timestamp;
 
-        displayTips();
+        //displayTips();
 
         db = dbHelper.getReadableDatabase();
         cursor = db.query("tbl_fb_feeds", null, null, null, null, null, null);
@@ -136,6 +163,7 @@ public class FeedsFragment extends Fragment {
         while (cursor.moveToNext()) {
             id = cursor.getString(0);
             type = cursor.getInt(1);
+            timestamp = cursor.getString(2);
 
             excludeID.add(id);
 //
@@ -149,7 +177,31 @@ public class FeedsFragment extends Fragment {
             Log.d("All feeds", id + " type: " + String.valueOf(type));
         }
         db.close();
+        sortList();
         adapter.notifyDataSetChanged();
+    }
+
+    public void sortList() {
+
+        Collections.sort(fi, new Comparator<Object>() {
+
+            @Override
+            public int compare(Object o1, Object o2) {
+
+                if (o1 instanceof FbImageItem && o2 instanceof FbImageItem && ((FbImageItem) o1).getTimestamp() != null || ((FbImageItem) o2).getTimestamp() != null) {
+                    return ((FbImageItem) o1).getTimestamp().compareTo(((FbImageItem) o2).getTimestamp());
+                } else if (o1 instanceof FbImageItem && o2 instanceof FbVideoItem && ((FbImageItem) o1).getTimestamp() != null || ((FbVideoItem) o2).getTimestamp() != null) {
+                    return ((FbImageItem) o1).getTimestamp().compareTo(((FbVideoItem) o2).getTimestamp());
+                } else if (o1 instanceof FbVideoItem && o2 instanceof FbVideoItem && ((FbVideoItem) o1).getTimestamp() != null || ((FbVideoItem) o2).getTimestamp() != null) {
+                    return ((FbVideoItem) o1).getTimestamp().compareTo(((FbVideoItem) o2).getTimestamp());
+                } else if (o1 instanceof FbVideoItem && o2 instanceof FbImageItem && ((FbVideoItem) o1).getTimestamp() != null || ((FbImageItem) o2).getTimestamp() != null) {
+                    return ((FbVideoItem) o1).getTimestamp().compareTo(((FbImageItem) o2).getTimestamp());
+                }
+
+                return 0;
+            }
+        });
+
     }
 
     public boolean isExist(String id) {
@@ -177,7 +229,6 @@ public class FeedsFragment extends Fragment {
         return exist;
     }
 
-
     public FbImageItem getFBImage(String id) {
         FbImageItem item = null;
 
@@ -186,6 +237,7 @@ public class FeedsFragment extends Fragment {
         String link = "";
         int likes = 0;
         int comment = 0;
+        String timestamp = "";
 
         db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM tbl_fb_image WHERE id = '" + id + "'";
@@ -197,8 +249,9 @@ public class FeedsFragment extends Fragment {
             link = cursor2.getString(3);
             likes = cursor2.getInt(4);
             comment = cursor2.getInt(5);
+            timestamp = cursor2.getString(6);
 
-            item = new FbImageItem(id, profilePic, message, link, likes, comment);
+            item = new FbImageItem(id, profilePic, message, link, likes, comment, timestamp);
         }
 
         return item;
@@ -212,6 +265,7 @@ public class FeedsFragment extends Fragment {
         String link = "";
         int likes = 0;
         int comment = 0;
+        String timestamp = "";
 
         db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM tbl_fb_video WHERE id = '" + id + "'";
@@ -223,8 +277,9 @@ public class FeedsFragment extends Fragment {
             link = cursor3.getString(3);
             likes = cursor3.getInt(4);
             comment = cursor3.getInt(5);
+            timestamp = cursor3.getString(6);
 
-            item = new FbVideoItem(id, profilePic, message, link, likes, comment);
+            item = new FbVideoItem(id, profilePic, message, link, likes, comment, timestamp);
         }
 
         return item;
@@ -233,6 +288,7 @@ public class FeedsFragment extends Fragment {
     public class FeedsTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog pDialog;
+        String nextUrl;
 
         @Override
         protected void onPreExecute() {
@@ -257,6 +313,8 @@ public class FeedsFragment extends Fragment {
             pDialog.dismiss();
 
             readFeeds();
+            storeNextUrl(nextUrl);
+
             //new NextFeedTask().execute();
             // readVideo();
         }
@@ -265,6 +323,12 @@ public class FeedsFragment extends Fragment {
     public class NextFeedTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog pDialog;
+
+        String nextUrl;
+
+        public NextFeedTask(String nextUrl) {
+            this.nextUrl = nextUrl;
+        }
 
         @Override
         protected void onPreExecute() {

@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 4);
+        super(mContext, "onex_db", null, 2);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -25,9 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer, timestamp varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
 //        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, " +
