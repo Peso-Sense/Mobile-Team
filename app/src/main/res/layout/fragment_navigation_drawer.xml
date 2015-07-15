@@ -22,7 +22,7 @@
             android:id="@+id/lblUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DEXTER ANDRADA"
+            android:text="Peso Sense"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/textColorPrimary" />
 
@@ -30,7 +30,7 @@
             android:id="@+id/lblUserAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ortigas, Pasig City"
+            android:text="Philippines"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/colorSelected" />
     </LinearLayout>

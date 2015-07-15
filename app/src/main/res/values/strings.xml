@@ -61,6 +61,24 @@
     </string-array>
     <string name="title_activity_signup">Signup</string>
 
+    <string name="rem_date">Sample Date</string>
+    <string name="rem_type">Sample type</string>
+    <string name="rem_content">Sample Content</string>
+
+    <string name="fab">+</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Delete</string>
+    <string name="add_new_item_title">ADD NEW ITEM</string>
+    <string name="btn_add_new_item">+ ADD</string>
+    <string name="lbl_date">Date</string>
+    <string name="txt_date">Edit date...</string>
+    <string name="lbl_title">Title</string>
+    <string name="txt_title">Edit title...</string>
+    <string name="lbl_message">Message</string>
+    <string name="txt_message">Edit message...</string>
+    <string name="btn_update_item">UPDATE</string>
+    <string name="update_item_title">Update Remittance Details</string>
+
     <!--
     //Thin
 CFO Newsfeeds

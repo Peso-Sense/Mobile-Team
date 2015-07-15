@@ -3,10 +3,12 @@ package one.com.pesosense.fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +59,8 @@ public class FeedsFragment extends Fragment {
 
     int colors[] = {R.color.tips1, R.color.tips2, R.color.tips3, R.color.tips4, R.color.tips5};
 
+    SharedPreferences pref;
+
     public FeedsFragment() {
         // Required empty public constructor
     }
@@ -74,6 +78,11 @@ public class FeedsFragment extends Fragment {
 
     public void initValues(View v) {
 
+        displayTips();
+
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        nextUrl = pref.getString("nextUrl", null);
+
         dbHelper = DatabaseHelper.getInstance(getActivity());
 
         fi = new ArrayList<>();
@@ -88,16 +97,18 @@ public class FeedsFragment extends Fragment {
         rv.setOnScrollListener(new EndlessRecyclerOnScrollListener(llm) {
             @Override
             public void onLoadMore(int current_page) {
+
+                nextUrl = pref.getString("nextUrl", null);
                 new NextFeedTask().execute();
             }
         });
 
 //        readFeeds();
 //        if (checkDB() != 0)
-//            readDB();
+//            readFeeds();
 //        else {
         new FeedsTask().execute();
-//         }
+//        }
     }
 
 
@@ -116,6 +127,8 @@ public class FeedsFragment extends Fragment {
 
         String id;
         int type;
+
+        displayTips();
 
         db = dbHelper.getReadableDatabase();
         cursor = db.query("tbl_fb_feeds", null, null, null, null, null, null);
@@ -226,7 +239,7 @@ public class FeedsFragment extends Fragment {
             super.onPreExecute();
 
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Pansamantala...");
+            pDialog.setMessage("Loading feeds...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -243,9 +256,8 @@ public class FeedsFragment extends Fragment {
             super.onPostExecute(aVoid);
             pDialog.dismiss();
 
-            displayTips();
             readFeeds();
-            new NextFeedTask().execute();
+            //new NextFeedTask().execute();
             // readVideo();
         }
     }
@@ -259,9 +271,9 @@ public class FeedsFragment extends Fragment {
             super.onPreExecute();
 
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Pansamantala...");
+            pDialog.setMessage("Loading more feeds...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
+            pDialog.setCancelable(true);
             pDialog.show();
 
             //  Toast.makeText(getActivity(), "LOADING ulit...", Toast.LENGTH_SHORT).show();
@@ -279,6 +291,7 @@ public class FeedsFragment extends Fragment {
 
             pDialog.dismiss();
             readFeeds();
+            storeNextUrl(nextUrl);
         }
     }
 
@@ -294,48 +307,51 @@ public class FeedsFragment extends Fragment {
 
         TipsItem ti = getTips(id);
 
-        type = ti.getType();
-        tipsEnglish = ti.getEnglish();
-        tipsTagalog = ti.getTagalog();
+        if (ti != null) {
+            type = ti.getType();
+            tipsEnglish = ti.getEnglish();
+            tipsTagalog = ti.getTagalog();
 
-        TextView lblTips;
-        TextView lblTipsEnglish;
-        TextView lblTipsTagalog;
+            TextView lblTips;
+            TextView lblTipsEnglish;
+            TextView lblTipsTagalog;
 
-        ImageView imgIcon;
+            ImageView imgIcon;
 
-        Button btnClose;
+            Button btnClose;
 
-        final Dialog dialog = new Dialog(this.getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_tips);
+            final Dialog dialog = new Dialog(this.getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_tips);
 
-        lblTips = (TextView) dialog.findViewById(R.id.lblTips);
-        lblTips.setTypeface(UtilsApp.opensansNormal());
+            lblTips = (TextView) dialog.findViewById(R.id.lblTips);
+            lblTips.setTypeface(UtilsApp.opensansNormal());
 
-        lblTipsEnglish = (TextView) dialog.findViewById(R.id.lblTipsEnglish);
-        lblTipsEnglish.setTypeface(UtilsApp.opensansNormal());
+            lblTipsEnglish = (TextView) dialog.findViewById(R.id.lblTipsEnglish);
+            lblTipsEnglish.setTypeface(UtilsApp.opensansNormal());
 
-        lblTipsTagalog = (TextView) dialog.findViewById(R.id.lblTipsTagalog);
-        lblTipsTagalog.setTypeface(UtilsApp.opensansNormal());
+            lblTipsTagalog = (TextView) dialog.findViewById(R.id.lblTipsTagalog);
+            lblTipsTagalog.setTypeface(UtilsApp.opensansNormal());
 
-        lblTips.setText("Tips for " + tipsType[type - 1]);
-        lblTipsEnglish.setText(tipsEnglish);
-        lblTipsTagalog.setText(tipsTagalog);
+            lblTips.setText("Tips for " + tipsType[type - 1]);
+            lblTipsEnglish.setText(tipsEnglish);
+            lblTipsTagalog.setText(tipsTagalog);
 
-        imgIcon = (ImageView) dialog.findViewById(R.id.imgIcon);
-        imgIcon.setImageDrawable(getResources().getDrawable(icons[type - 1]));
+            imgIcon = (ImageView) dialog.findViewById(R.id.imgIcon);
+            imgIcon.setImageDrawable(getResources().getDrawable(icons[type - 1]));
 
-        btnClose = (Button) dialog.findViewById(R.id.btnClose);
-        btnClose.setBackgroundColor(getResources().getColor(colors[type - 1]));
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            btnClose = (Button) dialog.findViewById(R.id.btnClose);
+            btnClose.setBackgroundColor(getResources().getColor(colors[type - 1]));
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
+        }
 
     }
 
@@ -363,5 +379,11 @@ public class FeedsFragment extends Fragment {
         return ti;
     }
 
+    public void storeNextUrl(String nextUrl) {
+
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("nextUrl", nextUrl);
+        editor.commit();
+    }
 
 }

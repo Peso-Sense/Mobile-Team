@@ -22,4 +22,14 @@
 
     <item name="grey" type="color">#424242</item>
 
+    <item name="black" type="color">#1e1e1e</item>
+    <item name="black_pressed" type="color">#444</item>
+    <item name="blue" type="color">#63c2ee</item>
+    <item name="blue_pressed" type="color">#a8e4ff</item>
+
+    <color name="button_fb">#3b5998</color>
+    <color name="button_fb_pressed">#3b5998ff</color>
+    <color name="button_primary">#63C2EC</color>
+    <color name="button_primary_pressed">#63C2ECff</color>
+
 </resources>

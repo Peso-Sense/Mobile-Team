@@ -125,7 +125,7 @@ public class FragmentDrawer extends Fragment {
         if (UtilsApp.LOGIN_STATUS == 0) {
             civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
         } else {
-            civ.setImageDrawable(getResources().getDrawable(R.drawable.pic));
+            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
             //TODO (change image)
         }
 
