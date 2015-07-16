@@ -32,4 +32,10 @@
     <color name="button_primary">#63C2EC</color>
     <color name="button_primary_pressed">#63C2ECff</color>
 
+    <color name="navtext_active">#0f0f0f</color>
+    <color name="navtext_normal">#c7c7c7</color>
+    <color name="navtext_pressed">#63c2ee</color>
+
+    <color name="navrow_normal">#121315</color>
+
 </resources>

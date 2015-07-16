@@ -31,6 +31,7 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
 
     private void initValues() {
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setTypeface(UtilsApp.opensansNormal());
         btnLogin.setOnClickListener(this);
 
 //        btnSignup = (Button) findViewById(R.id.btnSignup);

@@ -22,27 +22,30 @@
         <item>Shop</item>
         <item>Payments</item>
         <item>Remittance</item>
+        <item>Settings</item>
 
     </string-array>
 
     <array name="nav_icons_thin">
-        <item>@drawable/selector_feed</item>
+        <item>@drawable/selector_feeds</item>
         <item>@drawable/check_icon_hover</item>
-        <item>@drawable/selector_payment</item>
+        <item>@drawable/selector_bills</item>
         <item>@drawable/selector_settings</item>
     </array>
 
     <array name="nav_icons_rich">
-        <item>@drawable/selector_feed</item>
-        <item>@drawable/selector_store</item>
-        <item>@drawable/selector_payment</item>
+        <item>@drawable/selector_feeds</item>
+        <item>@drawable/selector_shop</item>
+        <item>@drawable/selector_bills</item>
         <item>@drawable/selector_remittance</item>
+        <item>@drawable/selector_settings</item>
     </array>
 
     <array name="nav_icons_rich_selected">
         <item>@drawable/ic_feeds_selected</item>
-        <item>@drawable/ic_store_selected</item>
-        <item>@drawable/ic_payment_selected</item>
+        <item>@drawable/ic_shop_selected</item>
+        <item>@drawable/ic_bills_selected</item>
+        <item>@drawable/ic_remittance_selected</item>
         <item>@drawable/ic_settings_selected</item>
     </array>
 
@@ -78,6 +81,7 @@
     <string name="txt_message">Edit message...</string>
     <string name="btn_update_item">UPDATE</string>
     <string name="update_item_title">Update Remittance Details</string>
+    <string name="title_activity_government_payment">GovernmentPayment</string>
 
     <!--
     //Thin
