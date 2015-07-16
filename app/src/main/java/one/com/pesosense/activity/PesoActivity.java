@@ -88,7 +88,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         switch (position) {
             case 0:
-
+                setTitle("Feeds");
                 mFragment = new FeedsFragment();
                 break;
             case 1:
