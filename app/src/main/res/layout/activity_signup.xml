@@ -91,6 +91,33 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:padding="12dp"
+                android:src="@drawable/username" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#00000000"
+                android:hint="Username"
+                android:padding="8dp"
+                android:textColor="#fff"
+                android:textColorHint="#525252"
+                android:id="@+id/txtUsername" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="#222223"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:src="@drawable/email" />
 
             <EditText
@@ -101,14 +128,14 @@
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252" />
+                android:textColorHint="#525252"
+                android:id="@+id/txtEmail" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
             android:background="#222223"
             android:orientation="horizontal"
             android:paddingLeft="12dp">
@@ -127,31 +154,8 @@
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#222223"
-            android:orientation="horizontal"
-            android:paddingLeft="12dp">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:src="@drawable/username" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="#00000000"
-                android:hint="Username"
-                android:padding="8dp"
-                android:textColor="#fff"
-                android:textColorHint="#525252" />
+                android:textColorHint="#525252"
+                android:id="@+id/txtPassword" />
 
         </LinearLayout>
 
@@ -159,7 +163,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/primary_button"
-            android:text="Sign Up" />
+            android:text="Sign Up"
+            android:id="@+id/btnSignup" />
 
         <LinearLayout
             android:layout_width="match_parent"

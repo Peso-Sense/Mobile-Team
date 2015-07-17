@@ -38,4 +38,7 @@
 
     <color name="navrow_normal">#121315</color>
 
+    <color name="button_secondary">#ccc</color>
+    <color name="button_secondary_pressed">#aaa</color>
+
 </resources>

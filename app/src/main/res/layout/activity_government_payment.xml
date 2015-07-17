@@ -7,16 +7,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/lblGovernment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@color/blue"
-            android:padding="16dp"
+            android:padding="8dp"
             android:text="Social Security"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/navtext_active" />
 
         <LinearLayout
@@ -43,7 +45,7 @@
                 android:background="@drawable/text_stoke_black"
                 android:hint="Account Name"
                 android:inputType="text"
-                android:padding="4dp"
+                android:padding="8dp"
 
                 android:textColorHint="@color/navtext_normal" />
 
@@ -73,7 +75,7 @@
                 android:background="@drawable/text_stoke_black"
                 android:hint="Reference ID"
                 android:inputType="text"
-                android:padding="4dp"
+                android:padding="8dp"
 
                 android:textColorHint="@color/navtext_normal" />
 
@@ -104,10 +106,7 @@
                 android:gravity="right"
                 android:hint="Amount"
                 android:inputType="text"
-                android:paddingBottom="8dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-
+                android:padding="8dp"
                 android:textColor="@color/navtext_active"
                 android:textColorHint="@color/navtext_normal" />
 

@@ -3,6 +3,8 @@ package one.com.pesosense.fragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pkmmte.view.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,9 @@ import java.util.List;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.adapter.NavigationDrawerAdapter;
+import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.NavDrawerItem;
+import one.com.pesosense.model.UserItem;
 
 /**
  * Created by mykelneds on 6/19/15.
@@ -103,12 +108,18 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer,
                 container, false);
+
+        UserItem item = readDB();
+
+
         navbarbgtop = (LinearLayout) layout.findViewById(R.id.nav_header_container);
         lblUsername = (TextView) layout.findViewById(R.id.lblUsername);
         lblUsername.setTypeface(UtilsApp.opensansBold());
+        lblUsername.setText(item.getfName() + " " + item.getlName());
 
         lblUseraddress = (TextView) layout.findViewById(R.id.lblUserAddress);
         lblUseraddress.setTypeface(UtilsApp.opensansNormal());
+        lblUseraddress.setText(item.getAddress());
 
         if (UtilsApp.LOGIN_STATUS == 0) {
 //          lblUseraddress.setVisibility(View.GONE);
@@ -121,12 +132,14 @@ public class FragmentDrawer extends Fragment {
         CircularImageView civ = (CircularImageView) layout.findViewById(R.id.imgUser);
         civ.setImageDrawable(getResources().getDrawable(R.drawable.ic_unsync));
 
-        if (UtilsApp.LOGIN_STATUS == 0) {
-            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
-        } else {
-            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
-            //TODO (change image)
-        }
+        Picasso.with(getActivity()).load(item.getImgPath()).into(civ);
+//
+//        if (UtilsApp.LOGIN_STATUS == 0) {
+//            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
+//        } else {
+//            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
+//            //TODO (change image)
+//        }
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
@@ -148,6 +161,41 @@ public class FragmentDrawer extends Fragment {
         }));
 
         return layout;
+
+
+    }
+
+    public UserItem readDB() {
+
+        UserItem item = null;
+
+        String imgPath = "";
+        String lName = "";
+        String fName = "";
+        String mName = "";
+        String gender = "";
+        String birthday = "";
+        String address = "";
+
+
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query("tbl_user_info", null, null, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            imgPath = cursor.getString(0);
+            lName = cursor.getString(1);
+            fName = cursor.getString(2);
+            mName = cursor.getString(3);
+            gender = cursor.getString(4);
+            birthday = cursor.getString(5);
+            address = cursor.getString(6);
+            item = new UserItem(imgPath, lName, fName, mName, gender, birthday, address);
+        }
+
+        return item;
+
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout,

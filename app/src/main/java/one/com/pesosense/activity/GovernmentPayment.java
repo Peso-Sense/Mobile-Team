@@ -36,14 +36,27 @@ public class GovernmentPayment extends ActionBarActivity {
 
         lblGovernment = (TextView) findViewById(R.id.lblGovernment);
         lblGovernment.setTypeface(UtilsApp.opensansNormal());
+
         lblName = (TextView) findViewById(R.id.lblName);
-        lblGovernment.setTypeface(UtilsApp.opensansNormal());
+        lblName.setTypeface(UtilsApp.opensansNormal());
+
         lblRef = (TextView) findViewById(R.id.lblRef);
+        lblRef.setTypeface(UtilsApp.opensansNormal());
 
-        lblGovernment.setTypeface(UtilsApp.opensansNormal());
         lblAmount = (TextView) findViewById(R.id.lblAmount);
-        lblGovernment.setTypeface(UtilsApp.opensansNormal());
+        lblAmount.setTypeface(UtilsApp.opensansNormal());
 
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnConfirm.setTypeface(UtilsApp.opensansNormal());
+
+        txtName = (EditText) findViewById(R.id.txtName);
+        txtName.setTypeface(UtilsApp.opensansNormal());
+
+        txtRefNum = (EditText) findViewById(R.id.txtRefNum);
+        txtRefNum.setTypeface(UtilsApp.opensansNormal());
+
+        txtAmount = (EditText) findViewById(R.id.txtAmount);
+        txtAmount.setTypeface(UtilsApp.opensansNormal());
 
 
     }

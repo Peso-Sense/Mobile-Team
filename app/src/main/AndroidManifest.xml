@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="one.com.pesosense" >
+    package="one.com.pesosense">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".UtilsApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.Splashscreen"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,11 +45,14 @@
         <activity
             android:name=".activity.GovernmentPayment"
             android:label="@string/title_activity_government_payment"
-            android:parentActivityName=".activity.PesoActivity" >
+            android:parentActivityName=".activity.PesoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="one.com.pesosense.activity.PesoActivity" />
         </activity>
+        <activity
+            android:name=".activity.UserInformation"
+            android:label="@string/title_activity_signup" />
     </application>
 
 </manifest>
