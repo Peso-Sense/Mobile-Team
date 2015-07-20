@@ -22,4 +22,23 @@
 
     <item name="grey" type="color">#424242</item>
 
+    <item name="black" type="color">#1e1e1e</item>
+    <item name="black_pressed" type="color">#444</item>
+    <item name="blue" type="color">#63c2ee</item>
+    <item name="blue_pressed" type="color">#a8e4ff</item>
+
+    <color name="button_fb">#3b5998</color>
+    <color name="button_fb_pressed">#3b5998ff</color>
+    <color name="button_primary">#63C2EC</color>
+    <color name="button_primary_pressed">#63C2ECff</color>
+
+    <color name="navtext_active">#0f0f0f</color>
+    <color name="navtext_normal">#c7c7c7</color>
+    <color name="navtext_pressed">#63c2ee</color>
+
+    <color name="navrow_normal">#121315</color>
+
+    <color name="button_secondary">#ccc</color>
+    <color name="button_secondary_pressed">#aaa</color>
+
 </resources>

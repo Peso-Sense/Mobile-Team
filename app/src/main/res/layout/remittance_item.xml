@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="4dp">
+
+    <!--we will put the contents of the remittances here-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0f0f0f"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/rem_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:text="@string/rem_type"
+                android:textColor="#fff"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="8dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/ic_pencil_white_48dp"
+                android:contentDescription="@string/btn_edit" />
+
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_delete_white_48dp"
+                android:contentDescription="@string/btn_delete" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rem_content"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="@string/rem_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#bbb" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/rem_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rem_date"
+                android:textColor="#aaa"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

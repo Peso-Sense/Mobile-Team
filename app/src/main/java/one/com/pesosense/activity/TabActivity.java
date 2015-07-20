@@ -1,7 +1,5 @@
 package one.com.pesosense.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import one.com.pesosense.R;
-import one.com.pesosense.tabs.SlidingTabLayout;
+import one.com.pesosense.sliding.SlidingTabLayout;
 
 /**
  * Created by Maox on 6/30/2015.

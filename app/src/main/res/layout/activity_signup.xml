@@ -1,11 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="one.com.pesosense.activity.Signup">
+    android:background="#121315"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_fb"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="12dp"
+            android:padding="12dp"
+            android:src="@drawable/fblogowhite" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lbl_login_with"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Sign up with "
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/lbl_facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Facebook"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/lbl_login_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="or with "
+                android:textColor="#fff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="#222223"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@drawable/username" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#00000000"
+                android:hint="Username"
+                android:padding="8dp"
+                android:textColor="#fff"
+                android:textColorHint="#525252"
+                android:id="@+id/txtUsername" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="#222223"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@drawable/email" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#00000000"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:padding="8dp"
+                android:textColor="#fff"
+                android:textColorHint="#525252"
+                android:id="@+id/txtEmail" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#222223"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@drawable/password" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#00000000"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                android:textColor="#fff"
+                android:textColorHint="#525252"
+                android:id="@+id/txtPassword" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/primary_button"
+            android:text="Sign Up"
+            android:id="@+id/btnSignup" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="false"
+                android:text="By signing up, you agree to Peso Sense's"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#525252" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:text="Terms and Condition, "
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#b6b5b5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:text="Privacy Policy, "
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#b6b5b5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="and"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#525252" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Mobile Terms"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#b6b5b5" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

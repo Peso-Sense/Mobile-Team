@@ -13,69 +13,6 @@
         android:layout_marginTop="59dp"
         android:background="@drawable/p8" />
 
-
-    <!-- RELATIVE PA MORE! -->
-    <!--<RelativeLayout-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/imageView10"-->
-    <!--android:layout_width="192dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/lbb" />-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/imageView11"-->
-    <!--android:layout_width="192dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:background="@drawable/lb" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textView11"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginLeft="71dp"-->
-    <!--android:layout_marginStart="71dp"-->
-    <!--android:text="Log in"-->
-    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-    <!--android:textColor="#ffffff" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textView12"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignEnd="@+id/imageView11"-->
-    <!--android:layout_alignRight="@+id/imageView11"-->
-    <!--android:layout_alignTop="@+id/textView11"-->
-    <!--android:layout_marginEnd="62dp"-->
-    <!--android:layout_marginRight="62dp"-->
-    <!--android:text="Sign up"-->
-    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-    <!--android:textColor="#000000" />-->
-    <!-- -->
-    <!-- -->
-    <!-- Para san to?-->
-    <!--<ProgressBar-->
-    <!--style="?android:attr/progressBarStyleHorizontal"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/progressBar"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_alignParentEnd="true" />-->
-
-    <!--</RelativeLayout>-->
-
     <ImageView
         android:layout_width="180dp"
         android:layout_height="25dp"
@@ -84,7 +21,57 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/pesosense_title" />
 
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="50dp" />
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linear"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/selector_bullet"
+            android:button="@android:color/transparent"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignLeft="@+id/radioButton"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/selector_bullet"
+            android:button="@android:color/transparent"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignLeft="@+id/radioButton1"
+            android:background="@drawable/selector_bullet"
+            android:button="@android:color/transparent"
+            android:gravity="center" />
+
+    </RadioGroup>
+
+
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

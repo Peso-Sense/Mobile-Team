@@ -46,7 +46,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         if (status == 1)
-            displayViewRich(0);
+            displayViewRich(1);
 
 
     }
@@ -88,15 +88,19 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         switch (position) {
             case 0:
+                setTitle("Feeds");
                 mFragment = new FeedsFragment();
                 break;
             case 1:
+                setTitle("Shop");
                 mFragment = new ShopFragment();
                 break;
             case 2:
+                setTitle("Payment");
                 mFragment = new PaymentFragment();
                 break;
             case 3:
+                setTitle("Remittance");
                 mFragment = new RemittanceFragment();
                 break;
         }

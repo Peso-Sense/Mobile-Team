@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 2);
+        super(mContext, "onex_db", null, 5);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -25,19 +25,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer, timestamp varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
+//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, " +
+                "rem_date varchar, rem_title varchar, rem_message varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (email varchar, imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar)");
 
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer, province varchar, name varchar, price varchar, product_image varchar, description varchar, ratings int)");
-//
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_category (cat_id integer , cat_name varchar)");
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_subcategory(subcat_id integer , subcat_name varchar)");
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_products(product_id integer , cat_id integer, subcat_id integer, product_name varchar, product_desc varchar, product_cost integer, product_price integer, product_quantity integer, product_image varchar)");
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_grabbed(grabbed_id integer, cat_id integer, subcat_id integer, grabbed_name varchar, grabbed_desc varchar, grabbed_cost integer, grabbed_price integer, grabbed_quantity integer, grabbed_image varchar)");
-//
         populateTips(db);
     }
 
@@ -55,6 +51,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS tbl_subcategory");
         db.execSQL("DROP TABLE IF EXISTS tbl_products");
         db.execSQL("DROP TABLE IF EXISTS tbl_grabbed");
+
+        db.execSQL("DROP TABLE IF EXISTS tbl_user_info");
 
         onCreate(db);
 
@@ -117,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO tbl_financial_tips(id, type, tips_english, tips_tagalog) VALUES (50, 5, 'Have long-term financial goals.', 'Magkaroon ng pang-matagalang planong pinansyal.') ");
 
         /***    ***     ***     ***     ***     ***     ***     ***     ***/
-        db.execSQL("INSERT INTO tbl_remittances (id, date, title, message) VALUES (1, '01-01-2015', 'SMART', 'This is a sample content') ");
+        db.execSQL("INSERT INTO tbl_remittances (rem_id, rem_date, rem_title, rem_message) VALUES (1, '01-01-2015', 'SMART', 'This is a sample content') ");
     }
 
 }

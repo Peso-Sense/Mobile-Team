@@ -60,8 +60,8 @@ public class NavigationDrawerAdapter extends
 
         data.get(0).setShowNotify(true);
         holders.get(0).root.setBackgroundColor(context.getResources().getColor(
-                R.color.colorSelected));
-        holders.get(0).title.setTextColor(context.getResources().getColor(R.color.textColorBlack));
+                R.color.blue));
+        holders.get(0).title.setTextColor(context.getResources().getColor(R.color.navtext_active));
         holders.get(0).icon.setImageResource(data.get(0).getSelectedIcon());
 
         holder.root.setOnClickListener(new View.OnClickListener() {
@@ -70,14 +70,14 @@ public class NavigationDrawerAdapter extends
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
 
-                holders.get(position).root.setBackgroundColor(context.getResources().getColor(R.color.colorSelected));
-                holders.get(position).title.setTextColor(context.getResources().getColor(R.color.textColorBlack));
+                holders.get(position).root.setBackgroundColor(context.getResources().getColor(R.color.blue));
+                holders.get(position).title.setTextColor(context.getResources().getColor(R.color.navtext_active));
                 holders.get(position).icon.setImageResource(current.getSelectedIcon());
                 for (int i = 0; i < data.size(); i++) {
                     if (i != position) {
                         holders.get(i).root.setBackgroundColor(context
-                                .getResources().getColor(R.color.colorPrimary));
-                        holders.get(i).title.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+                                .getResources().getColor(R.color.navrow_normal));
+                        holders.get(i).title.setTextColor(context.getResources().getColor(R.color.navtext_normal));
                         holders.get(i).icon.setImageResource(data.get(i).getIcon());
 
                     }
