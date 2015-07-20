@@ -297,7 +297,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         db.delete("tbl_user_info", null, null);
 
         values = new ContentValues();
-        values.put("email", email);
+
         values.put("imagepath", imgPath);
         values.put("lname", lName);
         values.put("fname", fName);
@@ -305,6 +305,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         values.put("gender", gender);
         values.put("birthday", birthday);
         values.put("address", address);
+        values.put("email", email);
         db.insert("tbl_user_info", null, values);
         db.close();
 

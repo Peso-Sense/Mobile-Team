@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
@@ -26,7 +27,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
 
     int status = UtilsApp.LOGIN_STATUS;
-
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,12 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setContentView(R.layout.activity_peso);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setTitle("");
 
+        title = (TextView) mToolbar.findViewById(R.id.title);
+        //title.setTypeface(UtilsApp.opensansNormal());
         drawerFragment = (FragmentDrawer) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer,
@@ -85,22 +88,23 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         FragmentManager mFragmentManager = getSupportFragmentManager();
         Fragment mFragment = null;
-
+        String title = "";
         switch (position) {
             case 0:
-                setTitle("Feeds");
+                title = "Feeds";
                 mFragment = new FeedsFragment();
                 break;
             case 1:
-                setTitle("Shop");
+//                setTitle("Shop");
+                title = "Shop";
                 mFragment = new ShopFragment();
                 break;
             case 2:
-                setTitle("Payment");
+                title = "Payment";
                 mFragment = new PaymentFragment();
                 break;
             case 3:
-                setTitle("Remittance");
+                title = "Remittance";
                 mFragment = new RemittanceFragment();
                 break;
         }
@@ -109,6 +113,8 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
             mFragmentManager.beginTransaction()
                     .replace(R.id.container_body, mFragment).commit();
         }
+
+        this.title.setText(title);
 
 
     }

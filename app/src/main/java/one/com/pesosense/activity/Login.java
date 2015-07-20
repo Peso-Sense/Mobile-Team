@@ -1,13 +1,19 @@
 package one.com.pesosense.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +34,10 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
     Map<String, String> passedData;
     APIHandler apiHandler;
     String url = "http://search.onesupershop.com/api/auth";
+    String urlUserDetails = "http://search.onesupershop.com/api/me";
+
+    String token = "";
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +98,6 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
 
     public class LoginTask extends AsyncTask<Void, Void, Void> {
 
-        ProgressDialog pDialog;
-        String token;
 
         @Override
         protected void onPreExecute() {
@@ -104,19 +112,78 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-            pDialog.dismiss();
+            loginResult();
+            //pDialog.dismiss();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+            String response = apiHandler.httpMakeRequest(url, passedData, "post");
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                if (jsonObject.getString("message").equalsIgnoreCase("authentication successful"))
+                    token = jsonObject.getString("token");
+                else
+                    token = jsonObject.getString("message");
+                passedData.clear();
+                addToDataMap("token", token);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
     }
 
+    private void loginResult() {
+
+        Log.d("token", token);
+        if (token.equalsIgnoreCase("Invalid credentials")) {
+            pDialog.dismiss();
+            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
+
+            // insert error message;
+        } else {
+            pDialog.dismiss();
+            startActivity();
+            //     new GetUserDetails().execute();
+        }
+
+    }
+
+    public class GetUserDetails extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            String response = apiHandler.httpMakeRequest(urlUserDetails, passedData, "get");
+
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                Log.d("tag", response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pDialog.dismiss();
+
+        }
+    }
+
     public void addToDataMap(String key, String value) {
         passedData.put(key, value);
+    }
+
+    public void startActivity() {
+        startActivity(new Intent(Login.this, PesoActivity.class));
     }
 }

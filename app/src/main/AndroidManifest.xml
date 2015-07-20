@@ -46,9 +46,7 @@
             android:name=".activity.GovernmentPayment"
             android:label="@string/title_activity_government_payment"
             android:parentActivityName=".activity.PesoActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="one.com.pesosense.activity.PesoActivity" />
+
         </activity>
         <activity
             android:name=".activity.UserInformation"
