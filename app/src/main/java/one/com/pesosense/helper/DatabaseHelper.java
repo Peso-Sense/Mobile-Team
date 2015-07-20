@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 4);
+        super(mContext, "onex_db", null, 5);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, " +
                 "rem_date varchar, rem_title varchar, rem_message varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (email varchar, imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar)");
 
         populateTips(db);
     }

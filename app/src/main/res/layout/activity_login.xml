@@ -100,7 +100,8 @@
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252" />
+                android:textColorHint="#525252"
+                android:id="@+id/txtEmail" />
 
         </LinearLayout>
 
@@ -125,7 +126,8 @@
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252" />
+                android:textColorHint="#525252"
+                android:id="@+id/txtPassword" />
 
         </LinearLayout>
 

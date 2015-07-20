@@ -2,10 +2,12 @@
 package one.com.pesosense.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -167,6 +169,9 @@ public class FragmentDrawer extends Fragment {
 
     public UserItem readDB() {
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String email = preferences.getString("email", null);
+
         UserItem item = null;
 
         String imgPath = "";
@@ -180,7 +185,9 @@ public class FragmentDrawer extends Fragment {
 
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query("tbl_user_info", null, null, null, null, null, null);
+
+        String query = "SELECT * FROM tbl_user_info WHERE email = '" + email + "'";
+        Cursor cursor = db.rawQuery(query, null);
 
         if (cursor != null) {
             cursor.moveToFirst();

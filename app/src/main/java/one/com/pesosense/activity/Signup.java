@@ -134,6 +134,7 @@ public class Signup extends ActionBarActivity {
     public void userInfo() {
         Bundle b = new Bundle();
         b.putString("root", "signup");
+        b.putString("email", strEmail);
         Intent intent = new Intent(Signup.this, UserInformation.class);
         intent.putExtras(b);
         startActivity(intent);

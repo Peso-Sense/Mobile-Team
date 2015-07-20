@@ -81,7 +81,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     Bundle b;
 
-    String imgPath, lName, fName, mName, gender, birthday, address;
+    String email, imgPath, lName, fName, mName, gender, birthday, address;
 
 
     /**
@@ -180,6 +180,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
             if (root.equalsIgnoreCase("signup")) {
                 btnSave.setVisibility(View.VISIBLE);
+                email = b.getString("email");
             }
         }
 
@@ -296,6 +297,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         db.delete("tbl_user_info", null, null);
 
         values = new ContentValues();
+        values.put("email", email);
         values.put("imagepath", imgPath);
         values.put("lname", lName);
         values.put("fname", fName);
@@ -306,8 +308,14 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         db.insert("tbl_user_info", null, values);
         db.close();
 
-        if (root.equalsIgnoreCase("signup"))
+        UtilsApp.putString("email", email);
+
+        if (root.equalsIgnoreCase("signup")) {
             startActivity(new Intent(UserInformation.this, PesoActivity.class));
+
+        }
+
+        finish();
     }
 
     public void showDatePicker() {

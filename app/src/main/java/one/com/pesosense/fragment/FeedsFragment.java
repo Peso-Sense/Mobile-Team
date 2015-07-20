@@ -188,13 +188,13 @@ public class FeedsFragment extends Fragment {
             @Override
             public int compare(Object o1, Object o2) {
 
-                if (o1 instanceof FbImageItem && o2 instanceof FbImageItem && ((FbImageItem) o1).getTimestamp() != null || ((FbImageItem) o2).getTimestamp() != null) {
+                if (o1 instanceof FbImageItem && o2 instanceof FbImageItem && ((FbImageItem) o1).getTimestamp() != null && ((FbImageItem) o2).getTimestamp() != null) {
                     return ((FbImageItem) o1).getTimestamp().compareTo(((FbImageItem) o2).getTimestamp());
-                } else if (o1 instanceof FbImageItem && o2 instanceof FbVideoItem && ((FbImageItem) o1).getTimestamp() != null || ((FbVideoItem) o2).getTimestamp() != null) {
+                } else if (o1 instanceof FbImageItem && o2 instanceof FbVideoItem && ((FbImageItem) o1).getTimestamp() != null && ((FbVideoItem) o2).getTimestamp() != null) {
                     return ((FbImageItem) o1).getTimestamp().compareTo(((FbVideoItem) o2).getTimestamp());
-                } else if (o1 instanceof FbVideoItem && o2 instanceof FbVideoItem && ((FbVideoItem) o1).getTimestamp() != null || ((FbVideoItem) o2).getTimestamp() != null) {
+                } else if (o1 instanceof FbVideoItem && o2 instanceof FbVideoItem && ((FbVideoItem) o1).getTimestamp() != null && ((FbVideoItem) o2).getTimestamp() != null) {
                     return ((FbVideoItem) o1).getTimestamp().compareTo(((FbVideoItem) o2).getTimestamp());
-                } else if (o1 instanceof FbVideoItem && o2 instanceof FbImageItem && ((FbVideoItem) o1).getTimestamp() != null || ((FbImageItem) o2).getTimestamp() != null) {
+                } else if (o1 instanceof FbVideoItem && o2 instanceof FbImageItem && ((FbVideoItem) o1).getTimestamp() != null && ((FbImageItem) o2).getTimestamp() != null) {
                     return ((FbVideoItem) o1).getTimestamp().compareTo(((FbImageItem) o2).getTimestamp());
                 }
 
