@@ -59,8 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/fields_bg"
-                    android:maxLines="1"
                     android:hint="Last Name"
+                    android:inputType="textPersonName"
                     android:padding="8dp" />
 
             </LinearLayout>
@@ -82,8 +82,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/fields_bg"
                     android:hint="First Name"
+                    android:inputType="textPersonName"
                     android:padding="8dp"
-                    android:maxLines="1"
                     android:textColor="@color/navtext_active" />
 
             </LinearLayout>
@@ -105,8 +105,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/fields_bg"
                     android:hint="Middle Name"
+                    android:inputType="textPersonName"
                     android:padding="8dp"
-                    android:maxLines="1"
                     android:textColor="@color/navtext_active" />
 
             </LinearLayout>
