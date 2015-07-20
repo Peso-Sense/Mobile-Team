@@ -1,28 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/navrow_normal">
 
     <LinearLayout
         android:id="@+id/nav_header_container"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary"
+        android:background="@color/navrow_normal"
         android:gravity="center"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <com.pkmmte.view.CircularImageView
             android:id="@+id/imgUser"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_width="120dp"
+            android:layout_height="120dp" />
 
         <TextView
             android:id="@+id/lblUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DEXTER ANDRADA"
+            android:text="Peso Sense"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/textColorPrimary" />
 
@@ -30,7 +29,7 @@
             android:id="@+id/lblUserAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ortigas, Pasig City"
+            android:text="Philippines"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/colorSelected" />
     </LinearLayout>

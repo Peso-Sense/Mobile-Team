@@ -3,6 +3,9 @@
     package="one.com.pesosense">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".UtilsApp"
@@ -30,7 +33,6 @@
         <activity
             android:name=".activity.Login"
             android:label="@string/title_activity_login" />
-
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -39,7 +41,18 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".activity.Signup"
-            android:label="@string/title_activity_signup"></activity>
+            android:label="@string/title_activity_signup" />
+        <activity
+            android:name=".activity.GovernmentPayment"
+            android:label="@string/title_activity_government_payment"
+            android:parentActivityName=".activity.PesoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="one.com.pesosense.activity.PesoActivity" />
+        </activity>
+        <activity
+            android:name=".activity.UserInformation"
+            android:label="@string/title_activity_signup" />
     </application>
 
 </manifest>
