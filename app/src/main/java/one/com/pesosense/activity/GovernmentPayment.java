@@ -2,6 +2,7 @@ package one.com.pesosense.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 
 public class GovernmentPayment extends ActionBarActivity {
+
+    Toolbar toolbar;
 
     TextView lblGovernment;
     TextView lblName;
@@ -24,6 +27,8 @@ public class GovernmentPayment extends ActionBarActivity {
     EditText txtRefNum;
     EditText txtAmount;
 
+    int root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,15 @@ public class GovernmentPayment extends ActionBarActivity {
     }
 
     private void initValues() {
+
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        root = getIntent().getIntExtra("root", 0);
 
         lblGovernment = (TextView) findViewById(R.id.lblGovernment);
         lblGovernment.setTypeface(UtilsApp.opensansNormal());
@@ -58,6 +72,30 @@ public class GovernmentPayment extends ActionBarActivity {
         txtAmount = (EditText) findViewById(R.id.txtAmount);
         txtAmount.setTypeface(UtilsApp.opensansNormal());
 
+        setGovernmentName(root);
+    }
+
+    private void setGovernmentName(int root) {
+
+        String governmentName = "";
+
+        switch (root) {
+
+            case 0:
+                governmentName = "Social Security System";
+                break;
+            case 1:
+                governmentName = "PhilHealth";
+                break;
+            case 2:
+                governmentName = "Pag ibig Fund";
+                break;
+
+        }
+
+        lblGovernment.setText(governmentName);
+        setTitle(governmentName);
+
 
     }
 
@@ -78,6 +116,10 @@ public class GovernmentPayment extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

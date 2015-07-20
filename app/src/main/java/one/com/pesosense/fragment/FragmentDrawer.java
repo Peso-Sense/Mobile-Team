@@ -54,6 +54,7 @@ public class FragmentDrawer extends Fragment {
 
     private TextView lblUsername;
     private TextView lblUseraddress;
+    CircularImageView civ;
     LinearLayout navbarbgtop;
 
     public FragmentDrawer() {
@@ -111,37 +112,15 @@ public class FragmentDrawer extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer,
                 container, false);
 
-        UserItem item = readDB();
-
-
         navbarbgtop = (LinearLayout) layout.findViewById(R.id.nav_header_container);
         lblUsername = (TextView) layout.findViewById(R.id.lblUsername);
         lblUsername.setTypeface(UtilsApp.opensansBold());
-        lblUsername.setText(item.getfName() + " " + item.getlName());
 
         lblUseraddress = (TextView) layout.findViewById(R.id.lblUserAddress);
         lblUseraddress.setTypeface(UtilsApp.opensansNormal());
-        lblUseraddress.setText(item.getAddress());
 
-        if (UtilsApp.LOGIN_STATUS == 0) {
-//          lblUseraddress.setVisibility(View.GONE);
-            lblUseraddress.setText("PESO SENSE");
-            lblUsername.setVisibility(View.GONE);
-            navbarbgtop.setBackgroundResource(R.drawable.bg2);
-
-        }
-
-        CircularImageView civ = (CircularImageView) layout.findViewById(R.id.imgUser);
+        civ = (CircularImageView) layout.findViewById(R.id.imgUser);
         civ.setImageDrawable(getResources().getDrawable(R.drawable.ic_unsync));
-
-        Picasso.with(getActivity()).load(item.getImgPath()).into(civ);
-//
-//        if (UtilsApp.LOGIN_STATUS == 0) {
-//            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
-//        } else {
-//            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
-//            //TODO (change image)
-//        }
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
@@ -162,8 +141,38 @@ public class FragmentDrawer extends Fragment {
             }
         }));
 
+
+        setupUser();
+
         return layout;
 
+
+    }
+
+    public void setupUser() {
+
+        UserItem item = readDB();
+
+        String name = item.getfName() + " " + item.getlName();
+        String address = item.getAddress();
+        String profilePic = item.getImgPath();
+
+        if (!name.trim().equalsIgnoreCase("")) {
+            lblUsername.setText(name);
+        } else {
+            lblUsername.setText("PESO SENSE");
+        }
+
+        if (!address.equalsIgnoreCase("")) {
+            lblUseraddress.setText(address);
+        } else
+            lblUseraddress.setVisibility(View.INVISIBLE);
+
+        if (!profilePic.equalsIgnoreCase("")) {
+            Picasso.with(getActivity()).load(profilePic).resize(300, 300).centerCrop().into(civ);
+        } else {
+            civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
+        }
 
     }
 
@@ -190,14 +199,15 @@ public class FragmentDrawer extends Fragment {
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor != null) {
-            cursor.moveToFirst();
-            imgPath = cursor.getString(0);
-            lName = cursor.getString(1);
-            fName = cursor.getString(2);
-            mName = cursor.getString(3);
-            gender = cursor.getString(4);
-            birthday = cursor.getString(5);
-            address = cursor.getString(6);
+            while (cursor.moveToNext()) {
+                imgPath = cursor.getString(0);
+                lName = cursor.getString(1);
+                fName = cursor.getString(2);
+                mName = cursor.getString(3);
+                gender = cursor.getString(4);
+                birthday = cursor.getString(5);
+                address = cursor.getString(6);
+            }
             item = new UserItem(imgPath, lName, fName, mName, gender, birthday, address);
         }
 
