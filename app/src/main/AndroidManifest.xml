@@ -46,11 +46,19 @@
             android:name=".activity.GovernmentPayment"
             android:label="@string/title_activity_government_payment"
             android:parentActivityName=".activity.PesoActivity">
-
         </activity>
         <activity
             android:name=".activity.UserInformation"
             android:label="@string/title_activity_signup" />
+
+
+        <activity
+            android:name=".activity.OtopMerchant"
+            android:label="@string/title_activity_signup" />
+        <activity
+            android:name=".activity.InquireMessage"
+            android:label="@string/title_activity_signup" />
+
     </application>
 
 </manifest>
