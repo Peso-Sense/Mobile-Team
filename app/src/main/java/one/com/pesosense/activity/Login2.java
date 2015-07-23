@@ -29,7 +29,7 @@ import java.util.Map;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.download.APIHandler;
-import one.com.pesosense.download.LoginFacebook;
+import one.com.pesosense.download.LoginDownload;
 
 
 public class Login2 extends ActionBarActivity implements View.OnClickListener {
@@ -160,7 +160,7 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            response = new LoginFacebook(token).login();
+            response = new LoginDownload(token).login();
             return null;
         }
 
@@ -170,7 +170,6 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
 
 
             // TODO: to be removed later
-            pDialog.dismiss();
             // Log.d("response", "End point for now");
             parseResponse(response);
 
@@ -196,6 +195,8 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
                 if(message.equalsIgnoreCase(AUTH_SUCCESSFUL)){
                     token = jsonObject.getString("token");
 
+                    // TODO: GET USER DETAILS
+                    addToDataMap("token", token);
                 }
 
             }
@@ -209,9 +210,27 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
 
     public class GetUserDetails extends AsyncTask<Void, Void, Void>{
 
+        String response;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
+
+         //   response = apiHandler.httpMakeRequest(url)
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            pDialog.dismiss();
+
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by mykelneds on 7/23/15.
  */
-public class LoginFacebook {
+public class LoginDownload {
 
 
     String url = "http://search.onesupershop.com/api/auth/facebook";
@@ -31,7 +31,7 @@ public class LoginFacebook {
     List<NameValuePair> httpParams;
     JSONObject jsonObject;
 
-    public LoginFacebook(String token) {
+    public LoginDownload(String token) {
         this.token = token;
     }
 
