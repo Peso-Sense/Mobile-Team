@@ -183,11 +183,20 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
 
         JSONObject jsonObject;
 
+
+        String message;
+        String token;
+
         try {
 
             jsonObject = new JSONObject(response);
 
             if (jsonObject.has("message")) {
+               message = jsonObject.getString("message");
+                if(message.equalsIgnoreCase(AUTH_SUCCESSFUL)){
+                    token = jsonObject.getString("token");
+
+                }
 
             }
 
@@ -196,6 +205,14 @@ public class Login2 extends ActionBarActivity implements View.OnClickListener {
         }
 
 
+    }
+
+    public class GetUserDetails extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
     }
 
     @Override
