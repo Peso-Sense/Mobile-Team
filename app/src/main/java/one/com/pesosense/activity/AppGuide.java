@@ -93,7 +93,7 @@ public class AppGuide extends FragmentActivity implements View.OnClickListener {
         Intent intent = null;
 
         if (view.getId() == R.id.btnLogin)
-            intent = new Intent(AppGuide.this, Login.class);
+            intent = new Intent(AppGuide.this, Login2.class);
         //intent = new Intent(AppGuide.this, Login.class);
 
         if (view.getId() == R.id.btnSignup)

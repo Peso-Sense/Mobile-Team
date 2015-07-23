@@ -2,10 +2,18 @@ package one.com.pesosense.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
@@ -26,6 +34,22 @@ public class Splashscreen extends Activity {
         frameAnimation.start();
 
 
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "one.com.pesosense",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -40,6 +64,4 @@ public class Splashscreen extends Activity {
             }
         }, 2500);
     }
-
-
 }

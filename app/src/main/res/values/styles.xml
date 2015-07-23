@@ -14,4 +14,8 @@
 
     </style>
 
+    <style name="FacebookLoginButton">
+        <item name="android:layout_height">300dp</item>
+    </style>
+
 </resources>

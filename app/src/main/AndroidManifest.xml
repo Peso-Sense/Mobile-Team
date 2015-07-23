@@ -13,6 +13,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".activity.Splashscreen"
             android:label="@string/app_name"
@@ -27,6 +38,10 @@
             android:name=".activity.AppGuide"
             android:label="@string/title_activity_app_guide"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name=".activity.Login2"
+            android:label="@string/title_activity_app_guide" />
         <activity
             android:name=".activity.PesoActivity"
             android:label="@string/title_activity_peso" />
@@ -45,8 +60,7 @@
         <activity
             android:name=".activity.GovernmentPayment"
             android:label="@string/title_activity_government_payment"
-            android:parentActivityName=".activity.PesoActivity">
-        </activity>
+            android:parentActivityName=".activity.PesoActivity"></activity>
         <activity
             android:name=".activity.UserInformation"
             android:label="@string/title_activity_signup" />

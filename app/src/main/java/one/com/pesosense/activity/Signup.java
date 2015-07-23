@@ -11,11 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import one.com.pesosense.R;
@@ -74,19 +78,58 @@ public class Signup extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                strEmail = txtEmail.getText().toString();
-                strPass = txtPassword.getText().toString();
-                strName = txtUsername.getText().toString();
-                addToPassedDataMap("email", strEmail);
-                addToPassedDataMap("password", strPass);
-                addToPassedDataMap("name", strName);
+                strEmail = txtEmail.getText().toString().trim();
+                strPass = txtPassword.getText().toString().trim();
+                strName = txtUsername.getText().toString().trim();
 
-                new RegisterUser().execute();
+                if (strEmail.equals("") || strPass.equals("") || strName.equals("")) {
+                    Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+                } else if (!parseUsername(strName)) {
+                    txtUsername.setError("A~Z, a~z, 0~9, _");
+                } else {
+                    if (UtilsApp.isOnline()) {
+                        addToPassedDataMap("email", strEmail);
+                        addToPassedDataMap("password", strPass);
+                        addToPassedDataMap("name", strName);
+                        new RegisterUser().execute();
+                    } else {
+                        UtilsApp.toast("No Network Connection Available");
+                    }
+                }
 
             }
         });
 
+    }
 
+    private Boolean parseUsername(String uname) {
+        int i;
+        List<String> allowedCharsList = new ArrayList<String>();
+
+        for ( i = 65; i < 91; i++ ) {
+            allowedCharsList.add(String.valueOf((char) i));
+        }
+
+        for ( i = 97; i < 123; i++ ) {
+            allowedCharsList.add(String.valueOf((char) i));
+        }
+
+        for ( i = 0; i < 10; i++ ) {
+            allowedCharsList.add(String.valueOf(i));
+        }
+
+        allowedCharsList.add("_");
+
+        String[] allowedChars = new String[allowedCharsList.size()];
+        allowedCharsList.toArray(allowedChars);
+
+        for  ( i = 0; i < uname.length(); i++ ) {
+            if ( !Arrays.asList(allowedChars).contains(String.valueOf(uname.charAt(i))) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public class RegisterUser extends AsyncTask<Void, Void, Void> {

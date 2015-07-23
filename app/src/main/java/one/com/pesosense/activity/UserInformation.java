@@ -2,11 +2,14 @@ package one.com.pesosense.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -25,16 +28,25 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
+import one.com.pesosense.download.APIHandler;
+import one.com.pesosense.download.AndroidMultiPartEntity;
 import one.com.pesosense.helper.DatabaseHelper;
 
 /**
@@ -83,6 +95,14 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     String email, imgPath, lName, fName, mName, gender, birthday, address;
 
+    // Responsible for register
+    Map<String, String> param;
+    APIHandler apiHandler;
+    long totalSize = 0;
+    SharedPreferences sp;
+    String url = "http://search.onesupershop.com/api/me/photo";
+    String urlPersonInfo = "http://search.onesupershop.com/api/me";
+
 
     /**
      * **
@@ -94,7 +114,9 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        param = new HashMap<String, String>();
+        sp = getSharedPreferences("token", MODE_PRIVATE);
+        apiHandler = new APIHandler();
         setContentView(R.layout.activity_user_information);
 
         initValues();
@@ -199,7 +221,11 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         }
 
         if (view.getId() == R.id.btnSave) {
-            saveInfo();
+            if (UtilsApp.isOnline()) {
+                saveInfo();
+            } else {
+                UtilsApp.toast("No Network Connection");
+            }
         }
     }
 
@@ -293,30 +319,45 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         birthday = txtBirthday.getText().toString();
         address = txtAddress.getText().toString();
 
-        db = dbHelper.getWritableDatabase();
-        db.delete("tbl_user_info", null, null);
+        // Validation part
+        if (lName.equals("") || mName.equals("") || fName.equals("") || birthday.equals("") || address.equals("")) {
+            UtilsApp.toast("All fields are required");
+        } else {
+            db = dbHelper.getWritableDatabase();
+            db.delete("tbl_user_info", null, null);
 
-        values = new ContentValues();
+            values = new ContentValues();
 
-        values.put("imagepath", imgPath);
-        values.put("lname", lName);
-        values.put("fname", fName);
-        values.put("mname", mName);
-        values.put("gender", gender);
-        values.put("birthday", birthday);
-        values.put("address", address);
-        values.put("email", email);
-        db.insert("tbl_user_info", null, values);
-        db.close();
+            values.put("imagepath", imgPath);
+            values.put("lname", lName);
+            values.put("fname", fName);
+            values.put("mname", mName);
+            values.put("gender", gender);
+            values.put("birthday", birthday);
+            values.put("address", address);
+            values.put("email", email);
+            db.insert("tbl_user_info", null, values);
+            db.close();
 
-        UtilsApp.putString("email", email);
+            UtilsApp.putString("email", email);
 
-        if (root.equalsIgnoreCase("signup")) {
-            startActivity(new Intent(UserInformation.this, PesoActivity.class));
 
+            // send to API then server
+
+            addParams("first_name", fName);
+            addParams("last_name", lName);
+            addParams("middle_init", mName);
+            addParams("birthday", birthday);
+            addParams("gender", gender);
+
+            new UploadData().execute();
+
+//            if (root.equalsIgnoreCase("signup")) {
+//                startActivity(new Intent(UserInformation.this, PesoActivity.class));
+//            }
+//
+//            finish();
         }
-
-        finish();
     }
 
     public void showDatePicker() {
@@ -328,10 +369,17 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         dpd = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                txtBirthday.setText(month + "-" + day + "-" + year);
+                txtBirthday.setText(formatMonth(month) + " " + day + ", " + year);
             }
         }, year, month, day);
         dpd.show();
+    }
+
+    private String formatMonth(int m) {
+        String[] months = {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
+
+        return months[m];
     }
 
     @Override
@@ -358,5 +406,124 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         Log.d("User Image", imgPath);
 
 
+    }
+
+    class UploadData extends AsyncTask<Void, Integer, String> {
+        ProgressDialog pDialog;
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(UserInformation.this);
+            pDialog.setMax(100);
+            pDialog.setProgress(0);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+
+            pDialog.setProgress(progress[0]);
+
+            pDialog.setMessage("Uploading " + progress[0] + "%");
+        }
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                    new AndroidMultiPartEntity.ProgressListener() {
+
+                        @Override
+                        public void transferred(long num) {
+                            publishProgress((int) ((num / (float) totalSize) * 100));
+                        }
+
+                    });
+
+            File sourceFile = new File(imgPath);
+
+            //Log.d("tag", sp.getString("access_token", null));
+
+            try {
+                // Adding file data to http body
+                entity.addPart("file", new FileBody(sourceFile));
+
+                entity.addPart("Content-Type", new StringBody("x-www-form-urlencoded"));
+                totalSize = entity.getContentLength();
+                Log.d("tag", "size: " + totalSize);
+
+                response = apiHandler.httpMakeRequest(url, "post", entity, sp.getString("access_token", null));
+                JSONObject jsonObject = new JSONObject(response);
+                addParams("photo", jsonObject.getJSONObject("data").getString("photo"));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+
+            }
+
+            new AddInformation().execute();
+        }
+    }
+
+    class AddInformation extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(UserInformation.this);
+            pDialog.setMessage("Loading....");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String response = apiHandler.httpMakeRequest(urlPersonInfo, param, "put", sp.getString("access_token", null));
+            Log.d("tag", "response: " + response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
+            if (root.equalsIgnoreCase("signup")) {
+                startActivity(new Intent(UserInformation.this, PesoActivity.class));
+            }
+            finish();
+        }
+    }
+
+    public void addParams(String key, String value) {
+        param.put(key, value);
     }
 }
