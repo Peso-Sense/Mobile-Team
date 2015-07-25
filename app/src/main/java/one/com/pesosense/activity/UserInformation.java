@@ -4,9 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -34,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -102,6 +105,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     SharedPreferences sp;
     String url = "http://search.onesupershop.com/api/me/photo";
     String urlPersonInfo = "http://search.onesupershop.com/api/me";
+
+    String imageFilePath;
+
+    String token;
 
 
     /**
@@ -179,9 +186,9 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnEdit.setTypeface(UtilsApp.opensansNormal());
 
-
-        //
         btnSave.setVisibility(View.VISIBLE);
+
+        token = UtilsApp.getString("token_info");
     }
 
     public void genderItem() {
@@ -190,7 +197,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         list.add("Female");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, list);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+        //dataAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerGender.setAdapter(dataAdapter);
     }
 
@@ -265,15 +272,48 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     public void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-        imgPath = fileUri.toString();
-
+        imageFilePath = fileUri.getPath();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+
+    public static String getPath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {"_data"};
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                Log.d("tag", "cursor: " + DatabaseUtils.dumpCursorToString(cursor));
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+
+                    return cursor.getString(column_index);
+
+                }
+            } catch (Exception e) {
+                // Eat it
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                Log.d("tag", "cursor: " + DatabaseUtils.dumpCursorToString(cursor));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return uri.getPath();
+        }
+
+        return null;
     }
 
     private static File getOutputMediaFile(int type) {
@@ -328,10 +368,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
             values = new ContentValues();
 
-            values.put("imagepath", imgPath);
-            values.put("lname", lName);
-            values.put("fname", fName);
-            values.put("mname", mName);
+            values.put("photo", imageFilePath);
+            values.put("last_name", lName);
+            values.put("first_name", fName);
+            values.put("middle_name", mName);
             values.put("gender", gender);
             values.put("birthday", birthday);
             values.put("address", address);
@@ -341,22 +381,16 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
             UtilsApp.putString("email", email);
 
-
             // send to API then server
 
             addParams("first_name", fName);
             addParams("last_name", lName);
-            addParams("middle_init", mName);
+            addParams("middle_name", mName);
             addParams("birthday", birthday);
             addParams("gender", gender);
+            addParams("address", address);
 
             new UploadData().execute();
-
-//            if (root.equalsIgnoreCase("signup")) {
-//                startActivity(new Intent(UserInformation.this, PesoActivity.class));
-//            }
-//
-//            finish();
         }
     }
 
@@ -389,22 +423,44 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 previewPickedImage(data);
+//                try {
+//                    imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
+//
+//                    Log.d("tag", "File Path: " + imgPath);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
             }
         } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK)
-                Picasso.with(getApplicationContext()).load(imgPath).resize(300, 300).centerCrop().
-                        into(imgUser);
+
+            if (resultCode == RESULT_OK) {
+                Picasso.with(getApplicationContext()).load(fileUri).resize(300, 300).centerCrop().into(imgUser);
+                Log.d("Peso Sense", imageFilePath);
+            }
+//            try {
+//                imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
+//                Log.d("tag", "File Path: " + imgPath);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
         }
 
     }
 
     private void previewPickedImage(Intent data) {
-
         Uri pickedImage = data.getData();
-        imgPath = pickedImage.toString();
+        String[] filePath = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
+        cursor.moveToFirst();
+        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+        Log.d("Peso Sense", "Image Gallery URI " + pickedImage.toString());
+        imgPath = pickedImage.toString(); // Uri pala ang ibinibigay nito, hindi filepath
+        imageFilePath = imagePath;
+        Log.d("Peso Sense", "Image gallery path " + imageFilePath);
         Picasso.with(getApplicationContext()).load(imgPath).resize(300, 300).centerCrop().into(imgUser);
-        Log.d("User Image", imgPath);
+    }
 
+    private void getPickedImagePath(Intent data) {
 
     }
 
@@ -427,15 +483,14 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-
             pDialog.setProgress(progress[0]);
-
             pDialog.setMessage("Uploading " + progress[0] + "%");
         }
 
-
         @Override
         protected String doInBackground(Void... params) {
+
+            Log.d("Peso Sense", "In doInBackground already");
 
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                     new AndroidMultiPartEntity.ProgressListener() {
@@ -447,10 +502,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
                     });
 
-            File sourceFile = new File(imgPath);
+            File sourceFile = new File(imageFilePath); // imageFilePath is the path of the image
+            Log.d("Peso Sense", "Upload image path  " + imageFilePath); // we need to know if there's a file path being passed
 
             //Log.d("tag", sp.getString("access_token", null));
-
             try {
                 // Adding file data to http body
                 entity.addPart("file", new FileBody(sourceFile));
@@ -459,13 +514,15 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
                 totalSize = entity.getContentLength();
                 Log.d("tag", "size: " + totalSize);
 
-                response = apiHandler.httpMakeRequest(url, "post", entity, sp.getString("access_token", null));
+                response = apiHandler.httpMakeRequest(url, "post", entity, token);
                 JSONObject jsonObject = new JSONObject(response);
+                Log.d("tag", response);
                 addParams("photo", jsonObject.getJSONObject("data").getString("photo"));
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return null;
         }
 
@@ -475,7 +532,6 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
-
             }
 
             new AddInformation().execute();
@@ -488,7 +544,6 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             pDialog = new ProgressDialog(UserInformation.this);
             pDialog.setMessage("Loading....");
             pDialog.setCancelable(false);
@@ -497,7 +552,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
         @Override
         protected Void doInBackground(Void... params) {
-            String response = apiHandler.httpMakeRequest(urlPersonInfo, param, "put", sp.getString("access_token", null));
+            String response = apiHandler.httpMakeRequest(urlPersonInfo, param, "put", token);
             Log.d("tag", "response: " + response);
             try {
                 JSONObject jsonObject = new JSONObject(response);
@@ -519,6 +574,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
             if (root.equalsIgnoreCase("signup")) {
                 startActivity(new Intent(UserInformation.this, PesoActivity.class));
             }
+
             finish();
         }
     }

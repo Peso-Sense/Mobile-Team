@@ -200,13 +200,13 @@ public class FragmentDrawer extends Fragment {
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                imgPath = cursor.getString(0);
-                lName = cursor.getString(1);
-                fName = cursor.getString(2);
-                mName = cursor.getString(3);
-                gender = cursor.getString(4);
-                birthday = cursor.getString(5);
-                address = cursor.getString(6);
+                imgPath = cursor.getString(cursor.getColumnIndex("photo"));
+                lName = cursor.getString(cursor.getColumnIndex("last_name"));
+                fName = cursor.getString(cursor.getColumnIndex("first_name"));
+                mName = cursor.getString(cursor.getColumnIndex("middle_name"));
+                gender = cursor.getString(cursor.getColumnIndex("gender"));
+                birthday = cursor.getString(cursor.getColumnIndex("birthday"));
+                address = cursor.getString(cursor.getColumnIndex("address"));
             }
             item = new UserItem(imgPath, lName, fName, mName, gender, birthday, address);
         }

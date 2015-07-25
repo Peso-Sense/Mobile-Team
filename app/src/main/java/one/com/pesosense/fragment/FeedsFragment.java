@@ -84,9 +84,13 @@ public class FeedsFragment extends Fragment {
 
     public void initValues(View v) {
 
-        //  displayTips();
 
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        int display = pref.getInt("displayTips", 0);
+        if (display == 0)
+            displayTips();
+
         nextUrl = pref.getString("nextUrl", null);
 
         dbHelper = DatabaseHelper.getInstance(getActivity());
@@ -337,7 +341,7 @@ public class FeedsFragment extends Fragment {
             pDialog = new ProgressDialog(getActivity());
             pDialog.setMessage("Loading more feeds...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
             pDialog.show();
 
             //  Toast.makeText(getActivity(), "LOADING ulit...", Toast.LENGTH_SHORT).show();
@@ -365,7 +369,7 @@ public class FeedsFragment extends Fragment {
         String tipsEnglish, tipsTagalog;
 
         //     UtilsApp.putInt("display_tips", 1);
-
+        storeTips();
         Random rand = new Random();
         id = rand.nextInt(55) + 1;
 
@@ -447,6 +451,12 @@ public class FeedsFragment extends Fragment {
 
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("nextUrl", nextUrl);
+        editor.commit();
+    }
+
+    public void storeTips() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("displayTips", 1);
         editor.commit();
     }
 

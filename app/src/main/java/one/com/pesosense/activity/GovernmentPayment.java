@@ -28,6 +28,7 @@ public class GovernmentPayment extends ActionBarActivity {
     EditText txtAmount;
 
     int root;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +42,13 @@ public class GovernmentPayment extends ActionBarActivity {
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        title = (TextView) toolbar.findViewById(R.id.title);
+        title.setTypeface(UtilsApp.opensansNormal());
+
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         root = getIntent().getIntExtra("root", 0);
 
@@ -94,7 +98,7 @@ public class GovernmentPayment extends ActionBarActivity {
         }
 
         lblGovernment.setText(governmentName);
-        setTitle(governmentName);
+        title.setText(governmentName);
 
 
     }

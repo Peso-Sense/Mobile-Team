@@ -1,6 +1,9 @@
 package one.com.pesosense.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,12 +11,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
@@ -21,11 +27,17 @@ import one.com.pesosense.UtilsApp;
 
 public class AppGuide extends FragmentActivity implements View.OnClickListener {
 
+    VideoView myVideoView;
+
     Button btnLogin;
     Button btnSignup;
 
     RadioButton radio, radio1, radio2;
     ViewPager mPager;
+
+    ProgressDialog progressDialog;
+    private MediaController mediaControls;
+    int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +45,7 @@ public class AppGuide extends FragmentActivity implements View.OnClickListener {
         setContentView(R.layout.activity_app_guide);
 
         initValues();
+        initVideo();
 
     }
 
@@ -87,25 +100,83 @@ public class AppGuide extends FragmentActivity implements View.OnClickListener {
 
     }
 
+    private void initVideo() {
+        if (mediaControls == null) {
+
+            mediaControls = new MediaController(AppGuide.this);
+        }
+        myVideoView = (VideoView) findViewById(R.id.videoView);
+        progressDialog = new ProgressDialog(AppGuide.this);
+        progressDialog.show();
+
+        try {
+            myVideoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.pesosense1));
+
+
+        } catch (Exception e) {
+
+            Log.e("Error", e.getMessage());
+
+            e.printStackTrace();
+
+        }
+
+        myVideoView.requestFocus();
+
+        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
+
+        myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mediaPlayer) {
+
+                // close the progress bar and play the video
+
+                progressDialog.dismiss();
+                myVideoView.seekTo(position);
+
+                // this make the video loop unlimited
+                mediaPlayer.setLooping(true);
+
+                myVideoView.start();
+
+
+            }
+
+
+        });
+
+
+    }
+
     @Override
     public void onClick(View view) {
 
         Intent intent = null;
 
         if (view.getId() == R.id.btnLogin)
-            intent = new Intent(AppGuide.this, Login2.class);
+            intent = new Intent(AppGuide.this, Login.class);
         //intent = new Intent(AppGuide.this, Login.class);
 
         if (view.getId() == R.id.btnSignup)
             intent = new Intent(AppGuide.this, Signup.class);
 
         if (intent != null) {
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, 100);
+            //finish();
         }
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+            if (resultCode == 1) {
+                finish();
+            }
+        }
+    }
 
     public class AppGuidePagerAdapter extends FragmentPagerAdapter {
 

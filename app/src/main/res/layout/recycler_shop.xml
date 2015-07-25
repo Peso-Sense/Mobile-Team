@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+    <TextView
+        android:id="@+id/txtotop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OTOP merchant"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#424242"
+        />
+
+<Button
+    android:layout_width="80dp"
+    android:layout_height="25dp"
+    android:id="@+id/btnotop"
+    android:layout_alignParentRight="true"
+    android:layout_marginTop="35dp"
+    android:layout_marginRight="15dp"
+    android:background="#2196f3"
+    android:text="VIEW MORE"
+    android:textSize="11dp"
+    android:textColor="#ffffff"
+
+
+    />
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/txtotop"
+
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/txtbodl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buy Online Deliver Locally"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#424242"
+        android:layout_below="@+id/rv"
+        />
+
+
+
+    <Button
+        android:id="@+id/btnbodl"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="15dp"
+        android:background="#2196f3"
+        android:text="VIEW MORE"
+        android:textSize="11dp"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/rv"
+
+        />
+
+
+
+
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv1"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/txtbodl"
+
+        />
+
+
+
+
+
+    <TextView
+        android:id="@+id/txtharana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Harana sa Pamilya"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#424242"
+        android:layout_below="@+id/rv1"
+        />
+
+
+
+    <Button
+        android:id="@+id/btnharana"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="15dp"
+        android:background="#2196f3"
+        android:text="VIEW MORE"
+        android:textSize="11dp"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/rv1"
+
+        />
+
+
+
+
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv2"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/txtharana"
+        android:layout_marginBottom="25dp"
+        />
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
+</ScrollView>

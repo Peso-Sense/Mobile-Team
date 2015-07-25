@@ -7,41 +7,31 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.download.APIHandler;
+import one.com.pesosense.download.LoginDownload;
+import one.com.pesosense.helper.ProfileParser;
 
 
 public class Login extends ActionBarActivity implements View.OnClickListener {
@@ -54,16 +44,19 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
 
     Map<String, String> passedData;
     APIHandler apiHandler;
-    String url = "http://search.onesupershop.com/api/auth";
-    String urlUserDetails = "http://search.onesupershop.com/api/me";
-
-    String token = "";
-    ProgressDialog pDialog;
 
     //---- facebook //
+
+    final String GET = "get";
+    final String POST = "post";
+    final String urlEmail = "http://search.onesupershop.com/api/auth";
+    final String urlUserDetails = "http://search.onesupershop.com/api/me";
     CallbackManager cb;
     LoginButton loginButton;
-    String urlOfFBAuth = "http://search.onesupershop.com/api/auth/facebook";
+    Map<String, String> data;
+    //
+    ProgressDialog pDialog;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,120 +66,35 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
+        initToolbar();
+        initFB();
+        initAPI();
+        initValues();
+    }
+
+    private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView title = (TextView) mToolbar.findViewById(R.id.title);
         title.setText("Log in");
         title.setTypeface(UtilsApp.opensansNormal());
         setSupportActionBar(mToolbar);
 
-        initFB();
-        initAPI();
-        initValues();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
 
     private void initFB() {
 
         cb = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setOnClickListener(this);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email"));
+        loginButton.registerCallback(cb, callback);
+        loginButton.setTypeface(UtilsApp.opensansNormal());
+        //loginButton.setOnClickListener(this);
 
-        LoginManager.getInstance().registerCallback(cb, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                new LoginWithFacebook(loginResult.getAccessToken().getToken()).execute();
-            }
-
-            @Override
-            public void onCancel() {
-                UtilsApp.toast("Cancel");
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                UtilsApp.toast("FAILED");
-            }
-        });
 
     }
-
-    public class LoginWithFacebook extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog pDialog;
-        HttpEntity httpEntity;
-        HttpResponse httpResponse;
-        String response;
-        List<NameValuePair> httpParams;
-        JSONObject jsonObject;
-        String token;
-
-        public LoginWithFacebook(String token) {
-            this.token = token;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(Login.this);
-            pDialog.setMessage("Loading... Please Wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            httpParams = new ArrayList<NameValuePair>();
-            httpParams.add(new BasicNameValuePair("access_token", token));
-
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(urlOfFBAuth);
-            httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-
-            try {
-                httpPost.setEntity(new UrlEncodedFormEntity(httpParams));
-                httpResponse = httpClient.execute(httpPost);
-                httpEntity = httpResponse.getEntity();
-                response = EntityUtils.toString(httpEntity);
-                Log.d("response", response);
-                jsonObject = new JSONObject(response);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            pDialog.dismiss();
-            parseFBResponse(jsonObject);
-        }
-    }
-
-    private void parseFBResponse(JSONObject jObject) {
-
-        final String RESULT_OK = "auth successful";
-        String response;
-        String token;
-        try {
-
-            response = jObject.getString("message");
-
-            if (response.equalsIgnoreCase(RESULT_OK)) {
-                token = jObject.getString("token");
-                UtilsApp.putString("token", token);
-                passedData.clear();
-                addToDataMap("token", token);
-                new GetUserDetails().execute();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void initAPI() {
         apiHandler = new APIHandler();
@@ -204,6 +112,9 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         txtPassword = (EditText) findViewById(R.id.txtPassword);
         txtPassword.setTypeface(UtilsApp.opensansNormal());
 
+        pDialog = new ProgressDialog(Login.this);
+        pDialog.setCancelable(false);
+
 //        btnSignup = (Button) findViewById(R.id.btnSignup);
 //        btnSignup.setOnClickListener(this);
 
@@ -212,23 +123,242 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == R.id.login_button) {
-            facebookLogin();
-        }
-
-
         if (v.getId() == R.id.btnLogin) {
             UtilsApp.LOGIN_STATUS = 1;
+            //test();
             login();
 
         }
 
     }
 
-    private void facebookLogin() {
+    public void login() {
+        String email = txtEmail.getText().toString();
+        String password = txtPassword.getText().toString();
 
-        LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "user_friends", "email"));
-        LoginManager.getInstance().logInWithPublishPermissions(Login.this, Arrays.asList("publish_actions"));
+        passedData.clear();
+        addToDataMap("email", email);
+        addToDataMap("password", password);
+
+        new LoginTask().execute();
+    }
+
+    public class LoginTask extends AsyncTask<Void, Void, Void> {
+
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog.setMessage("Log in...");
+            pDialog.show();
+            Log.d("response", "Login using email");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            response = apiHandler.httpMakeRequest(urlEmail, passedData, POST);
+            Log.d("response", "Login response: " + response);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Log.d("response", "Parsing response...");
+            parseResponse(response);
+        }
+    }
+
+    private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            Log.d("response", "I WAS HERE");
+            token = loginResult.getAccessToken().getToken();
+            Log.d("response", "Token: " + token);
+            new LoginFacebookTask(token).execute();
+
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+
+        @Override
+        public void onError(FacebookException e) {
+
+        }
+    };
+
+    public class LoginFacebookTask extends AsyncTask<Void, Void, Void> {
+
+
+        String token;
+        String response;
+
+        public LoginFacebookTask(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //TODO: Papalitan ko pa to
+            pDialog.setMessage("Loading...");
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            response = new LoginDownload(token).login();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+
+            // TODO: to be removed later
+
+            parseResponse(response);
+
+        }
+    }
+
+    public class GetUserDetails extends AsyncTask<Void, Void, Void> {
+
+        String response;
+        Map<String, String> data;
+
+//        public GetUserDetails(Map<String, String> data) {
+//           // this.data = data;
+//        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            //   response = apiHandler.httpMakeRequest(url)
+            //response = new LoginDownload(data).userDetails();
+            response = apiHandler.httpMakeRequest(urlUserDetails, passedData, GET);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Log.d("response", "User details: " + response);
+            parseUserResponse(response);
+
+        }
+    }
+
+    public void parseResponse(String response) {
+
+        final String AUTHFB_SUCCESSFUL = "auth successful";
+        final String AUTHEMAIL_SUCCESSFUL = "authentication successful";
+        final String INVALID_CREDENTIALS = "Invalid credentials";
+
+        JSONObject jsonObject;
+
+        String message;
+        String token;
+
+        data = new HashMap<String, String>();
+
+        try {
+
+            jsonObject = new JSONObject(response);
+
+            if (jsonObject.has("message")) {
+                message = jsonObject.getString("message");
+                if (message.equalsIgnoreCase(AUTHFB_SUCCESSFUL) || message.equalsIgnoreCase(AUTHEMAIL_SUCCESSFUL)) {
+                    token = jsonObject.getString("token");
+                    // TODO: STORE TOKEN in SHARED PREF;
+                    UtilsApp.putString("token_info", token);
+                    // TODO: GET USER DETAILS
+                    Log.d("response", "Fetching user details...");
+
+                    //data.put("token", token);
+
+                    passedData.clear();
+                    addToDataMap("token", token);
+                    new GetUserDetails().execute();
+
+                } else if (message.equalsIgnoreCase(INVALID_CREDENTIALS)) {
+                    // Invalid email or password;
+                    pDialog.dismiss();
+                    invalidLogin();
+
+                }
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void parseUserResponse(String response) {
+
+        final String AUTHENTICATION = "authentication successful";
+
+        JSONObject jsonObject;
+        JSONObject profileObject;
+
+        String email, name;
+
+        Intent intent = null;
+
+        try {
+            jsonObject = new JSONObject(response).getJSONObject("data");
+            Log.d("response", "Parsing user details");
+
+            name = jsonObject.getString("name");
+            email = jsonObject.getString("email");
+
+            Log.d("response", "username: " + name + "| email: " + email);
+
+            if (jsonObject.isNull("profile")) {
+
+                Log.d("response", "Profile is null");
+                intent = new Intent(Login.this, UserInformation.class);
+
+            } else {
+                profileObject = jsonObject.getJSONObject("profile");
+                if (profileObject.has("user_id")) {
+
+                    Log.d("response", "Profile has information");
+                    new ProfileParser(getApplicationContext()).parse(profileObject, name, email);
+                    intent = new Intent(Login.this, PesoActivity.class);
+                }
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (intent != null) {
+            pDialog.dismiss();
+            startActivity(intent);
+            setResult(1);
+            finish();
+        }
 
     }
 
@@ -238,140 +368,30 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         cb.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void login() {
-        String email = txtEmail.getText().toString();
-        String password = txtPassword.getText().toString();
-
-        addToDataMap("email", email);
-        addToDataMap("password", password);
-
-        new LoginTask().execute();
-
-    }
-
-    public class LoginTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pDialog = new ProgressDialog(Login.this);
-            pDialog.setMessage("Logging in...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            loginResult();
-            //pDialog.dismiss();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            String response = apiHandler.httpMakeRequest(url, passedData, "post");
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-
-                if (jsonObject.getString("message").equalsIgnoreCase("authentication successful"))
-                    token = jsonObject.getString("token");
-                else
-                    token = jsonObject.getString("message");
-                passedData.clear();
-                addToDataMap("token", token);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
-
-    private void loginResult() {
-
-        Log.d("token", token);
-        if (token.equalsIgnoreCase("Invalid credentials")) {
-            pDialog.dismiss();
-            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
-
-            // insert error message;
-        } else {
-            pDialog.dismiss();
-            startActivity();
-            //     new GetUserDetails().execute();
-        }
-
-    }
-
-    public class GetUserDetails extends AsyncTask<Void, Void, Void> {
-        String response;
-        ProgressDialog pDialog;
-        JSONObject jsonObject;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(Login.this);
-            pDialog.setMessage("Loading... Please Wait...sx");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            response = apiHandler.httpMakeRequest(urlUserDetails, passedData, "get");
-
-            try {
-
-                jsonObject = new JSONObject(response);
-                Log.d("response", response);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            pDialog.dismiss();
-
-            parseUserResponse(jsonObject);
-
-        }
-    }
-
-    public void parseUserResponse(JSONObject jsonObject) {
-
-        String response = "";
-        int status = 0;
-        try {
-            if (jsonObject.has("status")) {
-
-                if (jsonObject.isNull("profile")) {
-                    Log.d("response", "Profile is null");
-                    startActivity(new Intent(Login.this, UserInformation.class));
-                    finish();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
     public void addToDataMap(String key, String value) {
         passedData.put(key, value);
     }
 
-    public void startActivity() {
-        startActivity(new Intent(Login.this, PesoActivity.class));
+    public void invalidLogin() {
+
+        txtEmail.setText("");
+        txtPassword.setText("");
+
+        //TODO: PAPALITAN PA TO.
+        UtilsApp.toast("INVALID EMAIL OR PASSWORD!");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 }

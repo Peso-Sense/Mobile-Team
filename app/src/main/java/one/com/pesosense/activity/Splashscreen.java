@@ -55,8 +55,8 @@ public class Splashscreen extends Activity {
             public void run() {
                 UtilsApp.putInt("LOGIN_STATUS", 1);
                 UtilsApp.LOGIN_STATUS = UtilsApp.getInt("LOGIN_STATUS");
-                startActivity(new Intent(Splashscreen.this, AppGuide.class));
-                //startActivity(new Intent(Splashscreen.this, PesoActivity.class));
+               // startActivity(new Intent(Splashscreen.this, AppGuide.class));
+                startActivity(new Intent(Splashscreen.this, PesoActivity.class));
 
                 finish();
 

@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -49,7 +51,20 @@ public class Signup extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        initToolbar();
         initValues();
+
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) mToolbar.findViewById(R.id.title);
+        title.setText("SIGN UP");
+        title.setTypeface(UtilsApp.opensansNormal());
+        setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -106,15 +121,15 @@ public class Signup extends ActionBarActivity {
         int i;
         List<String> allowedCharsList = new ArrayList<String>();
 
-        for ( i = 65; i < 91; i++ ) {
+        for (i = 65; i < 91; i++) {
             allowedCharsList.add(String.valueOf((char) i));
         }
 
-        for ( i = 97; i < 123; i++ ) {
+        for (i = 97; i < 123; i++) {
             allowedCharsList.add(String.valueOf((char) i));
         }
 
-        for ( i = 0; i < 10; i++ ) {
+        for (i = 0; i < 10; i++) {
             allowedCharsList.add(String.valueOf(i));
         }
 
@@ -123,8 +138,8 @@ public class Signup extends ActionBarActivity {
         String[] allowedChars = new String[allowedCharsList.size()];
         allowedCharsList.toArray(allowedChars);
 
-        for  ( i = 0; i < uname.length(); i++ ) {
-            if ( !Arrays.asList(allowedChars).contains(String.valueOf(uname.charAt(i))) ) {
+        for (i = 0; i < uname.length(); i++) {
+            if (!Arrays.asList(allowedChars).contains(String.valueOf(uname.charAt(i)))) {
                 return false;
             }
         }
@@ -213,5 +228,16 @@ public class Signup extends ActionBarActivity {
         builder.setPositiveButton("ok", null);
         builder.create();
         builder.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_drawer_width">300dp</dimen>
+    <dimen name="shop_grid_width">120dp</dimen>
+    <dimen name="shop_grid_height">160dp</dimen>
 </resources>

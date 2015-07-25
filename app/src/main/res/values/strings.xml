@@ -20,7 +20,6 @@
     <string-array name="nav_item_rich">
         <item>Feeds</item>
         <item>Shop</item>
-        <item>Add Product</item>
         <item>Payments</item>
         <item>Remittance</item>
         <item>Settings</item>
@@ -37,7 +36,6 @@
     <array name="nav_icons_rich">
         <item>@drawable/selector_feeds</item>
         <item>@drawable/selector_shop</item>
-        <item>@drawable/ic_add</item>
         <item>@drawable/selector_bills</item>
         <item>@drawable/selector_remittance</item>
         <item>@drawable/selector_settings</item>
@@ -47,7 +45,6 @@
     <array name="nav_icons_rich_selected">
         <item>@drawable/ic_feeds_selected</item>
         <item>@drawable/ic_shop_selected</item>
-        <item>@drawable/ic_add_selected</item>
         <item>@drawable/ic_bills_selected</item>
         <item>@drawable/ic_remittance_selected</item>
         <item>@drawable/ic_settings_selected</item>
@@ -91,6 +88,7 @@
 
 
     <string name="facebook_app_id">734293950049753</string>
+    <string name="title_activity_shop_item_view">ShopItemView</string>
     <!--
     //Thin
 CFO Newsfeeds

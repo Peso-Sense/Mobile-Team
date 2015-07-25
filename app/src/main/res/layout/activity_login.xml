@@ -11,10 +11,11 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        style="@style/FacebookLoginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp" />
 
 
     <LinearLayout

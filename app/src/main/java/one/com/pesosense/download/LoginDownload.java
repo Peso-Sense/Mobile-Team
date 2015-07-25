@@ -15,14 +15,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mykelneds on 7/23/15.
  */
 public class LoginDownload {
 
+    final String GET = "get";
 
-    String url = "http://search.onesupershop.com/api/auth/facebook";
+    APIHandler api;
+    String urlFBAuth = "http://search.onesupershop.com/api/auth/facebook";
+    String urlUserDetails = "http://search.onesupershop.com/api/me";
     String token;
     String response;
 
@@ -31,8 +35,18 @@ public class LoginDownload {
     List<NameValuePair> httpParams;
     JSONObject jsonObject;
 
+    Map<String, String> data;
+
+    public LoginDownload() {
+        api = new APIHandler();
+    }
+
     public LoginDownload(String token) {
         this.token = token;
+    }
+
+    public LoginDownload(Map<String, String> data) {
+        this.data = data;
     }
 
     public String login() {
@@ -41,7 +55,7 @@ public class LoginDownload {
         httpParams.add(new BasicNameValuePair("access_token", token));
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(url);
+        HttpPost httpPost = new HttpPost(urlFBAuth);
         httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 
         try {
@@ -56,6 +70,13 @@ public class LoginDownload {
             e.printStackTrace();
         }
 
+        return response;
+    }
+
+    public String userDetails() {
+
+        response = api.httpMakeRequest(urlUserDetails, data, GET);
+        Log.d("response", "User details: " + response);
         return response;
     }
 }

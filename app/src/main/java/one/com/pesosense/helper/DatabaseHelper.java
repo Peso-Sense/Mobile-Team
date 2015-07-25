@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 6);
+        super(mContext, "onex_db", null, 7);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -28,13 +28,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer, timestamp varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
-//        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_user_info(user_id integer, username varchar, email varchar, photo varchar, first_name varchar, middle_name varchar, last_name varchar, birthday varchar, gender varchar, address varchar)");
+//      db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, " +
                 "rem_date varchar, rem_title varchar, rem_message varchar)");
 
 
-        db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar, email varchar)");
+        //db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar, email varchar)");
+
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer primary key, province varchar, name varchar, price varchar, product_image varchar, description varchar, ratings int, brand varchar, inventory varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_category (cat_id integer primary key, cat_name varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_subcategory(subcat_id integer primary key, subcat_name varchar)");
@@ -129,7 +131,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO tbl_remittances (rem_id, rem_date, rem_title, rem_message) VALUES (1, '01-01-2015', 'SMART', 'This is a sample content') ");
 
 
-
         db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 1, 'Batanes', 'Miniovaheng', '150pesos', " +
                 "'http://journeyingjames.com/wp-content/uploads/2011/05/Rice-wine.jpg' , 'Sugarcane Wine' , 4, 'Miniovaheng', '105') ");
 
@@ -168,8 +169,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 13, 'Capiz', 'Capiz shell lamp', '300 pesos', " +
                 "'http://www.retireinthephilippines.info/wp-content/uploads/2012/05/Capiz-Capiz-shell-products.jpg' , 'description' , 4, 'furnitures', '20') ");
-
-
 
 
     }
