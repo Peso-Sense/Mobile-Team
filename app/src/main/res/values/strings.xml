@@ -89,6 +89,9 @@
 
     <string name="facebook_app_id">734293950049753</string>
     <string name="title_activity_shop_item_view">ShopItemView</string>
+    <string name="title_activity_reset_password">ResetPassword</string>
+
+    <string name="check_email">We sent to your email the verification to reset your password. Please check your inbox</string>
     <!--
     //Thin
 CFO Newsfeeds

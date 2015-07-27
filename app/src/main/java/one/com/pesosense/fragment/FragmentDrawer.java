@@ -89,7 +89,7 @@ public class FragmentDrawer extends Fragment {
     }
 
     private void populateList() {
-        if (UtilsApp.LOGIN_STATUS == 0) {
+        if (UtilsApp.APP_LOGIN == 0) {
             titles = getActivity().getResources().getStringArray(
                     R.array.nav_item_thin);
             icons = getActivity().getResources().obtainTypedArray(

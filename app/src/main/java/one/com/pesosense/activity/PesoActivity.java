@@ -16,9 +16,9 @@ import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.fragment.FeedsFragment;
 import one.com.pesosense.fragment.FragmentDrawer;
-import one.com.pesosense.fragment.FragmentShop;
 import one.com.pesosense.fragment.PaymentFragment;
 import one.com.pesosense.fragment.RemittanceFragment;
+import one.com.pesosense.fragment.ShopFragment;
 
 
 public class PesoActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -91,7 +91,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case 1:
                 setTitle("Shop");
                 title = "Shop";
-                mFragment = new FragmentShop();
+                mFragment = new ShopFragment();
                 break;
             case 2:
                 title = "Payment";

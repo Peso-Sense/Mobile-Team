@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "onex_db", null, 7);
+        super(mContext, "pesosense_db", null, 1);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -26,22 +26,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_feeds(id varchar, type integer, timestamp varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, likes integer, comment integer, timestamp varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_user_info(user_id integer, username varchar, email varchar, photo varchar, first_name varchar, middle_name varchar, last_name varchar, birthday varchar, gender varchar, address varchar)");
-//      db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (id integer primary key, date varchar, title varchar, message varchar)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_video(id varchar, profile_pic varchar, message varchar, link varchar, " +
+                "likes integer, comment integer, timestamp varchar)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_fb_image(id varchar, profile_pic varchar, message varchar, link varchar, " +
+                "likes integer, comment integer, timestamp varchar)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_user_info(user_id integer, username varchar, email varchar, photo varchar, " +
+                "first_name varchar, middle_name varchar, last_name varchar, birthday varchar, gender varchar, address varchar)");
+
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_financial_tips (id integer, type integer, tips_english varchar, tips_tagalog varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, " +
-                "rem_date varchar, rem_title varchar, rem_message varchar)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, rem_date varchar, rem_title varchar, rem_message varchar)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer primary key, province varchar, name varchar, price varchar, product_image varchar, " +
+                "description varchar, ratings int, brand varchar, inventory varchar)");
 
 
-        //db.execSQL("CREATE TABLE IF NOT EXISTs tbl_user_info (imagepath varchar, lname varchar, fname varchar, mname varchar, gender varchar, birthday varchar, address varchar, email varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_shop_products(id integer, price integer, rating integer, name varchar, description varchar, image varchar)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_users_products(id integer, price integer, rating integer, name varchar, description varchar, image varchar)");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer primary key, province varchar, name varchar, price varchar, product_image varchar, description varchar, ratings int, brand varchar, inventory varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_category (cat_id integer primary key, cat_name varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_subcategory(subcat_id integer primary key, subcat_name varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_products(product_id integer primary key autoincrement, cat_id integer, subcat_id integer, product_name varchar, product_desc varchar, product_cost integer, product_price integer, product_quantity integer, product_image varchar)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_grabbed(grabbed_id integer primary key autoincrement, cat_id integer, subcat_id integer, grabbed_name varchar, grabbed_desc varchar, grabbed_cost integer, grabbed_price integer, grabbed_quantity integer, grabbed_image varchar)");
+
+//        int id, price, rating;
+//        String name, description, image;
         populateTips(db);
     }
 
@@ -63,10 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS tbl_user_info");
 
         db.execSQL("DROP TABLE IF EXISTS tbl_otop");
-        db.execSQL("DROP TABLE IF EXISTS tbl_category");
-        db.execSQL("DROP TABLE IF EXISTS tbl_subcategory");
-        db.execSQL("DROP TABLE IF EXISTS tbl_products");
-        db.execSQL("DROP TABLE IF EXISTS tbl_grabbed");
         onCreate(db);
 
     }

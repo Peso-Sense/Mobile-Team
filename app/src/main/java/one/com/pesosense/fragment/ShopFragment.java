@@ -1,7 +1,8 @@
 package one.com.pesosense.fragment;
 
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
+import one.com.pesosense.adapter.ShopAdapter;
 import one.com.pesosense.model.ShopItem;
 
 
@@ -27,6 +29,7 @@ public class ShopFragment extends Fragment {
 
     public ShopFragment() {
         // Required empty public constructor
+        context = getActivity();
     }
 
     /**
@@ -35,15 +38,17 @@ public class ShopFragment extends Fragment {
      * Variables
      */
 
+    private final Context context;
     private final String TAG = "SHOP";
+
 
     LinearLayout containerOTOP, containerBODL, containerHSP, containerUProduct;
     RecyclerView rvOTOP, rvBODL, rvHSP, rvUProduct;
     TextView lblOTOP, lblBODL, lblHSP, lblUProduct;
     TextView lblSeeMore, lblSeeMore2, lblSeeMore3, lblSeeMore4;
 
-    ArrayList<ShopItem> item;
-
+    ArrayList<ShopItem> itemOTOP, itemBODL, itemHSP, itemUProduct;
+    ShopAdapter adapterOTOP, adapterBODL, adapterHSP, adapterUProduct;
     LinearLayoutManager llm;
 
 
@@ -59,7 +64,7 @@ public class ShopFragment extends Fragment {
 
     private void initialize(View v) {
         initViews(v);
-        initValues();
+        initRV();
     }
 
     private void initViews(View v) {
@@ -102,8 +107,35 @@ public class ShopFragment extends Fragment {
 
     }
 
-    private void initValues(){
+    private void initRV() {
         Log.d(TAG, "Values initialized");
+
+
+        //   llm = new
+        itemOTOP = new ArrayList<>();
+        adapterOTOP = new ShopAdapter(this.getActivity(), itemOTOP);
+        llm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        rvOTOP.setLayoutManager(llm);
+        rvOTOP.setAdapter(adapterOTOP);
+
+        itemBODL = new ArrayList<>();
+        adapterBODL = new ShopAdapter(this.getActivity(), itemBODL);
+        llm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        rvBODL.setLayoutManager(llm);
+        rvBODL.setAdapter(adapterBODL);
+
+        itemHSP = new ArrayList<>();
+        adapterHSP = new ShopAdapter(this.getActivity(), itemHSP);
+        llm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        rvHSP.setLayoutManager(llm);
+        rvHSP.setAdapter(adapterHSP);
+
+        itemUProduct = new ArrayList<>();
+        adapterUProduct = new ShopAdapter(this.getActivity(), itemUProduct);
+        llm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        rvUProduct.setLayoutManager(llm);
+        rvUProduct.setAdapter(adapterUProduct);
+
     }
 
 }

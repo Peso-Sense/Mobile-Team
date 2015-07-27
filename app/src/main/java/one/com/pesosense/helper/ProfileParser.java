@@ -3,10 +3,20 @@ package one.com.pesosense.helper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.util.Log;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import one.com.pesosense.UtilsApp;
 
@@ -15,7 +25,10 @@ import one.com.pesosense.UtilsApp;
  */
 public class ProfileParser {
 
+    private static String imageUrl = "https://search.onesupershop.com/api/photos/";
+    private String url = "http://4hdwallpapers.com/wp-content/uploads/2013/05/Chopper-One-Piece-Photo-728x546.jpg";
     Context context;
+
 
     public ProfileParser(Context context) {
         this.context = context;
@@ -47,7 +60,7 @@ public class ProfileParser {
 
             jsonInner = jsonObject.getJSONObject("info");
 
-            //photo = jsonInner.getString("photo");
+            photo = jsonInner.getString("photo");
             firstName = jsonInner.getString("first_name");
             middleName = jsonInner.getString("middle_name");
             lastName = jsonInner.getString("last_name");
@@ -86,8 +99,48 @@ public class ProfileParser {
         values.put("address", address);
 
         db.insert("tbl_user_info", null, values);
+        getPhoto(photo);
         Log.d("response", "Inserting userInformation in database");
 
+    }
+
+    private void getPhoto(final String photo) {
+
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                File file = new File(Environment.getExternalStoragePublicDirectory
+                        (Environment.DIRECTORY_PICTURES), "Peso Testing");
+
+                if (!file.exists()) {
+                    // do something
+                    file.mkdir();
+                }
+
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, out);
+
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
+        Picasso.with(context).load(url).into(target);
     }
 
     //(user_id integer, username varchar, email varchar, photo varchar, first_name varchar, middle_name varchar, last_name varchar, birthday varchar, gender varchar, address varchar)");

@@ -66,6 +66,10 @@
             android:name=".activity.ShopItemView"
             android:label="@string/title_activity_shop_item_view" >
         </activity>
+        <activity
+            android:name=".activity.ResetPassword"
+            android:label="@string/title_activity_reset_password" >
+        </activity>
     </application>
 
 </manifest>

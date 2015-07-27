@@ -43,10 +43,6 @@ public class APIHandler {
     StringEntity stringEntity;
 
 
-    public APIHandler() {
-
-    }
-
     public String httpMakeRequest(String url, Map<String, String> params, String method, String token) {
         String response = null;
         httpParams = new ArrayList<NameValuePair>();
@@ -157,7 +153,6 @@ public class APIHandler {
 
         return response;
     }
-
 
     public String httpMakeRequest(String url, Map<String, String> params, String method) {
         String response = null;

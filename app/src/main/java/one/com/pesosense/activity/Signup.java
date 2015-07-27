@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,12 +25,12 @@ import java.util.Map;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
-import one.com.pesosense.download.APIHandler;
+import one.com.pesosense.download.DownloadHelper;
 
-public class Signup extends ActionBarActivity {
+public class Signup extends ActionBarActivity implements View.OnClickListener {
 
 
-    Toolbar mToolbar;
+    Toolbar toolbar;
 
     EditText txtUsername;
     EditText txtEmail;
@@ -40,28 +39,25 @@ public class Signup extends ActionBarActivity {
     Button btnSignup;
 
     /****/
-    String strEmail, strPass, strName;
-    Map<String, String> passedData;
-    String url = "http://search.onesupershop.com/api/register";
-    APIHandler apiHandler;
-
+    String email, password, username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        UtilsApp.initSharedPreferences(getApplicationContext());
         initToolbar();
         initValues();
 
     }
 
     private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) mToolbar.findViewById(R.id.title);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) toolbar.findViewById(R.id.title);
         title.setText("SIGN UP");
         title.setTypeface(UtilsApp.opensansNormal());
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,12 +66,9 @@ public class Signup extends ActionBarActivity {
 
     public void initValues() {
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
         // (s) RUM 07/17/15
-        apiHandler = new APIHandler();
-        passedData = new HashMap<String, String>();
+//        apiHandler = new APIHandler();
+//        data = new HashMap<String, String>();
         // (e) RUM 07/17/15
 
         txtUsername = (EditText) findViewById(R.id.txtUsername);
@@ -93,20 +86,18 @@ public class Signup extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                strEmail = txtEmail.getText().toString().trim();
-                strPass = txtPassword.getText().toString().trim();
-                strName = txtUsername.getText().toString().trim();
+                email = txtEmail.getText().toString().trim();
+                password = txtPassword.getText().toString().trim();
+                username = txtUsername.getText().toString().trim();
 
-                if (strEmail.equals("") || strPass.equals("") || strName.equals("")) {
+                if (email.equals("") || password.equals("") || username.equals("")) {
                     Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
-                } else if (!parseUsername(strName)) {
+                } else if (!parseUsername(username)) {
                     txtUsername.setError("A~Z, a~z, 0~9, _");
                 } else {
                     if (UtilsApp.isOnline()) {
-                        addToPassedDataMap("email", strEmail);
-                        addToPassedDataMap("password", strPass);
-                        addToPassedDataMap("name", strName);
-                        new RegisterUser().execute();
+
+                        new RegisterUser(email, password, username).execute();
                     } else {
                         UtilsApp.toast("No Network Connection Available");
                     }
@@ -147,9 +138,25 @@ public class Signup extends ActionBarActivity {
         return true;
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
     public class RegisterUser extends AsyncTask<Void, Void, Void> {
+
         ProgressDialog pDialog;
-        JSONObject jsonObject;
+        String response;
+
+        Map<String, String> data;
+
+        public RegisterUser(String email, String password, String username) {
+            data = new HashMap<>();
+            data.put("email", email);
+            data.put("password", password);
+            data.put("name", username);
+        }
+
 
         @Override
         protected void onPreExecute() {
@@ -161,14 +168,8 @@ public class Signup extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String response = apiHandler.httpMakeRequest(url, passedData, "post");
-            try {
-                jsonObject = new JSONObject(response);
-                Log.d("key", response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
+            response = new DownloadHelper().registerUser(data);
 
             return null;
         }
@@ -179,12 +180,10 @@ public class Signup extends ActionBarActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            if (parseResponse(jsonObject)) {
+            if (parseResponse(response)) {
                 userInfo();
-                //Toast.makeText(getApplicationContext(), "RESIGTER ", Toast.LENGTH_SHORT).show();
             } else
                 showError();
-            //Toast.makeText(getApplicationContext(), "Email Already used. ", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -192,26 +191,28 @@ public class Signup extends ActionBarActivity {
     public void userInfo() {
         Bundle b = new Bundle();
         b.putString("root", "signup");
-        b.putString("email", strEmail);
+        b.putString("email", email);
         Intent intent = new Intent(Signup.this, UserInformation.class);
         intent.putExtras(b);
         startActivity(intent);
         finish();
     }
 
-    public void addToPassedDataMap(String key, String value) {
-        passedData.put(key, value);
-    }
+    public boolean parseResponse(String response) {
 
-    public boolean parseResponse(JSONObject jObject) {
-
+        JSONObject jObject = null;
+        try {
+            jObject = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         int status = 0;
         String token = "";
 
         if (jObject.has("status")) {
             try {
                 token = jObject.getString("token");
-                UtilsApp.putString("token_info", token);
+                UtilsApp.putString("access_token", token);
                 return true;
             } catch (JSONException e) {
                 e.printStackTrace();

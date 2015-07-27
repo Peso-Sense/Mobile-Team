@@ -3,13 +3,11 @@ package one.com.pesosense.fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,8 +63,6 @@ public class FeedsFragment extends Fragment {
 
     int colors[] = {R.color.tips1, R.color.tips2, R.color.tips3, R.color.tips4, R.color.tips5};
 
-    SharedPreferences pref;
-
     public FeedsFragment() {
         // Required empty public constructor
     }
@@ -78,20 +74,18 @@ public class FeedsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_feeds, container, false);
+        UtilsApp.initSharedPreferences(getActivity());
         initValues(v);
         return v;
     }
 
     public void initValues(View v) {
 
-
-        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        int display = pref.getInt("displayTips", 0);
+        int display = UtilsApp.getInt("display_tips");
         if (display == 0)
             displayTips();
 
-        nextUrl = pref.getString("nextUrl", null);
+        nextUrl = UtilsApp.getString("feeds_next_url");
 
         dbHelper = DatabaseHelper.getInstance(getActivity());
 
@@ -128,7 +122,7 @@ public class FeedsFragment extends Fragment {
             @Override
             public void onLoadMore(int current_page) {
 
-                nextUrl = pref.getString("nextUrl", null);
+                nextUrl = UtilsApp.getString("feeds_next_url");
                 new NextFeedTask(nextUrl).execute();
             }
         });
@@ -317,7 +311,7 @@ public class FeedsFragment extends Fragment {
             pDialog.dismiss();
 
             readFeeds();
-            storeNextUrl(nextUrl);
+            UtilsApp.putString("feeds_next_url", nextUrl);
 
             //new NextFeedTask().execute();
             // readVideo();
@@ -359,7 +353,8 @@ public class FeedsFragment extends Fragment {
 
             pDialog.dismiss();
             readFeeds();
-            storeNextUrl(nextUrl);
+
+            UtilsApp.putString("feeds_next_url", nextUrl);
         }
     }
 
@@ -368,8 +363,8 @@ public class FeedsFragment extends Fragment {
         int id, type;
         String tipsEnglish, tipsTagalog;
 
-        //     UtilsApp.putInt("display_tips", 1);
-        storeTips();
+        UtilsApp.putInt("display_tips", 1);
+
         Random rand = new Random();
         id = rand.nextInt(55) + 1;
 
@@ -447,17 +442,5 @@ public class FeedsFragment extends Fragment {
         return ti;
     }
 
-    public void storeNextUrl(String nextUrl) {
-
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("nextUrl", nextUrl);
-        editor.commit();
-    }
-
-    public void storeTips() {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("displayTips", 1);
-        editor.commit();
-    }
 
 }

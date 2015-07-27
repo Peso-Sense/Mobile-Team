@@ -41,5 +41,7 @@
     <color name="button_secondary">#ccc</color>
     <color name="button_secondary_pressed">#aaa</color>
     <color name="viewmore">#2196f3</color>
+    <color name="shop_pressed">#ddd</color>
+    <color name="login_failed">#ff0002</color>
 
 </resources>

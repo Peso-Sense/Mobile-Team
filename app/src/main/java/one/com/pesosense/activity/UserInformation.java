@@ -122,7 +122,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         param = new HashMap<String, String>();
-        sp = getSharedPreferences("token", MODE_PRIVATE);
+
         apiHandler = new APIHandler();
         setContentView(R.layout.activity_user_information);
 
@@ -188,7 +188,8 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
         btnSave.setVisibility(View.VISIBLE);
 
-        token = UtilsApp.getString("token_info");
+        UtilsApp.initSharedPreferences(getApplicationContext());
+        token = UtilsApp.getString("access_token");
     }
 
     public void genderItem() {
@@ -274,13 +275,13 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
         imageFilePath = fileUri.getPath();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        intent.putExtra("android.intent.extras.CAMERA_FACING", 1);
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
-
 
     public static String getPath(Context context, Uri uri) throws URISyntaxException {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -505,7 +506,6 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
             File sourceFile = new File(imageFilePath); // imageFilePath is the path of the image
             Log.d("Peso Sense", "Upload image path  " + imageFilePath); // we need to know if there's a file path being passed
 
-            //Log.d("tag", sp.getString("access_token", null));
             try {
                 // Adding file data to http body
                 entity.addPart("file", new FileBody(sourceFile));

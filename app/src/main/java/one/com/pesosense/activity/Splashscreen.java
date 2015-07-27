@@ -16,7 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import one.com.pesosense.R;
-import one.com.pesosense.UtilsApp;
 
 
 public class Splashscreen extends Activity {
@@ -53,14 +52,13 @@ public class Splashscreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                UtilsApp.putInt("LOGIN_STATUS", 1);
-                UtilsApp.LOGIN_STATUS = UtilsApp.getInt("LOGIN_STATUS");
-               // startActivity(new Intent(Splashscreen.this, AppGuide.class));
-                startActivity(new Intent(Splashscreen.this, PesoActivity.class));
+//                UtilsApp.putInt("APP_LOGIN", 1);
+//                UtilsApp.APP_LOGIN = UtilsApp.getInt("APP_LOGIN");
+                startActivity(new Intent(Splashscreen.this, AppGuide.class));
+//                startActivity(new Intent(Splashscreen.this, ResetPassword.class));
+//                startActivity(new Intent(Splashscreen.this, UserInformation.class));
 
                 finish();
-
-
             }
         }, 2500);
     }

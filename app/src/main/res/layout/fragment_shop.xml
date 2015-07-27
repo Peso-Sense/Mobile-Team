@@ -10,8 +10,11 @@
         tools:context="one.com.pesosense.fragment.ShopFragment">
 
         <LinearLayout
-            android:layout_width="match_parent" android:id="@+id/containerOTOP"
+            android:id="@+id/containerOTOP"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
             android:padding="16dp">
 
             <TextView
@@ -31,7 +34,7 @@
                 android:background="@color/viewmore"
                 android:padding="4dp"
                 android:text="VIEW MORE"
-                android:textSize="8sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -40,8 +43,11 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:id="@+id/containerBODL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/containerBODL"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
             android:padding="16dp">
 
             <TextView
@@ -49,7 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="One Town One Product"
+                android:text="Buy Online Delivery Local"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/navtext_active" />
 
@@ -61,7 +67,7 @@
                 android:background="@color/viewmore"
                 android:padding="4dp"
                 android:text="VIEW MORE"
-                android:textSize="8sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -70,8 +76,11 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:id="@+id/containerHSP"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/containerHSP"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
             android:padding="16dp">
 
             <TextView
@@ -79,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="One Town One Product"
+                android:text="Harana sa Pamilya"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/navtext_active" />
 
@@ -91,7 +100,7 @@
                 android:background="@color/viewmore"
                 android:padding="4dp"
                 android:text="VIEW MORE"
-                android:textSize="8sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -100,8 +109,11 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_width="match_parent" android:id="@+id/containerUProduct"
+            android:id="@+id/containerUProduct"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
             android:padding="16dp">
 
             <TextView
@@ -109,7 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="One Town One Product"
+                android:text="Others users Products"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/navtext_active" />
 
@@ -121,7 +133,7 @@
                 android:background="@color/viewmore"
                 android:padding="4dp"
                 android:text="VIEW MORE"
-                android:textSize="8sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
