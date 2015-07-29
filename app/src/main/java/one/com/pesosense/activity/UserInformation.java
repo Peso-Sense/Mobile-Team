@@ -3,6 +3,7 @@ package one.com.pesosense.activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,6 +61,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 150;
+    private static final int IMAGE_CROP = 110;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     public static final String IMAGE_DIR_NAME = "Peso Sense";
@@ -109,7 +112,8 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     String imageFilePath;
 
     String token;
-
+    // for validating if there's an image uploaded or none
+    int USER_IMAGE = 0; // indicates that no image was uploaded yet
 
     /**
      * **
@@ -363,6 +367,8 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         // Validation part
         if (lName.equals("") || mName.equals("") || fName.equals("") || birthday.equals("") || address.equals("")) {
             UtilsApp.toast("All fields are required");
+        } else if (USER_IMAGE == 0) {
+            UtilsApp.toast("Please provided your profile image");
         } else {
             db = dbHelper.getWritableDatabase();
             db.delete("tbl_user_info", null, null);
@@ -423,6 +429,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
         if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
+                // TODO: availablity of cropping image sourced from gallery
+
+                USER_IMAGE = 1;
                 previewPickedImage(data);
 //                try {
 //                    imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
@@ -435,17 +445,14 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
 
             if (resultCode == RESULT_OK) {
-                Picasso.with(getApplicationContext()).load(fileUri).resize(300, 300).centerCrop().into(imgUser);
-                Log.d("Peso Sense", imageFilePath);
+                cropImage(fileUri);
+//                Picasso.with(getApplicationContext()).load(fileUri).resize(300, 300).centerCrop().into(imgUser);
+//                Log.d("Peso Sense", imageFilePath);
             }
-//            try {
-//                imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
-//                Log.d("tag", "File Path: " + imgPath);
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
+        } else if (requestCode == IMAGE_CROP) {
+             USER_IMAGE = 1;
+            previewCroppedImage(data);
         }
-
     }
 
     private void previewPickedImage(Intent data) {
@@ -582,4 +589,44 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     public void addParams(String key, String value) {
         param.put(key, value);
     }
+
+    // XLTC (START) most recently added: image cropping and validation
+
+    // generic image cropping: works on image capture by the camera first
+    private void cropImage(Uri imgUri) {
+
+        try {
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            imageFilePath = fileUri.getPath();
+
+            cropIntent.setDataAndType(imgUri, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("return-data", true);
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+            startActivityForResult(cropIntent, IMAGE_CROP);
+
+        } catch (ActivityNotFoundException e) {
+
+            UtilsApp.toast("Your device does not support image cropping");
+
+        }
+    }
+
+    //TODO: Generic cropping method to add compatibility for gallery picked images
+
+    private void previewCroppedImage(Intent data){
+        Bundle extras = data.getExtras();
+        Bitmap imgPreview = extras.getParcelable("data");
+        imgUser.setImageBitmap(imgPreview);
+    }
+
+
+    // XLTC (END)
 }

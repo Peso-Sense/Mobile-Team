@@ -8,12 +8,16 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by mykelneds on 6/20/15.
@@ -44,6 +48,8 @@ public class UtilsApp extends Application {
     public static int APP_LOGIN = 1;
     public static int FB_LOGIN = 0;
     public static int VMONEY_LOGIN = 0;
+
+    public static Timer timelapse;
 
     @Override
     public void onCreate() {
@@ -130,4 +136,35 @@ public class UtilsApp extends Application {
             }
         }
     }
+
+    // XLTC (START)
+    public static void terminateOnPause(final Activity current) {
+        // use: kill app after 5 minutes of inactivity/home/mobile1
+        // trigger: onpause
+        // algo: start countring 5 mins after on pause of the application
+        int span = 300000; // 5 minutes in milliseconds
+        int span30 = 5000; // 30 seconds
+
+        timelapse = new Timer();
+
+        TimerTask terminate = new TimerTask() {
+            @Override
+            public void run() {
+                // command to terminate the application
+                Log.d("Peso Sense", "App will now close");
+                current.finish();
+            }
+        };
+
+        timelapse.schedule(terminate, span30);
+    }
+
+    public static void handleOnResume() {
+        if(timelapse != null) {
+            timelapse.cancel();
+            timelapse.purge();
+        }
+    }
+
+    // XLTC (END)
 }

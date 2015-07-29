@@ -66,11 +66,6 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
 
     public void initValues() {
 
-        // (s) RUM 07/17/15
-//        apiHandler = new APIHandler();
-//        data = new HashMap<String, String>();
-        // (e) RUM 07/17/15
-
         txtUsername = (EditText) findViewById(R.id.txtUsername);
         txtUsername.setTypeface(UtilsApp.opensansNormal());
 
@@ -82,33 +77,39 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
 
         btnSignup = (Button) findViewById(R.id.btnSignup);
         btnSignup.setTypeface(UtilsApp.opensansNormal());
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                email = txtEmail.getText().toString().trim();
-                password = txtPassword.getText().toString().trim();
-                username = txtUsername.getText().toString().trim();
-
-                if (email.equals("") || password.equals("") || username.equals("")) {
-                    Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
-                } else if (!parseUsername(username)) {
-                    txtUsername.setError("A~Z, a~z, 0~9, _");
-                } else {
-                    if (UtilsApp.isOnline()) {
-
-                        new RegisterUser(email, password, username).execute();
-                    } else {
-                        UtilsApp.toast("No Network Connection Available");
-                    }
-                }
-
-            }
-        });
+        btnSignup.setOnClickListener(this);
 
     }
 
-    private Boolean parseUsername(String uname) {
+    @Override
+    public void onClick(View view) {
+
+        if(view.getId() == R.id.btnSignup){
+            signup();
+        }
+
+    }
+
+    private void signup() {
+        email = txtEmail.getText().toString().trim();
+        password = txtPassword.getText().toString().trim();
+        username = txtUsername.getText().toString().trim();
+
+        if (email.equals("") || password.equals("") || username.equals("")) {
+            Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+        } else if (!validateUsername(username)) {
+            txtUsername.setError("A~Z, a~z, 0~9, _");
+        } else {
+            if (UtilsApp.isOnline()) {
+
+                new RegisterUser(email, password, username).execute();
+            } else {
+                UtilsApp.toast("No Network Connection Available");
+            }
+        }
+    }
+
+    private Boolean validateUsername(String uname) {
         int i;
         List<String> allowedCharsList = new ArrayList<String>();
 
@@ -138,10 +139,6 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
         return true;
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
 
     public class RegisterUser extends AsyncTask<Void, Void, Void> {
 

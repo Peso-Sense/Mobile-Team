@@ -15,8 +15,6 @@ import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 
 
-
-
 public class ResetPassword extends ActionBarActivity implements View.OnClickListener {
 
     Toolbar toolbar;
@@ -68,26 +66,25 @@ public class ResetPassword extends ActionBarActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == R.id.btnSubmit){
+        if (view.getId() == R.id.btnSubmit) {
             submit();
         }
 
-        if(view.getId() == R.id.btnOk){
+        if (view.getId() == R.id.btnOk) {
             dialog.dismiss();
             //ready for next Activity;
         }
     }
 
 
-    private void submit(){
+    private void submit() {
         new ResetEmailTask().execute();
     }
 
-    private void checkEmail(){
+    private void checkEmail() {
 
         TextView lblCheckEmail, text;
         Button btnOk;
-
 
         dialog = new Dialog(ResetPassword.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -108,8 +105,7 @@ public class ResetPassword extends ActionBarActivity implements View.OnClickList
     }
 
 
-    public class ResetEmailTask extends AsyncTask<Void, Void, Void>{
-
+    public class ResetEmailTask extends AsyncTask<Void, Void, Void> {
 
 
         @Override
