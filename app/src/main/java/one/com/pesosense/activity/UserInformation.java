@@ -2,15 +2,23 @@ package one.com.pesosense.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,16 +33,26 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
+import one.com.pesosense.download.APIHandler;
+import one.com.pesosense.download.AndroidMultiPartEntity;
 import one.com.pesosense.helper.DatabaseHelper;
 
 /**
@@ -44,6 +62,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 150;
+    private static final int IMAGE_CROP = 110;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     public static final String IMAGE_DIR_NAME = "Peso Sense";
@@ -57,6 +76,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     ScrollView container;
 
+    Toolbar toolbar;
     ImageView imgUser;
 
     TextView lblLName;
@@ -83,6 +103,19 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     String email, imgPath, lName, fName, mName, gender, birthday, address;
 
+    // Responsible for register
+    Map<String, String> param;
+    APIHandler apiHandler;
+    long totalSize = 0;
+    SharedPreferences sp;
+    String url = "http://search.onesupershop.com/api/me/photo";
+    String urlPersonInfo = "http://search.onesupershop.com/api/me";
+
+    String imageFilePath;
+
+    String token;
+    // for validating if there's an image uploaded or none
+    int USER_IMAGE = 0; // indicates that no image was uploaded yet
 
     /**
      * **
@@ -94,13 +127,29 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        param = new HashMap<String, String>();
 
+        apiHandler = new APIHandler();
         setContentView(R.layout.activity_user_information);
 
+        initToolbar();
         initValues();
         getBundle();
 
     }
+
+
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) toolbar.findViewById(R.id.title);
+        title.setText("Profile Information");
+        title.setTypeface(UtilsApp.opensansNormal());
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
 
     private void initValues() {
 
@@ -157,9 +206,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnEdit.setTypeface(UtilsApp.opensansNormal());
 
-
-        //
         btnSave.setVisibility(View.VISIBLE);
+
+        UtilsApp.initSharedPreferences(getApplicationContext());
+        token = UtilsApp.getString("access_token");
     }
 
     public void genderItem() {
@@ -168,7 +218,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         list.add("Female");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, list);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+        //dataAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerGender.setAdapter(dataAdapter);
     }
 
@@ -199,7 +249,11 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         }
 
         if (view.getId() == R.id.btnSave) {
-            saveInfo();
+            if (UtilsApp.isOnline()) {
+                saveInfo();
+            } else {
+                UtilsApp.toast("No Network Connection");
+            }
         }
     }
 
@@ -239,15 +293,48 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
     public void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-        imgPath = fileUri.toString();
-
+        imageFilePath = fileUri.getPath();
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        intent.putExtra("android.intent.extras.CAMERA_FACING", 1);
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    public static String getPath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {"_data"};
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                Log.d("tag", "cursor: " + DatabaseUtils.dumpCursorToString(cursor));
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+
+                    return cursor.getString(column_index);
+
+                }
+            } catch (Exception e) {
+                // Eat it
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                Log.d("tag", "cursor: " + DatabaseUtils.dumpCursorToString(cursor));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return uri.getPath();
+        }
+
+        return null;
     }
 
     private static File getOutputMediaFile(int type) {
@@ -293,30 +380,41 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         birthday = txtBirthday.getText().toString();
         address = txtAddress.getText().toString();
 
-        db = dbHelper.getWritableDatabase();
-        db.delete("tbl_user_info", null, null);
+        // Validation part
+        if (lName.equals("") || mName.equals("") || fName.equals("") || birthday.equals("") || address.equals("")) {
+            UtilsApp.toast("All fields are required");
+        } else if (USER_IMAGE == 0) {
+            UtilsApp.toast("Please provided your profile image");
+        } else {
+            db = dbHelper.getWritableDatabase();
+            db.delete("tbl_user_info", null, null);
 
-        values = new ContentValues();
+            values = new ContentValues();
 
-        values.put("imagepath", imgPath);
-        values.put("lname", lName);
-        values.put("fname", fName);
-        values.put("mname", mName);
-        values.put("gender", gender);
-        values.put("birthday", birthday);
-        values.put("address", address);
-        values.put("email", email);
-        db.insert("tbl_user_info", null, values);
-        db.close();
+            values.put("photo", imageFilePath);
+            values.put("last_name", lName);
+            values.put("first_name", fName);
+            values.put("middle_name", mName);
+            values.put("gender", gender);
+            values.put("birthday", birthday);
+            values.put("address", address);
+            values.put("email", email);
+            db.insert("tbl_user_info", null, values);
+            db.close();
 
-        UtilsApp.putString("email", email);
+            UtilsApp.putString("email", email);
 
-        if (root.equalsIgnoreCase("signup")) {
-            startActivity(new Intent(UserInformation.this, PesoActivity.class));
+            // send to API then server
 
+            addParams("first_name", fName);
+            addParams("last_name", lName);
+            addParams("middle_name", mName);
+            addParams("birthday", birthday);
+            addParams("gender", gender);
+            addParams("address", address);
+
+            new UploadData().execute();
         }
-
-        finish();
     }
 
     public void showDatePicker() {
@@ -328,10 +426,17 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         dpd = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                txtBirthday.setText(month + "-" + day + "-" + year);
+                txtBirthday.setText(formatMonth(month) + " " + day + ", " + year);
             }
         }, year, month, day);
         dpd.show();
+    }
+
+    private String formatMonth(int m) {
+        String[] months = {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
+
+        return months[m];
     }
 
     @Override
@@ -340,23 +445,204 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
         if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
+                // TODO: availablity of cropping image sourced from gallery
+
+                USER_IMAGE = 1;
                 previewPickedImage(data);
+//                try {
+//                    imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
+//
+//                    Log.d("tag", "File Path: " + imgPath);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
             }
         } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK)
-                Picasso.with(getApplicationContext()).load(imgPath).resize(300, 300).centerCrop().
-                        into(imgUser);
-        }
 
+            if (resultCode == RESULT_OK) {
+                cropImage(fileUri);
+//                Picasso.with(getApplicationContext()).load(fileUri).resize(300, 300).centerCrop().into(imgUser);
+//                Log.d("Peso Sense", imageFilePath);
+            }
+        } else if (requestCode == IMAGE_CROP) {
+            USER_IMAGE = 1;
+            previewCroppedImage(data);
+        }
     }
 
     private void previewPickedImage(Intent data) {
-
         Uri pickedImage = data.getData();
-        imgPath = pickedImage.toString();
+        String[] filePath = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
+        cursor.moveToFirst();
+        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+        Log.d("Peso Sense", "Image Gallery URI " + pickedImage.toString());
+        imgPath = pickedImage.toString(); // Uri pala ang ibinibigay nito, hindi filepath
+        imageFilePath = imagePath;
+        Log.d("Peso Sense", "Image gallery path " + imageFilePath);
         Picasso.with(getApplicationContext()).load(imgPath).resize(300, 300).centerCrop().into(imgUser);
-        Log.d("User Image", imgPath);
+    }
 
+    private void getPickedImagePath(Intent data) {
 
     }
+
+    class UploadData extends AsyncTask<Void, Integer, String> {
+        ProgressDialog pDialog;
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(UserInformation.this);
+            pDialog.setMax(100);
+            pDialog.setProgress(0);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            pDialog.setProgress(progress[0]);
+            pDialog.setMessage("Uploading " + progress[0] + "%");
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            Log.d("Peso Sense", "In doInBackground already");
+
+            AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                    new AndroidMultiPartEntity.ProgressListener() {
+
+                        @Override
+                        public void transferred(long num) {
+                            publishProgress((int) ((num / (float) totalSize) * 100));
+                        }
+
+                    });
+
+            File sourceFile = new File(imageFilePath); // imageFilePath is the path of the image
+            Log.d("Peso Sense", "Upload image path  " + imageFilePath); // we need to know if there's a file path being passed
+
+            try {
+                // Adding file data to http body
+                entity.addPart("file", new FileBody(sourceFile));
+
+                entity.addPart("Content-Type", new StringBody("x-www-form-urlencoded"));
+                totalSize = entity.getContentLength();
+                Log.d("tag", "size: " + totalSize);
+
+                response = apiHandler.httpMakeRequest(url, "post", entity, token);
+                JSONObject jsonObject = new JSONObject(response);
+                Log.d("tag", response);
+                addParams("photo", jsonObject.getJSONObject("data").getString("photo"));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
+            new AddInformation().execute();
+        }
+    }
+
+    class AddInformation extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(UserInformation.this);
+            pDialog.setMessage("Loading....");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String response = apiHandler.httpMakeRequest(urlPersonInfo, param, "put", token);
+            Log.d("tag", "response: " + response);
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
+            if (root.equalsIgnoreCase("signup")) {
+                startActivity(new Intent(UserInformation.this, PesoActivity.class));
+            }
+
+            finish();
+        }
+    }
+
+    public void addParams(String key, String value) {
+        param.put(key, value);
+    }
+
+    // XLTC (START) most recently added: image cropping and validation
+
+    // generic image cropping: works on image capture by the camera first
+    private void cropImage(Uri imgUri) {
+
+        try {
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            imageFilePath = fileUri.getPath();
+
+            cropIntent.setDataAndType(imgUri, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("return-data", true);
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+            startActivityForResult(cropIntent, IMAGE_CROP);
+
+        } catch (ActivityNotFoundException e) {
+
+            UtilsApp.toast("Your device does not support image cropping");
+
+        }
+    }
+
+    //TODO: Generic cropping method to add compatibility for gallery picked images
+
+    private void previewCroppedImage(Intent data) {
+        Bundle extras = data.getExtras();
+        Bitmap imgPreview = extras.getParcelable("data");
+        imgUser.setImageBitmap(imgPreview);
+    }
+
+
+    // XLTC (END)
 }

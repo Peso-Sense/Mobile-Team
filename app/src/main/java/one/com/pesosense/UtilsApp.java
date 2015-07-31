@@ -5,13 +5,19 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by mykelneds on 6/20/15.
@@ -20,19 +26,42 @@ import android.widget.Toast;
 //TESING KO LANG
 public class UtilsApp extends Application {
 
+    /**
+     * SHARED PREFERENCES VALUES
+     * String:
+     * access_token        :       token to authorized everything;
+     * feeds_next_url         :       token to previous feeds
+     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     * Int:
+     * app_login            :       status whether login to app or not;
+     * fb_login             :       status whether user is login to facebook
+     * vmoney_login         :       status whether user is login to vmoney account
+     * <p/>
+     * display_tips         :       returns 1 not to display TIPS    /   returns 0 to display TIPS
+     * user_id              :       id of user currently logged in
+     */
+
     private static Context mContext;
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
 
-    public static int LOGIN_STATUS = 1;
+    public static int APP_LOGIN = 1;
+    public static int FB_LOGIN = 0;
+    public static int VMONEY_LOGIN = 0;
+
+    public static Timer timelapse;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         mContext = getApplicationContext();
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = preferences.edit();
+    }
+
+    public static boolean isOnline() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static Typeface opensansLight() {
@@ -50,11 +79,15 @@ public class UtilsApp extends Application {
         return Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans_Bold.ttf");
     }
 
+    public static void initSharedPreferences(Context context) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        editor = preferences.edit();
+    }
+
     public static String getString(String title) {
         String str = preferences.getString(title, null);
         return str;
     }
-
 
     public static int getInt(String title) {
         int i = preferences.getInt(title, 0);
@@ -70,7 +103,6 @@ public class UtilsApp extends Application {
         editor.putInt(title, value);
         editor.apply();
     }
-
 
     public static void toast(String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
@@ -104,4 +136,35 @@ public class UtilsApp extends Application {
             }
         }
     }
+
+    // XLTC (START)
+    public static void terminateOnPause(final Activity current) {
+        // use: kill app after 5 minutes of inactivity/home/mobile1
+        // trigger: onpause
+        // algo: start countring 5 mins after on pause of the application
+        int span = 300000; // 5 minutes in milliseconds
+        int span30 = 5000; // 30 seconds
+
+        timelapse = new Timer();
+
+        TimerTask terminate = new TimerTask() {
+            @Override
+            public void run() {
+                // command to terminate the application
+                Log.d("Peso Sense", "App will now close");
+                current.finish();
+            }
+        };
+
+        timelapse.schedule(terminate, span30);
+    }
+
+    public static void handleOnResume() {
+        if(timelapse != null) {
+            timelapse.cancel();
+            timelapse.purge();
+        }
+    }
+
+    // XLTC (END)
 }

@@ -1,5 +1,6 @@
 package one.com.pesosense.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +27,6 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
-    int status = UtilsApp.LOGIN_STATUS;
     TextView title;
 
     @Override
@@ -34,13 +34,10 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peso);
 
+//        this.invalidateOptionsMenu();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle("");
-
         title = (TextView) mToolbar.findViewById(R.id.title);
-        //title.setTypeface(UtilsApp.opensansNormal());
+        title.setTypeface(UtilsApp.opensansNormal());
         drawerFragment = (FragmentDrawer) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer,
@@ -48,8 +45,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
 
 
-        if (status == 1)
-            displayViewRich(1);
+        displayView(1);
 
 
     }
@@ -80,11 +76,10 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onDrawerItemSelected(View view, int position) {
 
-        if (status == 1)
-            displayViewRich(position);
+        displayView(position);
     }
 
-    private void displayViewRich(int position) {
+    private void displayView(int position) {
 
         FragmentManager mFragmentManager = getSupportFragmentManager();
         Fragment mFragment = null;
@@ -95,7 +90,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 mFragment = new FeedsFragment();
                 break;
             case 1:
-//                setTitle("Shop");
+                setTitle("Shop");
                 title = "Shop";
                 mFragment = new ShopFragment();
                 break;
@@ -107,6 +102,12 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = "Remittance";
                 mFragment = new RemittanceFragment();
                 break;
+            case 4:
+                title = "Settings";
+//                mFragment = new RemittanceFragment();
+                startActivity(new Intent(PesoActivity.this, SettingsActivity.class));
+
+                break;
         }
 
         if (mFragment != null) {
@@ -116,8 +117,12 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         this.title.setText(title);
 
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        UtilsApp.putInt("displayTips", 0);
+    }
 }

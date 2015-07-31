@@ -39,6 +39,7 @@
         <item>@drawable/selector_bills</item>
         <item>@drawable/selector_remittance</item>
         <item>@drawable/selector_settings</item>
+
     </array>
 
     <array name="nav_icons_rich_selected">
@@ -47,6 +48,8 @@
         <item>@drawable/ic_bills_selected</item>
         <item>@drawable/ic_remittance_selected</item>
         <item>@drawable/ic_settings_selected</item>
+        <item>@drawable/ic_settings_selected</item>
+
     </array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -83,6 +86,12 @@
     <string name="update_item_title">Update Remittance Details</string>
     <string name="title_activity_government_payment">GovernmentPayment</string>
 
+
+    <string name="facebook_app_id">734293950049753</string>
+    <string name="title_activity_shop_item_view">ShopItemView</string>
+    <string name="title_activity_reset_password">ResetPassword</string>
+
+    <string name="check_email">We sent to your email the verification to reset your password. Please check your inbox</string>
     <!--
     //Thin
 CFO Newsfeeds

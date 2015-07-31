@@ -47,7 +47,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View v = null;
         switch (viewType) {
             case FB_IMAGE:
-                v = inflater.inflate(R.layout.feeds_fbimage, parent, false);
+                v = inflater.inflate(R.layout.feeds_fbimage2, parent, false);
                 viewHolder = new FbImageHolder(v);
                 break;
             case FB_VIDEO:
@@ -87,7 +87,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.lblNoLikes.setText(String.valueOf(current.getLikes()));
         holder.lblNoComments.setText(String.valueOf(current.getComment()));
 
-        Picasso.with(context).load(current.getProfilePic()).into(holder.fbProfilePicture);
+     //   Picasso.with(context).load(current.getProfilePic()).into(holder.fbProfilePicture);
         Picasso.with(context).load(current.getLink()).into(holder.fbImage);
     }
 
@@ -96,7 +96,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView lblPesoSense;
         TextView fbMessage;
 
-        ImageView fbProfilePicture;
+      //  ImageView fbProfilePicture;
         ImageView fbImage;
 
         TextView lblNoComments;
@@ -110,7 +110,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             lblPesoSense = (TextView) v.findViewById(R.id.lblPesoSense);
             lblPesoSense.setTypeface(UtilsApp.opensansBold());
 
-            fbProfilePicture = (ImageView) v.findViewById(R.id.fbProfilePicture);
+        //    fbProfilePicture = (ImageView) v.findViewById(R.id.fbProfilePicture);
 
             fbImage = (ImageView) v.findViewById(R.id.fbImage);
 

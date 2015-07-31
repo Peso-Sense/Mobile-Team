@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -89,7 +90,7 @@ public class FragmentDrawer extends Fragment {
     }
 
     private void populateList() {
-        if (UtilsApp.LOGIN_STATUS == 0) {
+        if (UtilsApp.APP_LOGIN == 0) {
             titles = getActivity().getResources().getStringArray(
                     R.array.nav_item_thin);
             icons = getActivity().getResources().obtainTypedArray(
@@ -111,6 +112,8 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer,
                 container, false);
+
+        UtilsApp.initSharedPreferences(getActivity());
 
         navbarbgtop = (LinearLayout) layout.findViewById(R.id.nav_header_container);
         lblUsername = (TextView) layout.findViewById(R.id.lblUsername);
@@ -151,6 +154,7 @@ public class FragmentDrawer extends Fragment {
 
     public void setupUser() {
 
+        String url = "http://search.onesupershop.com/api/photos/";
         UserItem item = readDB();
 
         String name = item.getfName() + " " + item.getlName();
@@ -169,7 +173,8 @@ public class FragmentDrawer extends Fragment {
             lblUseraddress.setVisibility(View.INVISIBLE);
 
         if (!profilePic.equalsIgnoreCase("")) {
-            Picasso.with(getActivity()).load(profilePic).resize(300, 300).centerCrop().into(civ);
+            Picasso.with(getActivity()).load(url + profilePic).into(civ);
+            Log.d("picture", url + profilePic);
         } else {
             civ.setImageDrawable(getResources().getDrawable(R.drawable.pesosense_sqaure));
         }
@@ -180,7 +185,7 @@ public class FragmentDrawer extends Fragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String email = preferences.getString("email", null);
-
+        int userID = UtilsApp.getInt("user_id");
         UserItem item = null;
 
         String imgPath = "";
@@ -195,18 +200,18 @@ public class FragmentDrawer extends Fragment {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String query = "SELECT * FROM tbl_user_info WHERE email = '" + email + "'";
+        String query = "SELECT * FROM tbl_user_info WHERE user_id = " + userID;
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                imgPath = cursor.getString(0);
-                lName = cursor.getString(1);
-                fName = cursor.getString(2);
-                mName = cursor.getString(3);
-                gender = cursor.getString(4);
-                birthday = cursor.getString(5);
-                address = cursor.getString(6);
+                imgPath = cursor.getString(cursor.getColumnIndex("photo"));
+                lName = cursor.getString(cursor.getColumnIndex("last_name"));
+                fName = cursor.getString(cursor.getColumnIndex("first_name"));
+                mName = cursor.getString(cursor.getColumnIndex("middle_name"));
+                gender = cursor.getString(cursor.getColumnIndex("gender"));
+                birthday = cursor.getString(cursor.getColumnIndex("birthday"));
+                address = cursor.getString(cursor.getColumnIndex("address"));
             }
             item = new UserItem(imgPath, lName, fName, mName, gender, birthday, address);
         }

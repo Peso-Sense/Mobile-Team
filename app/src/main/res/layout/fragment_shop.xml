@@ -1,9 +1,145 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="one.com.pesosense.fragment.ShopFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="one.com.pesosense.fragment.ShopFragment">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/containerOTOP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/lblOTOP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="One Town One Product"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/navtext_active" />
+
+            <TextView
+                android:id="@+id/lblSeeMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/viewmore"
+                android:padding="4dp"
+                android:text="VIEW MORE"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvOTOP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/containerBODL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/lblBODL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Buy Online Delivery Local"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/navtext_active" />
+
+            <TextView
+                android:id="@+id/lblSeeMore2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/viewmore"
+                android:padding="4dp"
+                android:text="VIEW MORE"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvBODL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/containerHSP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/lblHSP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Harana sa Pamilya"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/navtext_active" />
+
+            <TextView
+                android:id="@+id/lblSeeMore3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/viewmore"
+                android:padding="4dp"
+                android:text="VIEW MORE"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvHSP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/containerUProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_row_selector"
+            android:clickable="true"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/lblUProduct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Others users Products"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/navtext_active" />
+
+            <TextView
+                android:id="@+id/lblSeeMore4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/viewmore"
+                android:padding="4dp"
+                android:text="VIEW MORE"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvUProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</ScrollView>
