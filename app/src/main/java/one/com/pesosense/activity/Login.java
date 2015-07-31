@@ -109,13 +109,13 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
             loginEmail();
         }
 
-        if (v.getId() == R.id.btnRegister) {
-            UtilsApp.toast("REGISTER");
-        }
-
         if (v.getId() == R.id.btnReset) {
             UtilsApp.toast("RESET");
             startActivity(new Intent(Login.this, ResetPassword.class));
+        }
+
+        if (v.getId() == R.id.btnRegister) {
+            startActivity(new Intent(Login.this, Signup.class));
         }
     }
 
@@ -123,7 +123,18 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
         String email = txtEmail.getText().toString();
         String password = txtPassword.getText().toString();
 
-        new LoginEmailTask(email, password).execute();
+        if (!email.trim().equals("") && !password.trim().equals(""))
+            new LoginEmailTask(email, password).execute();
+        else {
+            if (email.trim().equals("")) {
+                txtEmail.setError("Please enter your email");
+                txtEmail.requestFocus();
+            }
+            if (password.trim().equals("")) {
+                txtPassword.requestFocus();
+                txtPassword.setError("Please enter your password");
+            }
+        }
     }
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
@@ -356,7 +367,6 @@ public class Login extends ActionBarActivity implements View.OnClickListener {
 
         pDialog.dismiss();
 
-        txtEmail.setText("");
         txtPassword.setText("");
 
         Dialog dialog = new Dialog(Login.this);

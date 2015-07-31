@@ -11,6 +11,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,16 @@ import java.util.Map;
  * Created by mykelneds on 7/23/15.
  */
 public class DownloadHelper {
+    private final String URL = "http://search.onesupershop.com/api";
+    private final String URL_FB_AUTH = URL + "/auth/facebook";
+    private final String URL_EMAIL = URL + "/auth";
+    private final String URL_USER_DETAILS = URL + "/me";
+    private final String URL_REGISTER_USER = URL + "/register";
+    private final String URL_FORGET_PASSWORD = URL + "/password/forgot";
+    private final String URL_CHANGED_PASSWORD = URL + "/password/reset";
 
-    private final String URL_FB_AUTH = "http://search.onesupershop.com/api/auth/facebook";
-    private final String URL_EMAIL = "http://search.onesupershop.com/api/auth";
-    private final String URL_USER_DETAILS = "http://search.onesupershop.com/api/me";
-    private final String URL_REGISTER_USER = "http://search.onesupershop.com/api/register";
+    private final String AUTH_RESET = "password reset code sent to email";
+    private final String AUTH_PASSWORD_CHANGED = "password changed";
 
     private final String GET = "get";
     private final String POST = "post";
@@ -84,5 +91,51 @@ public class DownloadHelper {
         response = api.httpMakeRequest(URL_REGISTER_USER, data, POST);
         Log.d(TAG, "Register response: " + response);
         return response;
+    }
+
+    public boolean forgetPassword(Map<String, String> data) {
+
+        boolean success = true;
+
+        response = api.httpMakeRequest(URL_FORGET_PASSWORD, data, POST);
+        Log.d(TAG, "Forget Password response: " + response);
+        success = response(response);
+        return success;
+    }
+
+    public boolean changedPassword(Map<String, String> data) {
+
+        boolean success = true;
+
+        response = api.httpMakeRequest(URL_CHANGED_PASSWORD, data, POST);
+        Log.d(TAG, "Change Password Response: " + response);
+        success = response(response);
+        return success;
+    }
+
+    // use to parse the authentication message;
+    public boolean response(String response) {
+
+        JSONObject jsonObject;
+        String message;
+
+        try {
+            jsonObject = new JSONObject(response);
+
+            if (jsonObject.has("message")) {
+                message = jsonObject.getString("message");
+
+                //authentication for reset password;
+                if (message.equalsIgnoreCase(AUTH_RESET) || message.equals(AUTH_PASSWORD_CHANGED)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

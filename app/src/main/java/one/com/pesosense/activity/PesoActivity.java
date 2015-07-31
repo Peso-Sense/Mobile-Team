@@ -34,6 +34,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peso);
 
+//        this.invalidateOptionsMenu();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) mToolbar.findViewById(R.id.title);
         title.setTypeface(UtilsApp.opensansNormal());

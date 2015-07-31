@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -51,6 +53,12 @@ public class ShopFragment extends Fragment {
     ShopAdapter adapterOTOP, adapterBODL, adapterHSP, adapterUProduct;
     LinearLayoutManager llm;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "Call Option Menu");
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +71,7 @@ public class ShopFragment extends Fragment {
     }
 
     private void initialize(View v) {
+
         initViews(v);
         initRV();
     }
@@ -138,4 +147,19 @@ public class ShopFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        setHasOptionsMenu(true);
+        inflater.inflate(R.menu.menu_shop_fragment, menu);
+        Log.d(TAG, "Options should be createD!!!");
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        //  getActivity().getMenuInflater().inflate(R.menu.menu_shop_fragment, menu);
+    }
 }

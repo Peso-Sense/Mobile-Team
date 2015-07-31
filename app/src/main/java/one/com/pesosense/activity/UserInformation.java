@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -75,6 +76,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     ScrollView container;
 
+    Toolbar toolbar;
     ImageView imgUser;
 
     TextView lblLName;
@@ -130,10 +132,24 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         apiHandler = new APIHandler();
         setContentView(R.layout.activity_user_information);
 
+        initToolbar();
         initValues();
         getBundle();
 
     }
+
+
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) toolbar.findViewById(R.id.title);
+        title.setText("Profile Information");
+        title.setTypeface(UtilsApp.opensansNormal());
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
 
     private void initValues() {
 
@@ -450,7 +466,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 //                Log.d("Peso Sense", imageFilePath);
             }
         } else if (requestCode == IMAGE_CROP) {
-             USER_IMAGE = 1;
+            USER_IMAGE = 1;
             previewCroppedImage(data);
         }
     }
@@ -621,7 +637,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     //TODO: Generic cropping method to add compatibility for gallery picked images
 
-    private void previewCroppedImage(Intent data){
+    private void previewCroppedImage(Intent data) {
         Bundle extras = data.getExtras();
         Bitmap imgPreview = extras.getParcelable("data");
         imgUser.setImageBitmap(imgPreview);

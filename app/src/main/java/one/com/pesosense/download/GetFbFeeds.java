@@ -93,7 +93,7 @@ public class GetFbFeeds {
                             Log.d("imgLink", imgLink);
                             JSONObject jsonObj1 = new JSONObject(imgLink);
                             JSONArray jsonArray1 = jsonObj1.getJSONArray("images");
-                            JSONObject largeImg = jsonArray1.getJSONObject(jsonArray1.length() - 1);
+                            JSONObject largeImg = jsonArray1.getJSONObject(0);
 
                             link = largeImg.getString("source");
                             if (c.has("message"))
@@ -250,7 +250,7 @@ public class GetFbFeeds {
                             Log.d("imgLink", imgLink);
                             JSONObject jsonObj1 = new JSONObject(imgLink);
                             JSONArray jsonArray1 = jsonObj1.getJSONArray("images");
-                            JSONObject largeImg = jsonArray1.getJSONObject(jsonArray1.length() - 1);
+                            JSONObject largeImg = jsonArray1.getJSONObject(0);
 
                             link = largeImg.getString("source");
                             if (c.has("message"))
@@ -336,7 +336,7 @@ public class GetFbFeeds {
 
                             if (!isDataExist("tbl_fb_video", id)) {
                                 populateFbFeeds(id, 1, timestamp);
-                                populateFbVideo(id, picture, message, link, ilikes, icomments, timestamp );
+                                populateFbVideo(id, picture, message, link, ilikes, icomments, timestamp);
                             }
 
 

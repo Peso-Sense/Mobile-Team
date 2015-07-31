@@ -60,7 +60,8 @@ public class ProfileParser {
 
             jsonInner = jsonObject.getJSONObject("info");
 
-            photo = jsonInner.getString("photo");
+            if (!jsonInner.isNull("photo"))
+                photo = jsonInner.getString("photo");
             firstName = jsonInner.getString("first_name");
             middleName = jsonInner.getString("middle_name");
             lastName = jsonInner.getString("last_name");

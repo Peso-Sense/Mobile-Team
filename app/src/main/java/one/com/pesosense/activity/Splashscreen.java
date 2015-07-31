@@ -56,7 +56,7 @@ public class Splashscreen extends Activity {
 //                UtilsApp.APP_LOGIN = UtilsApp.getInt("APP_LOGIN");
                 startActivity(new Intent(Splashscreen.this, AppGuide.class));
 //                startActivity(new Intent(Splashscreen.this, ResetPassword.class));
-//                startActivity(new Intent(Splashscreen.this, UserInformation.class));
+//                startActivity(new Intent(Splashscreen.this, PesoActivity.class));
 
                 finish();
             }
