@@ -83,6 +83,7 @@ public class Shop extends Fragment implements View.OnClickListener {
         btnharana.setOnClickListener(this);
 
 
+
         initValues(v);
         return v;
     }
@@ -94,7 +95,7 @@ public class Shop extends Fragment implements View.OnClickListener {
 
         if (v.getId() == R.id.btnotop)
 
-            startActivity(new Intent(getActivity(), OtopShop.class));
+            intent = new Intent(getActivity(), OtopShop.class);
 
         if (v.getId() == R.id.btnbodl)
 
