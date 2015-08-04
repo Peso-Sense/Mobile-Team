@@ -19,6 +19,9 @@ public class C {
     public static final int IMAGE_CROP = 110;
     public static final String APP_DIR_NAME = ".Peso Sense";
 
+    // Specifics
+    public static final int MIN_AGE = 13;
+
 }
 
 

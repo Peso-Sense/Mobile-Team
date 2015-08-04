@@ -1,23 +1,31 @@
 package one.com.pesosense.adapter;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import one.com.pesosense.C;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.helper.DatabaseHelper;
@@ -38,6 +46,9 @@ public class RemittanceAdapter extends RecyclerView.Adapter<RemittanceAdapter.Re
     EditText txtTitle;
     EditText txtMessage;
     Button btnUpdate;
+
+    // for date picker
+    DatePickerDialog dpd;
 
     public RemittanceAdapter(Context context, List<RemittanceItem> data) {
         this.context = context;
@@ -159,6 +170,81 @@ public class RemittanceAdapter extends RecyclerView.Adapter<RemittanceAdapter.Re
                 }
             });
 
+        }
+
+        public void showDatePicker() {
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            dpd = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    txtDate.setText(formatMonth(month) + " " + day + ", " + year);
+                }
+            }, year, month, day);
+
+            dpd.getDatePicker().setMaxDate(maxDate());
+            dpd.getDatePicker().setMinDate(minDate());
+            dpd.show();
+        }
+
+        private String formatMonth(int m) {
+            String[] months = {"January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"};
+
+            return months[m];
+        }
+
+        private Long minDate() {
+
+            try {
+
+                String time = "1900-01-01";
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Date dt = df.parse(time);
+                Long minDate = dt.getTime();
+
+                return minDate;
+
+            } catch (ParseException e) {
+
+                UtilsApp.toast(e.getLocalizedMessage());
+                return 0L;
+
+            }
+
+        }
+
+        private Long maxDate() {
+
+            Calendar now = Calendar.getInstance();
+
+            String allowedYear = String.valueOf(now.get(Calendar.YEAR) - C.MIN_AGE);
+            String currentMonth = String.valueOf(now.get(Calendar.MONTH) + 1);
+            String currentDay = String.valueOf(now.get(Calendar.DAY_OF_MONTH));
+
+            Log.d("Peso Sense", "Current year: " + allowedYear); // track
+
+            try {
+
+                String time = allowedYear + "-" + currentMonth + "-" + currentDay;
+                Log.d("Peso Sense", time);
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Date dt = df.parse(time);
+                Long maxDate = dt.getTime();
+
+                Log.d("Peso Sense", "This is the long min date: " + String.valueOf(maxDate)); // track
+                return maxDate;
+
+            } catch (ParseException e) {
+
+                UtilsApp.toast(e.getLocalizedMessage());
+                return 0L;
+
+            }
         }
 
         public void updateRemittance(int position, int id, String date, String title, String message) {

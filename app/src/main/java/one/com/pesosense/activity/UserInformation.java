@@ -1,24 +1,26 @@
 package one.com.pesosense.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,8 +33,6 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONException;
@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +50,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import one.com.pesosense.C;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
 import one.com.pesosense.download.APIHandler;
@@ -76,7 +78,6 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     ScrollView container;
 
-    Toolbar toolbar;
     ImageView imgUser;
 
     TextView lblLName;
@@ -132,24 +133,10 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         apiHandler = new APIHandler();
         setContentView(R.layout.activity_user_information);
 
-        initToolbar();
         initValues();
         getBundle();
 
     }
-
-
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) toolbar.findViewById(R.id.title);
-        title.setText("Profile Information");
-        title.setTypeface(UtilsApp.opensansNormal());
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
 
     private void initValues() {
 
@@ -236,9 +223,8 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
     }
 
-
     @Override
-    public void onClick(View view) {
+    public void onClick(View view){
 
         if (view.getId() == R.id.imgUser) {
             openPhotoDialog();
@@ -249,10 +235,15 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         }
 
         if (view.getId() == R.id.btnSave) {
-            if (UtilsApp.isOnline()) {
+
+            if (UtilsApp.isOnline()) { // Check first if user is online
+
                 saveInfo();
+
             } else {
+
                 UtilsApp.toast("No Network Connection");
+
             }
         }
     }
@@ -312,13 +303,12 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
                 cursor = context.getContentResolver().query(uri, null, null, null, null);
                 Log.d("tag", "cursor: " + DatabaseUtils.dumpCursorToString(cursor));
                 int column_index = cursor.getColumnIndexOrThrow("_data");
+
                 if (cursor.moveToFirst()) {
-
                     return cursor.getString(column_index);
-
                 }
+
             } catch (Exception e) {
-                // Eat it
                 e.printStackTrace();
             } finally {
                 cursor.close();
@@ -371,7 +361,7 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         return mediaFile;
     }
 
-    public void saveInfo() {
+    public void saveInfo(){
 
         lName = txtLName.getText().toString();
         mName = txtMName.getText().toString();
@@ -382,39 +372,97 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
 
         // Validation part
         if (lName.equals("") || mName.equals("") || fName.equals("") || birthday.equals("") || address.equals("")) {
+
             UtilsApp.toast("All fields are required");
-        } else if (USER_IMAGE == 0) {
-            UtilsApp.toast("Please provided your profile image");
+
         } else {
-            db = dbHelper.getWritableDatabase();
-            db.delete("tbl_user_info", null, null);
+            // will launch series of alert dialogs
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // final Dialog dialog = new Dialog(getApplicationContext());
 
-            values = new ContentValues();
+            builder.setTitle("Save infromation?");
+            if (USER_IMAGE == 0) {
 
-            values.put("photo", imageFilePath);
-            values.put("last_name", lName);
-            values.put("first_name", fName);
-            values.put("middle_name", mName);
-            values.put("gender", gender);
-            values.put("birthday", birthday);
-            values.put("address", address);
-            values.put("email", email);
-            db.insert("tbl_user_info", null, values);
-            db.close();
+                builder.setMessage("You haven't provided a profile image; the application default profile image will be used." +
+                        "\n\nTap OK to proceed with the registration");
 
-            UtilsApp.putString("email", email);
+                imageFilePath = getDrawablePath();
+                Log.d("Peso Sense", "Image file path: " + imageFilePath);
 
-            // send to API then server
+            } else {
 
-            addParams("first_name", fName);
-            addParams("last_name", lName);
-            addParams("middle_name", mName);
-            addParams("birthday", birthday);
-            addParams("gender", gender);
-            addParams("address", address);
+                builder.setMessage("Tap OK to proceed in the registration.");
 
+            }
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sendInfo();
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    public void sendInfo() {
+        db = dbHelper.getWritableDatabase();
+        db.delete("tbl_user_info", null, null);
+
+        values = new ContentValues();
+
+        values.put("photo", imageFilePath);
+        values.put("last_name", lName);
+        values.put("first_name", fName);
+        values.put("middle_name", mName);
+        values.put("gender", gender);
+        values.put("birthday", birthday);
+        values.put("address", address);
+        values.put("email", email);
+
+        db.insert("tbl_user_info", null, values);
+        db.close();
+
+        UtilsApp.putString("email", email);
+
+        // send to API then server
+
+        addParams("first_name", fName);
+        addParams("last_name", lName);
+        addParams("middle_name", mName);
+        addParams("birthday", birthday);
+        addParams("gender", gender);
+        addParams("address", address);
+
+        if (USER_IMAGE == 0) {
+            new AddInformation().execute();
+        } else {
             new UploadData().execute();
         }
+
+    }
+
+    public String getDrawablePath() {
+        // this method shall return the filepath of the drawable/asset
+        //return "drawable://" + R.drawable.pesosense_sqaure;
+        Uri testUri = Uri.parse("file:///android_assets/pesosense_square.png");
+        return testUri.getPath();
+    }
+
+    public String getAssetPath() {
+        // this method decodes the image from the assets folder
+        BitmapFactory.decodeFile("");
+        return null;
     }
 
     public void showDatePicker() {
@@ -429,6 +477,9 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
                 txtBirthday.setText(formatMonth(month) + " " + day + ", " + year);
             }
         }, year, month, day);
+
+        dpd.getDatePicker().setMaxDate(maxDate());
+        dpd.getDatePicker().setMinDate(minDate());
         dpd.show();
     }
 
@@ -439,53 +490,88 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         return months[m];
     }
 
+    private Long minDate() {
+
+        try {
+
+            String time = "1900-01-01";
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = df.parse(time);
+            Long minDate = dt.getTime();
+
+            return minDate;
+
+        } catch (ParseException e) {
+
+            UtilsApp.toast(e.getLocalizedMessage());
+            return 0L;
+
+        }
+
+    }
+
+    private Long maxDate() {
+
+        Calendar now = Calendar.getInstance();
+
+        String allowedYear = String.valueOf(now.get(Calendar.YEAR) - C.MIN_AGE);
+        String currentMonth = String.valueOf(now.get(Calendar.MONTH) + 1);
+        String currentDay = String.valueOf(now.get(Calendar.DAY_OF_MONTH));
+
+        Log.d("Peso Sense", "Current year: " + allowedYear); // track
+
+        try {
+
+            String time = allowedYear + "-" + currentMonth + "-" + currentDay;
+            Log.d("Peso Sense", time);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = df.parse(time);
+            Long maxDate = dt.getTime();
+
+            Log.d("Peso Sense", "This is the long min date: " + String.valueOf(maxDate)); // track
+            return maxDate;
+
+        } catch (ParseException e) {
+
+            UtilsApp.toast(e.getLocalizedMessage());
+            return 0L;
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
+
             if (resultCode == RESULT_OK) {
-
-                // TODO: availablity of cropping image sourced from gallery
-
-                USER_IMAGE = 1;
-                previewPickedImage(data);
-//                try {
-//                    imgPath = UserInformation.getPath(this, getOutputMediaFileUri(1));
-//
-//                    Log.d("tag", "File Path: " + imgPath);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
+                Log.d("Peso Sense", "Cropping image from the GALLERY");
+                fileUri = data.getData();
+                getPickedImagePath(fileUri);
+                cropImage(fileUri);
             }
+
         } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
 
             if (resultCode == RESULT_OK) {
+                Log.d("Peso Sense", "Cropping image from the CAMERA");
                 cropImage(fileUri);
-//                Picasso.with(getApplicationContext()).load(fileUri).resize(300, 300).centerCrop().into(imgUser);
-//                Log.d("Peso Sense", imageFilePath);
             }
+
         } else if (requestCode == IMAGE_CROP) {
-            USER_IMAGE = 1;
+            Log.d("Pese Sense", "Viewing cropped image");
+            USER_IMAGE = 1; // indicate that the user has provided an image
             previewCroppedImage(data);
         }
     }
 
-    private void previewPickedImage(Intent data) {
-        Uri pickedImage = data.getData();
+    private void getPickedImagePath(Uri pickedImage) {
         String[] filePath = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
         cursor.moveToFirst();
-        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-        Log.d("Peso Sense", "Image Gallery URI " + pickedImage.toString());
-        imgPath = pickedImage.toString(); // Uri pala ang ibinibigay nito, hindi filepath
-        imageFilePath = imagePath;
-        Log.d("Peso Sense", "Image gallery path " + imageFilePath);
-        Picasso.with(getApplicationContext()).load(imgPath).resize(300, 300).centerCrop().into(imgUser);
-    }
-
-    private void getPickedImagePath(Intent data) {
-
+        imageFilePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
     }
 
     class UploadData extends AsyncTask<Void, Integer, String> {
@@ -495,18 +581,22 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             pDialog = new ProgressDialog(UserInformation.this);
+            pDialog.setTitle("Uploading User Infromation");
             pDialog.setMax(100);
             pDialog.setProgress(0);
             pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
+
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
+
             pDialog.setProgress(progress[0]);
             pDialog.setMessage("Uploading " + progress[0] + "%");
         }
@@ -635,12 +725,19 @@ public class UserInformation extends ActionBarActivity implements View.OnClickLi
         }
     }
 
-    //TODO: Generic cropping method to add compatibility for gallery picked images
-
     private void previewCroppedImage(Intent data) {
-        Bundle extras = data.getExtras();
-        Bitmap imgPreview = extras.getParcelable("data");
-        imgUser.setImageBitmap(imgPreview);
+        try {
+
+            Bundle extras = data.getExtras();
+            Bitmap imgPreview = extras.getParcelable("data");
+            imgUser.setImageBitmap(imgPreview);
+
+        } catch (NullPointerException e) {
+
+            Log.d("Pese Sense", e.getLocalizedMessage());
+            UtilsApp.toast("No image to be cropped");
+
+        }
     }
 
 
