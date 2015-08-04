@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     private DatabaseHelper(Context mContext) {
-        super(mContext, "pesosense_db", null, 1);
+        super(mContext, "pesosense_db", null, 2);
     }
 
     public static DatabaseHelper getInstance(Context mContext) {
@@ -40,13 +40,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_remittances (rem_id integer primary key, rem_date varchar, rem_title varchar, rem_message varchar)");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_otop (id integer primary key, province varchar, name varchar, price varchar, product_image varchar, " +
-                "description varchar, ratings int, brand varchar, inventory varchar)");
-
-
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_shop_products(id integer, price integer, rating integer, name varchar, description varchar, image varchar)");
         db.execSQL("CREATE TABLE IF NOT EXISTS tbl_users_products(id integer, price integer, rating integer, name varchar, description varchar, image varchar)");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_prod(prod_id integer, user_id integer, prod_name varchar, prod_desc varchar, prod_price varchar, prod_brand varchar, " +
+                "prod_quantity varchar, prod_image varchar)");
 
 //        int id, price, rating;
 //        String name, description, image;
@@ -70,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS tbl_user_info");
 
-        db.execSQL("DROP TABLE IF EXISTS tbl_otop");
+        db.execSQL("DROP TABLE IF EXISTS tbl_prod");
         onCreate(db);
 
     }
@@ -135,46 +133,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO tbl_remittances (rem_id, rem_date, rem_title, rem_message) VALUES (1, '01-01-2015', 'SMART', 'This is a sample content') ");
 
 
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 1, 'Batanes', 'Miniovaheng', '150pesos', " +
-                "'http://journeyingjames.com/wp-content/uploads/2011/05/Rice-wine.jpg' , 'Sugarcane Wine' , 4, 'Miniovaheng', '105') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 2, 'Surigao del sur', 'Fashionable neckpieces', '120pesos', " +
-                "'http://www.interaksyon.com/lifestyle/assets/2014/10/IMG_1809e.jpg' , 'description' , 3, 'wood', '150') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 3, 'Palawan', 'Palawan wood figurines', '150pesos', " +
-                "'http://www.palawan-philippines.com/images/tn_wood-figurines.jpg' , 'description' , 4, 'wood', '200') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 4, 'Palawan', 'Palawan wood carving design', '200pesos', " +
-                "'https://retirednoway.files.wordpress.com/2011/02/2011-feb-puerto-princesa-to-nasiduan-27.jpg' , 'description' , 3, 'wood', '120') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 5, 'Ilocos Norte', 'Bagnet', '220 pesos', " +
-                "'http://heftyfoodie.com/wp-content/uploads/2014/01/manongs_bagnet_station_cover.jpg' , 'description' , 4, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 6, 'Vigan', 'Vigan empanada 5 pcs', '120 pesos', " +
-                "'http://4.bp.blogspot.com/-lt71C9Y9hMA/UOFWt-ruQwI/AAAAAAAAEY0/YUfevSexgAM/s1600/IMAG0094.jpg' , 'description' , 4, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 7, 'Zambales', 'Zambales Jar With Cover', '450 pesos', " +
-                "'http://i00.i.aliimg.com/photo/v0/11516384/Zambales_Jar_With_Cover.jpg' , 'description' , 5, 'jars', '120') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 8, 'Pangasinan', 'Lingayens Bagoong', '120 pesos', " +
-                "'http://4.bp.blogspot.com/-LY5UhJ20sN8/UbvgR0lFyjI/AAAAAAAADRc/n6NGVhhm9Q4/s320/pangasinantour_JBbagoong+%283%29.jpg' , 'description' , 3, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 9, 'Nueva Ecija', 'Puno’s Ice Cream and Sherbet', '150 pesos', " +
-                "'https://jhanellamanabat.files.wordpress.com/2015/03/adsfd.jpg' , 'description' , 3, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 10, 'Bulacan', 'Pastillas', '100 pesos', " +
-                "'http://www.bulacan.gov.ph/business/images/themes/pastillas/masthead.jpg' , 'description' , 3, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 11, 'Pampanga', 'Longaniza', '95 pesos', " +
-                "'http://static.ensogo.com.ph/assets/deals/16707a26f8b008cb6f6d860d4f4b7591/description1.jpg' , 'Pampangas Best Best Longaniza 500g for only P95 (valued at P121)' , 5, 'food', 'unlimited') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 12, 'Aklan', 'AKlan dress and barong', '2095 pesos', " +
-                "'https://s-media-cache-ak0.pinimg.com/736x/0c/6b/42/0c6b4291d434034ba94c11725a5dd28f.jpg' , 'description' , 4, 'Dress', '30') ");
-
-        db.execSQL("INSERT INTO tbl_otop (id, province, name, price, product_image, description, ratings, brand, inventory) VALUES ( 13, 'Capiz', 'Capiz shell lamp', '300 pesos', " +
-                "'http://www.retireinthephilippines.info/wp-content/uploads/2012/05/Capiz-Capiz-shell-products.jpg' , 'description' , 4, 'furnitures', '20') ");
-
-
     }
-
 }

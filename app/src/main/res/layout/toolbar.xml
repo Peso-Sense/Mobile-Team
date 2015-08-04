@@ -3,10 +3,10 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/actionBarSize"
+    android:layout_height="48dp"
     android:background="@color/navtext_active"
     android:minHeight="48dp"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    local:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <TextView

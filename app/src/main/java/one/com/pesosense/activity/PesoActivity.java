@@ -1,5 +1,7 @@
 package one.com.pesosense.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +20,7 @@ import one.com.pesosense.fragment.FeedsFragment;
 import one.com.pesosense.fragment.FragmentDrawer;
 import one.com.pesosense.fragment.PaymentFragment;
 import one.com.pesosense.fragment.RemittanceFragment;
-import one.com.pesosense.fragment.ShopFragment;
+import one.com.pesosense.fragment.Shop;
 
 
 public class PesoActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -28,16 +30,19 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
 
     TextView title;
+    int lastPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peso);
-
+        UtilsApp.initSharedPreferences(getApplicationContext());
 //        this.invalidateOptionsMenu();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) mToolbar.findViewById(R.id.title);
+
         title.setTypeface(UtilsApp.opensansNormal());
+        setSupportActionBar(mToolbar);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer,
@@ -45,31 +50,9 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
 
 
-        displayView(1);
+        displayView(0);
 
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_peso, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -92,7 +75,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case 1:
                 setTitle("Shop");
                 title = "Shop";
-                mFragment = new ShopFragment();
+                mFragment = new Shop();
                 break;
             case 2:
                 title = "Payment";
@@ -103,10 +86,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 mFragment = new RemittanceFragment();
                 break;
             case 4:
-                title = "Settings";
-//                mFragment = new RemittanceFragment();
-                startActivity(new Intent(PesoActivity.this, SettingsActivity.class));
-
+                signOut();
                 break;
         }
 
@@ -114,15 +94,54 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
             mFragmentManager.beginTransaction()
                     .replace(R.id.container_body, mFragment).commit();
         }
+        if (position != 4)
+            lastPosition = position;
 
         this.title.setText(title);
 
+    }
+
+    private void signOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PesoActivity.this);
+        builder.setTitle("Sign out").setMessage("Do you want to sign out?").setNegativeButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(PesoActivity.this, Login.class));
+            }
+        }).setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                displayView(lastPosition);
+                dialogInterface.dismiss();
+
+            }
+        }).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_peso, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.settings) {
+            startActivity(new Intent(PesoActivity.this, SettingsActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        UtilsApp.putInt("displayTips", 0);
+        UtilsApp.putInt("display_tips", 0);
     }
 }

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="OTOP Merchant"
+            android:id="@+id/textView"
+            android:textStyle="bold"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="23dp" />
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="30dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            >
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view3"
+            android:layout_gravity="center"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            card_view:cardCornerRadius="4dp"
+            android:layout_marginLeft="4dp"
+            >
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/box"
+                android:id="@+id/imgitem2" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:text="ITEM NAME"
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="120dp" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:text="ITEM description"
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="135dp" />
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:text="100.00"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:textColor="#01579b"
+                android:layout_marginLeft="95dp"
+                android:layout_marginTop="150dp"
+                android:gravity="right" />
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view2"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginLeft="4dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/box"
+                        android:id="@+id/imgitem1" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM NAME"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="120dp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM description"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="135dp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:text="100.00"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="#01579b"
+                        android:layout_marginLeft="95dp"
+                        android:layout_marginTop="150dp"
+                        android:gravity="right" />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear1"
+            android:layout_marginTop="20dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view1"
+                    android:layout_gravity="center"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginLeft="4dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/box"
+                        android:id="@+id/imgitem" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM NAME"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="120dp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM description"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="135dp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:text="100.00"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="#01579b"
+                        android:layout_marginLeft="95dp"
+                        android:layout_marginTop="150dp"
+                        android:gravity="right" />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view4"
+                    android:layout_gravity="center"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginLeft="4dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/box"
+                        android:id="@+id/imgitem4" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM NAME"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="120dp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM description"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="135dp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:text="100.00"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="#01579b"
+                        android:layout_marginLeft="95dp"
+                        android:layout_marginTop="150dp"
+                        android:gravity="right" />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear2"
+            android:layout_marginTop="20dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view5"
+                    android:layout_gravity="center"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginLeft="4dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/box"
+                        android:id="@+id/imgitem5" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM NAME"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="120dp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM description"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="135dp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:text="100.00"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="#01579b"
+                        android:layout_marginLeft="95dp"
+                        android:layout_marginTop="150dp"
+                        android:gravity="right" />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view6"
+                    android:layout_gravity="center"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginLeft="4dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/box"
+                        android:id="@+id/imgitem6" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM NAME"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="120dp" />
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:text="ITEM description"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="135dp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="20dp"
+                        android:text="100.00"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="#01579b"
+                        android:layout_marginLeft="95dp"
+                        android:layout_marginTop="150dp"
+                        android:gravity="right" />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+    </ScrollView>

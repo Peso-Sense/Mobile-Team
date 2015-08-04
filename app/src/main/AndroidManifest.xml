@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="one.com.pesosense" >
+    package="one.com.pesosense">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -26,7 +26,8 @@
         <activity
             android:name=".activity.Splashscreen"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,40 +37,65 @@
         <activity
             android:name=".activity.AppGuide"
             android:label="@string/title_activity_app_guide"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
             android:name=".activity.Login"
-            android:label="@string/title_activity_app_guide" />
+            android:label="@string/title_activity_app_guide"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PesoActivity"
-            android:label="@string/title_activity_peso" />
+            android:label="@string/title_activity_peso"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.Signup"
-            android:label="@string/title_activity_signup" />
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.GovernmentPayment"
             android:label="@string/title_activity_government_payment"
-            android:parentActivityName=".activity.PesoActivity" />
+            android:parentActivityName=".activity.PesoActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserInformation"
-            android:label="@string/title_activity_signup" />
-        <activity
-            android:name=".activity.OtopMerchant"
-            android:label="@string/title_activity_signup" />
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.InquireMessage"
-            android:label="@string/title_activity_signup" />
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ShopItemView"
-            android:label="@string/title_activity_shop_item_view" >
-        </activity>
+            android:label="@string/title_activity_shop_item_view"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.ResetPassword"
-            android:label="@string/title_activity_reset_password" >
-        </activity>
+            android:label="@string/title_activity_reset_password"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.CardSample"
+            android:label="@string/title_activity_reset_password"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.OnlineShop"
+            android:label="@string/title_activity_reset_password"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.OnlineShopItemOnclick"
+            android:label="@string/title_activity_reset_password"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.OtopShop"
+            android:label="@string/title_activity_reset_password"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

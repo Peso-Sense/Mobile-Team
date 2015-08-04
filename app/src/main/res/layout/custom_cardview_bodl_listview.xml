@@ -36,32 +36,14 @@
                 android:text="Product Name"
                 android:textSize="15dp"
                 android:textStyle="bold"
-                android:layout_toRightOf="@+id/itemimage" />
+                android:layout_toRightOf="@+id/itemimage"
+                android:textColor="#000000"
+                />
 
 
-            <TextView
-                android:id="@+id/province"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Province :"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/txtprice"
-                android:layout_toRightOf="@+id/itemimage" />
 
-            <TextView
-                android:id="@+id/txtprovince"
-                android:layout_width="100dp"
-                android:layout_height="20dp"
-                android:text="Malabon"
-                android:textSize="10dp"
-                android:textColor="#a8e4ff"
-                android:textStyle="bold"
-                android:layout_below="@+id/txtprice"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp"
-                android:layout_toRightOf="@+id/province"
+
+
 
                 />
 
@@ -72,10 +54,12 @@
                 android:layout_height="wrap_content"
                 android:text="Brand :"
                 android:textSize="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:textStyle="bold"
-                android:layout_below="@+id/province"
-                android:layout_toRightOf="@+id/itemimage" />
+                android:layout_below="@+id/txtprice"
+                android:layout_toRightOf="@+id/itemimage"
+                android:textColor="#000000"
+                />
 
             <TextView
                 android:id="@+id/txtbrand"
@@ -83,12 +67,12 @@
                 android:layout_height="wrap_content"
                 android:text="Brand"
                 android:textSize="10dp"
-                android:textColor="#a8e4ff"
+                android:textColor="#63c2ee"
                 android:textStyle="bold"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_below="@+id/province"
-                android:layout_toRightOf="@+id/province"
+                android:layout_marginLeft="63dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/txtprice"
+                android:layout_toRightOf="@+id/brand"
 
                 />
 
@@ -101,7 +85,9 @@
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
                 android:layout_below="@+id/brand"
-                android:layout_toRightOf="@+id/itemimage" />
+                android:layout_toRightOf="@+id/itemimage"
+                android:textColor="#000000"
+                />
 
             <TextView
                 android:id="@+id/txtinventory"
@@ -109,25 +95,27 @@
                 android:layout_height="wrap_content"
                 android:text="10"
                 android:textSize="10dp"
-                android:textColor="#a8e4ff"
+                android:textColor="#63c2ee"
                 android:textStyle="bold"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="47dp"
                 android:layout_marginTop="5dp"
                 android:layout_below="@+id/brand"
-                android:layout_toRightOf="@+id/province"
+                android:layout_toRightOf="@+id/Inventory"
 
                 />
 
             <TextView
-                android:id="@+id/rating"
+                android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rating"
+                android:text="Quantity"
                 android:textSize="10dp"
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/itemimage"
-                android:layout_below="@+id/Inventory" />
+                android:layout_below="@+id/Inventory"
+                android:textColor="#000000"
+                />
 
             <TextView
                 android:id="@+id/txtrating"
@@ -137,9 +125,9 @@
                 android:textSize="10dp"
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
-                android:textColor="#a8e4ff"
-                android:layout_marginLeft="67dp"
-                android:layout_toRightOf="@+id/rating"
+                android:textColor="#63c2ee"
+                android:layout_marginLeft="58dp"
+                android:layout_toRightOf="@+id/quantity"
                 android:layout_below="@+id/txtinventory"
                 />
 
@@ -147,7 +135,7 @@
                 android:id="@+id/txtprice"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#a8e4ff"
+                android:textColor="#63c2ee"
                 android:text="100.00"
                 android:layout_marginTop="5dp"
                 android:textSize="15dp"

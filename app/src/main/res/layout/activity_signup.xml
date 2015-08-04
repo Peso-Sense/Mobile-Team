@@ -10,46 +10,13 @@
         layout="@layout/toolbar" />
 
 
-    <RelativeLayout
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_fb"
-        android:clickable="true">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="12dp"
-            android:padding="12dp"
-            android:src="@drawable/fblogowhite" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/lbl_login_with"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="Sign up with "
-                android:textColor="#fff" />
-
-            <TextView
-                android:id="@+id/lbl_facebook"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="Facebook"
-                android:textColor="#fff"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-    </RelativeLayout>
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,14 +61,14 @@
                 android:src="@drawable/username" />
 
             <EditText
+                android:id="@+id/txtUsername"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#00000000"
                 android:hint="Username"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252"
-                android:id="@+id/txtUsername" />
+                android:textColorHint="#525252" />
 
         </LinearLayout>
 
@@ -121,6 +88,7 @@
                 android:src="@drawable/email" />
 
             <EditText
+                android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#00000000"
@@ -128,8 +96,7 @@
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252"
-                android:id="@+id/txtEmail" />
+                android:textColorHint="#525252" />
 
         </LinearLayout>
 
@@ -147,6 +114,7 @@
                 android:src="@drawable/password" />
 
             <EditText
+                android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#00000000"
@@ -154,17 +122,16 @@
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="#fff"
-                android:textColorHint="#525252"
-                android:id="@+id/txtPassword" />
+                android:textColorHint="#525252" />
 
         </LinearLayout>
 
         <Button
+            android:id="@+id/btnSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/primary_button"
-            android:text="Sign Up"
-            android:id="@+id/btnSignup" />
+            android:text="Sign Up" />
 
         <LinearLayout
             android:layout_width="match_parent"

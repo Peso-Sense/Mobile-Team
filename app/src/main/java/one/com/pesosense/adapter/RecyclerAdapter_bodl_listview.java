@@ -8,35 +8,33 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import one.com.pesosense.R;
-import one.com.pesosense.activity.OtopItemOnclick;
-import one.com.pesosense.model.Item;
+import one.com.pesosense.activity.OnlineShopItemOnclick;
+import one.com.pesosense.model.Item_shop;
+
 
 /**
  * Created by Marc Lim on 7/15/15.
  */
 
-public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_Otop1.MyViewHolder> {
+public class RecyclerAdapter_bodl_listview extends RecyclerView.Adapter<RecyclerAdapter_bodl_listview.MyViewHolder> {
 
-    List<Item> data = Collections.emptyList();
+    List<Item_shop> data = Collections.emptyList();
 
 
     private LayoutInflater inflater;
     private Context context;
 
 
-    public RecyclerAdapter_Otop1(Context context, List<Item> data) {
+    public RecyclerAdapter_bodl_listview(Context context, List<Item_shop> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -45,7 +43,7 @@ public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = inflater.inflate(R.layout.custom_cardview_otop_listview, parent, false);
+        View v = inflater.inflate(R.layout.custom_cardview_bodl_listview, parent, false);
         MyViewHolder holder = new MyViewHolder(v);
 
         return holder;
@@ -53,16 +51,14 @@ public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Item current = data.get(position);
+        Item_shop current = data.get(position);
 
-        holder.lblname.setText(current.getName());
-        holder.lblprovince.setText(current.getProvince());
-        holder.lblprice.setText(current.getPrice());
-        holder.lblquantity.setText(String.valueOf(current.getInventory()));
-        holder.lblbrand.setText(current.getBrand());
-        holder.lblrating.setText(String.valueOf(current.getRatings()));
+        holder.lblname.setText(current.getProd_name());
+        holder.lblprice.setText(current.getProd_price());
+        holder.lblquantity.setText(current.getProd_quantity());
+        holder.lblbrand.setText(current.getProd_brand());
 
-        Picasso.with(context).load(current.getProduct_image()).into(holder.itemimage);
+        Picasso.with(context).load("http://search.onesupershop.com/api/photos/"+current.getProd_image()).into(holder.itemimage);
 
     }
 
@@ -76,13 +72,12 @@ public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_
 
 
         ImageView itemimage;
-        TextView lblbrand, lblname, lblprice, lblquantity, lblprovince, lblrating;
-        Button inquire;
+        TextView lblbrand, lblname, lblprice, lblquantity, lbldescription;
         CardView card;
 
-        String name,province,price,description,rating,image,brand,inventory;
+        String name,price,description,quantity,image,brand;
 
-        Item item;
+        Item_shop item;
 
 
         public MyViewHolder(View v) {
@@ -91,13 +86,11 @@ public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_
 
 
             lblname = (TextView) v.findViewById(R.id.txtname);
-            lblprovince = (TextView) v.findViewById(R.id.txtprovince);
             lblprice = (TextView) v.findViewById(R.id.txtprice);
             lblbrand = (TextView) v.findViewById(R.id.txtbrand);
             lblquantity = (TextView) v.findViewById(R.id.txtinventory);
-            lblrating = (TextView) v.findViewById(R.id.txtinventory);
             itemimage = (ImageView) v.findViewById(R.id.itemimage);
-            inquire = (Button) v.findViewById(R.id.btninquire);
+
             card = (CardView) v.findViewById(R.id.card_view);
 
             card.setOnClickListener(new View.OnClickListener() {
@@ -105,26 +98,22 @@ public class RecyclerAdapter_Otop1 extends RecyclerView.Adapter<RecyclerAdapter_
                 public void onClick(View v) {
 
                     item = data.get(getPosition());
-                    name = item.getName();
-                    province = item.getProvince();
-                    price = item.getPrice();
-                    brand = item.getBrand();
-                    inventory = item.getInventory();
-                    rating = String.valueOf(item.getRatings());
-                    image = item.getProduct_image();
-                    description = item.getDescription();
+                    name = item.getProd_name();
+                    price = item.getProd_price();
+                    brand = item.getProd_brand();
+                    quantity = item.getProd_quantity();
+                    image = item.getProd_image();
+                    description = item.getProd_desc();
                     Bundle b =  new Bundle();
 
                     b.putString("name",name);
-                    b.putString("province", province);
                     b.putString("price",price);
                     b.putString("brand",brand);
-                    b.putString("inventory",inventory);
-                    b.putString("rating",rating);
+                    b.putString("quantity",quantity);
                     b.putString("image",image);
                     b.putString("description",description);
 
-                    Intent i = new Intent(context,OtopItemOnclick.class );
+                    Intent i = new Intent(context,OnlineShopItemOnclick.class );
                     i.putExtras(b);
                     context.startActivity(i);
 

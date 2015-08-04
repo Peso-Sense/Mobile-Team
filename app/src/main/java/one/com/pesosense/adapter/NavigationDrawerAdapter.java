@@ -69,17 +69,18 @@ public class NavigationDrawerAdapter extends
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
+                if (position != 4) {
+                    holders.get(position).root.setBackgroundColor(context.getResources().getColor(R.color.blue));
+                    holders.get(position).title.setTextColor(context.getResources().getColor(R.color.navtext_active));
+                    holders.get(position).icon.setImageResource(current.getSelectedIcon());
+                    for (int i = 0; i < data.size(); i++) {
+                        if (i != position) {
+                            holders.get(i).root.setBackgroundColor(context
+                                    .getResources().getColor(R.color.navrow_normal));
+                            holders.get(i).title.setTextColor(context.getResources().getColor(R.color.navtext_normal));
+                            holders.get(i).icon.setImageResource(data.get(i).getIcon());
 
-                holders.get(position).root.setBackgroundColor(context.getResources().getColor(R.color.blue));
-                holders.get(position).title.setTextColor(context.getResources().getColor(R.color.navtext_active));
-                holders.get(position).icon.setImageResource(current.getSelectedIcon());
-                for (int i = 0; i < data.size(); i++) {
-                    if (i != position) {
-                        holders.get(i).root.setBackgroundColor(context
-                                .getResources().getColor(R.color.navrow_normal));
-                        holders.get(i).title.setTextColor(context.getResources().getColor(R.color.navtext_normal));
-                        holders.get(i).icon.setImageResource(data.get(i).getIcon());
-
+                        }
                     }
                 }
 

@@ -7,12 +7,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +37,7 @@ import one.com.pesosense.download.DownloadHelper;
 
 public class Signup extends ActionBarActivity implements View.OnClickListener {
 
+    private final String TAG = "Login";
 
     Toolbar toolbar;
 
@@ -37,17 +46,25 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
     EditText txtPassword;
 
     Button btnSignup;
+    ProgressDialog pDialog;
 
-    /****/
-    String email, password, username;
+    LoginButton loginButton;
+    CallbackManager cb;
+
+
+    Map<String, String> data;
+
+    String token, email, password, username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_signup);
 
         UtilsApp.initSharedPreferences(getApplicationContext());
         initToolbar();
+        initFB();
         initValues();
 
     }
@@ -62,6 +79,14 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void initFB() {
+        cb = CallbackManager.Factory.create();
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email"));
+        loginButton.registerCallback(cb, callback);
+        loginButton.setTypeface(UtilsApp.opensansNormal());
     }
 
     public void initValues() {
@@ -84,7 +109,7 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == R.id.btnSignup){
+        if (view.getId() == R.id.btnSignup) {
             signup();
         }
 
@@ -137,6 +162,133 @@ public class Signup extends ActionBarActivity implements View.OnClickListener {
         }
 
         return true;
+    }
+
+    private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            Log.d(TAG, "Facebook Login");
+            token = loginResult.getAccessToken().getToken();
+            Log.d(TAG, "Token: " + token);
+            new LoginFacebookTask(token).execute();
+
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+
+        @Override
+        public void onError(FacebookException e) {
+
+        }
+    };
+
+    public class LoginFacebookTask extends AsyncTask<Void, Void, Void> {
+
+
+        String token;
+        String response;
+
+        public LoginFacebookTask(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //TODO: Papalitan ko pa to
+            pDialog.setMessage("Loading...");
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            response = new DownloadHelper().fbLogin(token);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            parseResponse2(response);
+
+        }
+    }
+
+    public void parseResponse2(String response) {
+
+        final String AUTHFB_SUCCESSFUL = "auth successful";
+        final String AUTHEMAIL_SUCCESSFUL = "authentication successful";
+        final String INVALID_CREDENTIALS = "Invalid credentials";
+
+        JSONObject jsonObject;
+
+        String message;
+        String token;
+
+        data = new HashMap<String, String>();
+
+        try {
+
+            jsonObject = new JSONObject(response);
+
+            if (jsonObject.has("message")) {
+                message = jsonObject.getString("message");
+                if (message.equalsIgnoreCase(AUTHFB_SUCCESSFUL) || message.equalsIgnoreCase(AUTHEMAIL_SUCCESSFUL)) {
+                    token = jsonObject.getString("token");
+                    // TODO: STORE TOKEN in SHARED PREF;
+                    UtilsApp.putString("access_token", token);
+                    UtilsApp.putInt("app_login", 1);
+                    // TODO: GET USER DETAILS
+                    Log.d(TAG, "Fetching user details...");
+
+                    new GetUserDetails(token).execute();
+
+                }
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class GetUserDetails extends AsyncTask<Void, Void, Void> {
+
+        String response;
+        String token;
+
+        public GetUserDetails(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            data = new HashMap<>();
+            data.put("token", token);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            response = new DownloadHelper().userDetails(data);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Log.d(TAG, "User details: " + response);
+            //   parseUserResponse(response, token);
+
+        }
     }
 
 

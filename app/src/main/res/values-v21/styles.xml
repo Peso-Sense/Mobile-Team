@@ -9,8 +9,13 @@
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/navtext_active</item>
 
+    </style>
 
+    <style name="popupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:textColor">@color/blue</item>
     </style>
 
 </resources>

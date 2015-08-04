@@ -1,9 +1,5 @@
 package one.com.pesosense.activity;
 
-/**
- * Created by Marc on 7/9/15.
- */
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -24,7 +20,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import one.com.pesosense.R;
@@ -35,14 +30,16 @@ import one.com.pesosense.download.APIHandler;
 import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.Item_shop;
 
-
-public class OnlineShop extends Activity {
+/**
+ * Created by mobile2 on 8/3/15.
+ */
+public class OtopShop extends Activity {
 
 
     Cursor cursor;
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
-    List<Item_shop> itemshop;
+    ArrayList<Item_shop> itemshop;
     RecyclerAdapterOnlineShop adapter;
     RecyclerAdapter_bodl_listview adapter2;
     RecyclerView rv;
@@ -55,34 +52,32 @@ public class OnlineShop extends Activity {
     private String url = "http://search.onesupershop.com/api/items";
 
 
-    String token;
+    String token ;
     Map<String, String> params;
     ImageButton list, grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycler_onlineshop);
+        setContentView(R.layout.recycler_otop);
         UtilsApp.initSharedPreferences(getApplicationContext());
         token = UtilsApp.getString("access_token");
         apiHandler = new APIHandler();
         params = new HashMap<String, String>();
-
+        list = (ImageButton) findViewById(R.id.btnlist);
+        grid = (ImageButton) findViewById(R.id.btngrid);
 
         initValues();
-
     }
 
     public void initValues() {
-        list = (ImageButton) findViewById(R.id.btnlist);
-        grid = (ImageButton) findViewById(R.id.btngrid);
 
         dbHelper = DatabaseHelper.getInstance(getApplicationContext());
         rv = (RecyclerView) findViewById(R.id.rv);
         itemshop = new ArrayList<Item_shop>();
 
-        adapter = new RecyclerAdapterOnlineShop(OnlineShop.this, itemshop);
-        adapter2 = new RecyclerAdapter_bodl_listview(OnlineShop.this, itemshop);
+        adapter = new RecyclerAdapterOnlineShop(OtopShop.this, itemshop);
+        adapter2 = new RecyclerAdapter_bodl_listview(OtopShop.this, itemshop);
 
         llm = new LinearLayoutManager(getApplicationContext());
         llm = new GridLayoutManager(this, 2);
@@ -171,10 +166,12 @@ public class OnlineShop extends Activity {
                 itemshop.add(new Item_shop(prod_id, user_id, prod_name, prod_desc, prod_price, prod_brand, prod_quantity, prod_image));
 
 
+
             }
         }
         adapter.notifyDataSetChanged();
     }
+
 
 
     public void insertProduct(int prod_id, int user_id, String prod_name, String prod_desc, String prod_price, String prod_brand, String prod_quantity, String prod_image) {
@@ -203,7 +200,7 @@ public class OnlineShop extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(OnlineShop.this);
+            pDialog = new ProgressDialog(OtopShop.this);
             pDialog.setMessage("Loading Data Please Wait...");
             pDialog.setCancelable(false);
             pDialog.setIndeterminate(false);
@@ -233,7 +230,7 @@ public class OnlineShop extends Activity {
                         String prod_brand = data_object.getString("brand");
                         String prod_quantity = data_object.getString("quantity");
 
-                        if (!data_object.isNull("photos")) {
+                        if(!data_object.isNull("photos")) {
 
                             JSONArray array_object = data_object.getJSONArray("photos");
                             String prod_image = array_object.getString(0);
@@ -256,6 +253,7 @@ public class OnlineShop extends Activity {
         }
 
 
+
         protected void onPostExecute(Void result) {
             if (pDialog.isShowing())
                 pDialog.dismiss();
@@ -266,6 +264,5 @@ public class OnlineShop extends Activity {
 
 
     }
-
 
 }

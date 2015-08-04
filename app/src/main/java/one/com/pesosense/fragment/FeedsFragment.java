@@ -31,7 +31,7 @@ import java.util.Random;
 import one.com.pesosense.EndlessRecyclerOnScrollListener;
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
-import one.com.pesosense.adapter.FeedsAdapter;
+import one.com.pesosense.adapter.FeedsAdapter2;
 import one.com.pesosense.download.GetFbFeeds;
 import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.FbImageItem;
@@ -47,7 +47,7 @@ public class FeedsFragment extends Fragment {
     RecyclerView rv;
     LinearLayoutManager llm;
 
-    FeedsAdapter adapter;
+    FeedsAdapter2 adapter;
 
     ArrayList<Object> fi;
     ArrayList<String> excludeID;
@@ -92,7 +92,7 @@ public class FeedsFragment extends Fragment {
         fi = new ArrayList<>();
         excludeID = new ArrayList<>();
 
-        adapter = new FeedsAdapter(this.getActivity(), fi);
+        adapter = new FeedsAdapter2(this.getActivity(), fi);
 
         llm = new LinearLayoutManager(getActivity());
 

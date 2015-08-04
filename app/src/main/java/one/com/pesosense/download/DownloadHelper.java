@@ -116,6 +116,7 @@ public class DownloadHelper {
     // use to parse the authentication message;
     public boolean response(String response) {
 
+
         JSONObject jsonObject;
         String message;
 

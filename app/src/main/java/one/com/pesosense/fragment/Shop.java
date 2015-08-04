@@ -1,22 +1,22 @@
-package one.com.pesosense.activity;
-
-/**
- * Created by Marc on 7/9/15.
- */
+package one.com.pesosense.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -24,105 +24,134 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import one.com.pesosense.R;
 import one.com.pesosense.UtilsApp;
+import one.com.pesosense.activity.OnlineShop;
+import one.com.pesosense.activity.OtopShop;
 import one.com.pesosense.adapter.RecyclerAdapterOnlineShop;
-import one.com.pesosense.adapter.RecyclerAdapter_bodl_listview;
 import one.com.pesosense.download.APIHandler;
 import one.com.pesosense.helper.DatabaseHelper;
 import one.com.pesosense.model.Item_shop;
 
+/**
+ * Created by mobile2 on 7/8/15.
+ */
+public class Shop extends Fragment implements View.OnClickListener {
 
-public class OnlineShop extends Activity {
-
-
-    Cursor cursor;
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
-    List<Item_shop> itemshop;
-    RecyclerAdapterOnlineShop adapter;
-    RecyclerAdapter_bodl_listview adapter2;
-    RecyclerView rv;
-    LinearLayoutManager llm, llm2;
+    Cursor cursor;
+    Button btnotop, btnbodl, btnharana;
+    RecyclerView rv, rv1, rv2;
+    LinearLayoutManager llm, llm1, llm2;
+
+    RecyclerAdapterOnlineShop adapter2;
+    ArrayList<Item_shop> itemshop;
 
     int prod_id, user_id;
     String prod_name, prod_desc, prod_image, prod_price, prod_brand, prod_quantity;
 
     APIHandler apiHandler;
     private String url = "http://search.onesupershop.com/api/items";
-
-
-    String token;
+    String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIxLCJpc3MiOiJodHRwOlwvXC9zZWFyY2gub25lc3VwZXJzaG9wLmNvbVwvYXBpXC9hdXRoIiwiaWF0IjoiMTQzODU4NDEzNCIsImV4cCI6IjE0Mzg1ODc3MzQiLCJuYmYiOiIxNDM4NTg0MTM0IiwianRpIjoiMzBiOWRmMzI5OTFjZmQ4NDg3ZGFkMjFmZDcxMzEyOTUifQ.h_pMTB0ziSp27KUcsL_YaZuxsiWp5pB1v0j-x8yLCBM";
+    SharedPreferences sp;
     Map<String, String> params;
-    ImageButton list, grid;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycler_onlineshop);
-        UtilsApp.initSharedPreferences(getApplicationContext());
-        token = UtilsApp.getString("access_token");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.recycler_shop, container, false);
+
+        sp = this.getActivity().getSharedPreferences("token", Activity.MODE_PRIVATE);
         apiHandler = new APIHandler();
         params = new HashMap<String, String>();
 
+        UtilsApp.initSharedPreferences(getActivity());
+        token = UtilsApp.getString("access_token");
 
-        initValues();
+        btnotop = (Button) v.findViewById(R.id.btnotop);
+        btnotop.setOnClickListener(this);
+
+        btnbodl = (Button) v.findViewById(R.id.btnbodl);
+        btnbodl.setOnClickListener(this);
+
+
+        btnharana = (Button) v.findViewById(R.id.btnharana);
+        btnharana.setOnClickListener(this);
+
+
+        initValues(v);
+        return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        Intent intent = null;
+
+        if (v.getId() == R.id.btnotop)
+
+            startActivity(new Intent(getActivity(), OtopShop.class));
+
+        if (v.getId() == R.id.btnbodl)
+
+            startActivity(new Intent(getActivity(), OnlineShop.class));
+
+        if (v.getId() == R.id.btnharana)
+
+            startActivity(new Intent(getActivity(), OnlineShop.class));
+
+        if (intent != null) {
+            startActivity(intent);
+            getActivity().finish();
+        }
 
     }
 
-    public void initValues() {
-        list = (ImageButton) findViewById(R.id.btnlist);
-        grid = (ImageButton) findViewById(R.id.btngrid);
 
-        dbHelper = DatabaseHelper.getInstance(getApplicationContext());
-        rv = (RecyclerView) findViewById(R.id.rv);
+    public void initValues(View v) {
+
+
+        dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+
         itemshop = new ArrayList<Item_shop>();
+        adapter2 = new RecyclerAdapterOnlineShop(getActivity(), itemshop);
 
-        adapter = new RecyclerAdapterOnlineShop(OnlineShop.this, itemshop);
-        adapter2 = new RecyclerAdapter_bodl_listview(OnlineShop.this, itemshop);
 
-        llm = new LinearLayoutManager(getApplicationContext());
-        llm = new GridLayoutManager(this, 2);
+        rv = (RecyclerView) v.findViewById(R.id.rv);
+        rv.setAdapter(adapter2);
 
-        llm2 = new LinearLayoutManager(getApplicationContext());
+        rv1 = (RecyclerView) v.findViewById(R.id.rv1);
+        rv1.setAdapter(adapter2);
 
-        rv.setAdapter(adapter);
+        rv2 = (RecyclerView) v.findViewById(R.id.rv2);
+        rv2.setAdapter(adapter2);
+
+        llm = new LinearLayoutManager(getActivity().getApplicationContext());
+        llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+
+        llm1 = new LinearLayoutManager(getActivity().getApplicationContext());
+        llm1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+
+        llm2 = new LinearLayoutManager(getActivity().getApplicationContext());
+        llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+
         rv.setLayoutManager(llm);
-
-
-        list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                rv.setLayoutManager(llm2);
-                rv.setAdapter(adapter2);
-                grid.setVisibility(View.VISIBLE);
-                list.setVisibility(View.GONE);
-
-            }
-        });
-
-
-        grid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                rv.setLayoutManager(llm);
-                rv.setAdapter(adapter);
-                grid.setVisibility(View.GONE);
-                list.setVisibility(View.VISIBLE);
-            }
-        });
+        rv1.setLayoutManager(llm1);
+        rv2.setLayoutManager(llm2);
 
 
         new LoadData().execute();
+        readDBB();
 
     }
+
 
     public boolean isDataExist(String tableName, int id) {
 
@@ -148,12 +177,12 @@ public class OnlineShop extends Activity {
 
     }
 
-    public void readDB() {
+    public void readDBB() {
 
 
         db = dbHelper.getReadableDatabase();
         cursor = db.query("tbl_prod", null, null, null, null, null, null);
-        Toast.makeText(getApplicationContext(), String.valueOf(cursor.getCount()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity().getApplicationContext(), String.valueOf(cursor.getCount()), Toast.LENGTH_SHORT).show();
 
 
         if (cursor != null) {
@@ -173,7 +202,7 @@ public class OnlineShop extends Activity {
 
             }
         }
-        adapter.notifyDataSetChanged();
+        adapter2.notifyDataSetChanged();
     }
 
 
@@ -188,12 +217,14 @@ public class OnlineShop extends Activity {
         values.put("prod_brand", prod_brand);
         values.put("prod_quantity", prod_quantity);
         values.put("prod_image", prod_image);
+
         if (!isDataExist("tbl_prod", prod_id)) {
             db.insert("tbl_prod", null, values);
 
             db.close();
         }
     }
+
 
     public class LoadData extends AsyncTask<Void, Void, Void> {
 
@@ -203,7 +234,7 @@ public class OnlineShop extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(OnlineShop.this);
+            pDialog = new ProgressDialog(getActivity());
             pDialog.setMessage("Loading Data Please Wait...");
             pDialog.setCancelable(false);
             pDialog.setIndeterminate(false);
@@ -260,12 +291,12 @@ public class OnlineShop extends Activity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            readDB();
+            readDBB();
 
         }
-
 
     }
 
 
 }
+

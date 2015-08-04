@@ -27,7 +27,7 @@ import one.com.pesosense.model.ShopItem;
  * created by mykel neds 07/25/15
  * A simple {@link Fragment} subclass.
  */
-public class ShopFragment extends Fragment {
+public class ShopFragment extends Fragment implements View.OnClickListener {
 
     public ShopFragment() {
         // Required empty public constructor
@@ -57,14 +57,14 @@ public class ShopFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Call Option Menu");
-        setHasOptionsMenu(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_shop, container, false);
-
+        setHasOptionsMenu(true);
         initialize(v);
 
         return v;
@@ -80,9 +80,16 @@ public class ShopFragment extends Fragment {
         Log.d(TAG, "Views Initialized");
 
         containerOTOP = (LinearLayout) v.findViewById(R.id.containerOTOP);
+        containerOTOP.setOnClickListener(this);
+
         containerBODL = (LinearLayout) v.findViewById(R.id.containerBODL);
+        containerBODL.setOnClickListener(this);
+
         containerHSP = (LinearLayout) v.findViewById(R.id.containerHSP);
+        containerHSP.setOnClickListener(this);
+
         containerUProduct = (LinearLayout) v.findViewById(R.id.containerUProduct);
+        containerUProduct.setOnClickListener(this);
 
         rvOTOP = (RecyclerView) v.findViewById(R.id.rvOTOP);
         rvBODL = (RecyclerView) v.findViewById(R.id.rvBODL);
@@ -149,11 +156,11 @@ public class ShopFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        setHasOptionsMenu(true);
+        super.onCreateOptionsMenu(menu, inflater);
+
         inflater.inflate(R.menu.menu_shop_fragment, menu);
         Log.d(TAG, "Options should be createD!!!");
 
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -161,5 +168,11 @@ public class ShopFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
 
         //  getActivity().getMenuInflater().inflate(R.menu.menu_shop_fragment, menu);
+    }
+
+    @Override
+    public void onClick(View ve) {
+        if (ve.getId() == R.id.containerOTOP) {
+        }
     }
 }

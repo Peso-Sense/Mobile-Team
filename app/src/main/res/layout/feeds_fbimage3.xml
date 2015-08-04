@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/feeds_control"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:id="@+id/fbProfilePicture"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_no_user" />
+
+            <TextView
+                android:id="@+id/lblPesoSense"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Peso Sense"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/textColorBlack"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fbMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="lorem impsum..."
+            android:textColor="@color/textColorBlack" />
+
+        <ImageView
+            android:id="@+id/fbImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/pesosense_sqaure" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@drawable/feeds_control">
+
+        <TextView
+            android:id="@+id/lblNoLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="3dp"
+            android:alpha="0.6"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorBlack"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/lblNoLikes"
+            android:alpha="0.6"
+            android:text="likes"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorBlack"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblNoComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="3dp"
+            android:layout_toRightOf="@+id/lblLikes"
+            android:alpha="0.6"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorBlack" />
+
+        <TextView
+            android:id="@+id/lblComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/lblNoComments"
+            android:alpha="0.6"
+            android:text="comments"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorBlack" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/imgLike"
+            android:background="@color/feeds_border" />
+
+        <ImageView
+            android:id="@+id/imgLiked"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/separator2"
+            android:padding="2dp"
+            android:src="@drawable/feed_liked" />
+
+        <ImageView
+            android:id="@+id/imgLike"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/separator2"
+            android:padding="2dp"
+            android:src="@drawable/feed_like"
+            android:visibility="invisible" />
+
+
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/imgComment"
+            android:background="@color/feeds_border" />
+
+        <ImageView
+            android:id="@+id/imgComment"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:src="@drawable/feed_comment" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
