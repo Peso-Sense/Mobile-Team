@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import one.com.pesosense.R;
@@ -28,9 +30,13 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
+    private FrameLayout container_body;
+    private LinearLayout mainContainer;
 
     TextView title;
+    String str;
     int lastPosition = 0;
+    boolean exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +49,14 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         title.setTypeface(UtilsApp.opensansNormal());
         setSupportActionBar(mToolbar);
+
+        container_body = (FrameLayout) findViewById(R.id.container_body);
+        mainContainer = (LinearLayout) findViewById(R.id.mainContainer);
+
         drawerFragment = (FragmentDrawer) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+                (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, mainContainer);
         drawerFragment.setDrawerListener(this);
 
 
@@ -73,7 +83,6 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 mFragment = new FeedsFragment();
                 break;
             case 1:
-                setTitle("Shop");
                 title = "Shop";
                 mFragment = new Shop();
                 break;
@@ -94,10 +103,12 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
             mFragmentManager.beginTransaction()
                     .replace(R.id.container_body, mFragment).commit();
         }
-        if (position != 4)
+        if (position != 4) {
             lastPosition = position;
+            str = title;
+        }
 
-        this.title.setText(title);
+        this.title.setText(str);
 
     }
 
@@ -106,7 +117,7 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         builder.setTitle("Sign out").setMessage("Do you want to sign out?").setNegativeButton("OKAY", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent(PesoActivity.this, Login.class));
+                startActivity(new Intent(PesoActivity.this, AppGuide.class));
             }
         }).setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
@@ -143,5 +154,26 @@ public class PesoActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onDestroy();
 
         UtilsApp.putInt("display_tips", 0);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        exit = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle("Exit").setMessage("Are you sure you want to exit?").setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                exit = true;
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        if (exit)
+            super.onBackPressed();
     }
 }

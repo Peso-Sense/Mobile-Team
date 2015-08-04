@@ -220,8 +220,8 @@ public class FragmentDrawer extends Fragment {
 
     }
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout,
-                      final Toolbar toolbar) {
+    public void setUp(int fragmentId, final DrawerLayout drawerLayout,
+                      final Toolbar toolbar, final LinearLayout container) {
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout,
@@ -242,6 +242,10 @@ public class FragmentDrawer extends Fragment {
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 toolbar.setAlpha(1 - slideOffset / 2);
+                container.setTranslationX(slideOffset * drawerView.getWidth());
+                drawerLayout.bringChildToFront(drawerView);
+                drawerLayout.requestLayout();
+                //
             }
         };
 

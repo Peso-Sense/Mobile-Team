@@ -5,12 +5,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <!--<item name="android:textColor">@color/textColorPrimary</item>-->
+        <!--<item name="android:windowBackground">@color/windowBackground</item>-->
 
     </style>
 

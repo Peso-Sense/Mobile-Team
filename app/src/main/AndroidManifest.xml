@@ -71,30 +71,30 @@
         <activity
             android:name=".activity.ShopItemView"
             android:label="@string/title_activity_shop_item_view"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ResetPassword"
             android:label="@string/title_activity_reset_password"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.CardSample"
             android:label="@string/title_activity_reset_password"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.OnlineShop"
             android:label="@string/title_activity_reset_password"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.OnlineShopItemOnclick"
             android:label="@string/title_activity_reset_password"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.OtopShop"
             android:label="@string/title_activity_reset_password"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
     </application>
 
