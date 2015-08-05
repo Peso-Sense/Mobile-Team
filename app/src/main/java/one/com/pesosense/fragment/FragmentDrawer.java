@@ -185,7 +185,6 @@ public class FragmentDrawer extends Fragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String email = preferences.getString("email", null);
-        int userID = UtilsApp.getInt("user_id");
         UserItem item = null;
 
         String imgPath = "";
@@ -200,7 +199,7 @@ public class FragmentDrawer extends Fragment {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String query = "SELECT * FROM tbl_user_info WHERE user_id = " + userID;
+        String query = "SELECT * FROM tbl_user_info WHERE email = '" + email + "'";
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor != null) {

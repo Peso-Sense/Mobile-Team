@@ -197,6 +197,7 @@ public class APIHandler {
                 httpResponse = httpClient.execute(httpPost);
                 httpEntity = httpResponse.getEntity();
                 response = EntityUtils.toString(httpEntity);
+                Log.d("DownloadHelper", response);
             } catch (Exception e) {
                 e.printStackTrace();
             }

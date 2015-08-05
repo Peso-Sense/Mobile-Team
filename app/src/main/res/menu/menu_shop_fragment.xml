@@ -4,8 +4,8 @@
         android:id="@+id/add_product"
         android:icon="@drawable/ic_add"
         android:orderInCategory="100"
-        android:title="Upload a Product"
-        app:showAsAction="always" />
+        android:title="Add a Product"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/manage_product"
@@ -13,3 +13,4 @@
         android:title="Manage Your Products"
         app:showAsAction="never" />
 </menu>
+

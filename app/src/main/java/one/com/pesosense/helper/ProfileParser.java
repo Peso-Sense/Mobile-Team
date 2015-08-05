@@ -54,6 +54,7 @@ public class ProfileParser {
 
             Log.d("response", "Put user_id to SharedPref: " + userID);
             UtilsApp.putInt("user_id", userID);
+            UtilsApp.putString("email", email);
 
             username = name;
             emailA = email;

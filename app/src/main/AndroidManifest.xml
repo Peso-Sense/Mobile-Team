@@ -43,6 +43,11 @@
             android:name=".activity.Login"
             android:label="@string/title_activity_app_guide"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.Login2"
+            android:label="@string/title_activity_app_guide"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PesoActivity"
             android:label="@string/title_activity_peso"
